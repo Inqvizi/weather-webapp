@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/backend/">
+    <Project Path="backend/WeatherApp.Api/WeatherApp.Api.csproj" />
+    <Project Path="backend/WeatherApp.Application/WeatherApp.Application.csproj" />
+    <Project Path="backend/WeatherApp.Domain/WeatherApp.Domain.csproj" />
+    <Project Path="backend/WeatherApp.Infrastructure/WeatherApp.Infrastructure.csproj" />
+  </Folder>
+</Solution>
