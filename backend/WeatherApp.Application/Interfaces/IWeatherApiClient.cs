@@ -1,9 +1,9 @@
-﻿using WeatherApp.Application.DTOs;
+using WeatherApp.Domain.Entities;
 
 namespace WeatherApp.Application.Interfaces;
 
 public interface IWeatherApiClient
 {
-    Task<WeatherResponseDto> GetCurrentWeatherAsync(string cityName, CancellationToken cancellationToken = default);
-    Task<IReadOnlyList<ForecastItemDto>> GetForecastAsync(string cityName, CancellationToken cancellationToken = default);
+    Task<WeatherForecast> GetCurrentWeatherAsync(string cityName, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<WeatherForecast>> GetForecastAsync(string cityName, CancellationToken cancellationToken = default);
 }

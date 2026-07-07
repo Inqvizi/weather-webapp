@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using WeatherApp.Application.DTOs;
 using WeatherApp.Application.Interfaces;
 using WeatherApp.Application.Validators;
@@ -8,12 +9,14 @@ namespace WeatherApp.Application.Services;
 public class WeatherService : IWeatherService
 {
     private readonly IWeatherApiClient weatherApiClient;
+    private readonly IMapper mapper;
     private readonly CityNameValidator validator;
 
-    public WeatherService(IWeatherApiClient weatherApiClient, CityNameValidator validator)
+    public WeatherService(IWeatherApiClient weatherApiClient, IMapper mapper, CityNameValidator validator)
     {
         this.weatherApiClient = weatherApiClient;
-        this.validator = new CityNameValidator();
+        this.mapper = mapper;
+        this.validator = validator;
     }
 
     public async Task<WeatherResponseDto> GetCurrentWeatherAsync(string cityName, CancellationToken cancellationToken = default)
@@ -24,7 +27,8 @@ public class WeatherService : IWeatherService
             throw new ValidationException(validationResult.Errors.First().ErrorMessage);
         }
 
-        return await weatherApiClient.GetCurrentWeatherAsync(cityName, cancellationToken);
+        var weatherEntity = await weatherApiClient.GetCurrentWeatherAsync(cityName, cancellationToken);
+        return mapper.Map<WeatherResponseDto>(weatherEntity);
     }
 
     public async Task<ForecastResponseDto> GetForecastAsync(string cityName, CancellationToken cancellationToken = default)
@@ -39,8 +43,9 @@ public class WeatherService : IWeatherService
 
         return new ForecastResponseDto()
         {
-            CityName = cityName,
-            Items = items,
+            CityName = items.FirstOrDefault()?.City.Name ?? cityName,
+            CountryCode = items.FirstOrDefault()?.City.CountryCode ?? string.Empty,
+            Items = mapper.Map<IReadOnlyList<ForecastItemDto>>(items),
         };
     }
 }
