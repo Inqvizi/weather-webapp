@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace WeatherApp.Infrastructure.ExternalApis.OpenWeatherMap.Models;
 
@@ -42,6 +42,9 @@ internal sealed class OWMMain
 
     [JsonPropertyName("humidity")]
     public int Humidity { get; set; }
+
+    [JsonPropertyName("pressure")]
+    public int Pressure { get; set; }
 }
 
 internal sealed class OWMWind

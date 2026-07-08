@@ -3,6 +3,8 @@ using WeatherApp.Application.Interfaces;
 using WeatherApp.Application.Mappings;
 using WeatherApp.Application.Services;
 using WeatherApp.Application.Validators;
+using WeatherApp.Infrastructure;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(WeatherMappingProfile).Assembly));
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 builder.Services.AddScoped<CityNameValidator>();
@@ -34,6 +37,7 @@ app.UseCors("AllowAngular");
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();

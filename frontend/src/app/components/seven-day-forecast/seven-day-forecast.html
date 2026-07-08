@@ -1,0 +1,28 @@
+<div class="flex justify-between items-center mb-6">
+  <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">5-Day Forecast</h3>
+</div>
+
+<div class="flex flex-col gap-2">
+  @for (day of dailyForecast; track day.date; let i = $index) {
+    <div class="flex items-center justify-between p-4 rounded-2xl cursor-pointer hover:bg-white/5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+         tabindex="0"
+         (click)="onDayClick(day.rawDateStr)"
+         (keydown.enter)="onDayClick(day.rawDateStr)"
+         (keydown.space)="onDayClick(day.rawDateStr); $event.preventDefault()"
+         [class.bg-blue-500]="selectedDate === day.rawDateStr || (!selectedDate && i === 0)" 
+         [class.bg-opacity-10]="selectedDate === day.rawDateStr || (!selectedDate && i === 0)">
+      <div class="text-gray-400 w-20 font-medium whitespace-nowrap text-sm" [class.text-blue-400]="selectedDate === day.rawDateStr || (!selectedDate && i === 0)">{{ (!selectedDate && i === 0) || (selectedDate === day.rawDateStr && i === 0) ? 'Today' : (day.date | date:'E, d MMM') }}</div>
+      
+      <div class="flex items-center gap-3 flex-1 px-2">
+        <i class="bi {{ getIcon(day.iconCode, day.description) }} {{ getColor(day.iconCode, day.description) }} text-xl min-w-[24px] text-center"></i>
+        <span class="text-white font-bold text-sm capitalize whitespace-nowrap">{{ day.description || 'N/A' }}</span>
+      </div>
+      
+      <div class="flex items-center justify-end w-20 shrink-0">
+        <span class="text-white font-bold">{{ day.maxTemp | number:'1.0-0' }}&deg;</span>
+        <span class="text-gray-500 mx-1">/</span>
+        <span class="text-gray-400 text-sm">{{ day.minTemp | number:'1.0-0' }}&deg;</span>
+      </div>
+    </div>
+  }
+</div>

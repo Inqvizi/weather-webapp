@@ -1,4 +1,4 @@
-﻿namespace WeatherApp.Application.DTOs;
+namespace WeatherApp.Application.DTOs;
 
 public sealed class ForecastItemDto
 {
@@ -7,6 +7,7 @@ public sealed class ForecastItemDto
     public double FeelsLike { get; init; }
     public int Humidity { get; init; }
     public double WindSpeed { get; init; }
+    public int Pressure { get; init; }
     public string Description { get; init; } = string.Empty;
     public string IconCode { get; init; } = string.Empty;
 }

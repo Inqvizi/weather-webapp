@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
 using WeatherApp.Application.Interfaces;
@@ -15,10 +15,10 @@ internal sealed class OpenWeatherMapClient : IWeatherApiClient
     private readonly HttpClient httpClient;
     private readonly OpenWeatherMapOptions options;
 
-    public OpenWeatherMapClient(HttpClient httpClient, OpenWeatherMapOptions options)
+    public OpenWeatherMapClient(HttpClient httpClient, IOptions<OpenWeatherMapOptions> options)
     {
         this.httpClient = httpClient;
-        this.options = options;
+        this.options = options.Value;
     }
 
     public async Task<WeatherForecast> GetCurrentWeatherAsync(string cityName,
@@ -48,7 +48,9 @@ internal sealed class OpenWeatherMapClient : IWeatherApiClient
             Temperature.FromCelsius(raw.Main.FeelsLike),
             raw.Main.Humidity,
             raw.Wind.Speed,
+            raw.Main.Pressure,
             raw.Weather.FirstOrDefault()?.Description ?? string.Empty,
+            raw.Weather.FirstOrDefault()?.Icon ?? string.Empty,
             DateTimeOffset.FromUnixTimeSeconds(raw.Timestamp).UtcDateTime);
     }
 
@@ -78,7 +80,9 @@ internal sealed class OpenWeatherMapClient : IWeatherApiClient
             Temperature.FromCelsius(item.Main.FeelsLike),
             item.Main.Humidity,
             item.Wind.Speed,
+            item.Main.Pressure,
             item.Weather.FirstOrDefault()?.Description ?? string.Empty,
+            item.Weather.FirstOrDefault()?.Icon ?? string.Empty,
             DateTimeOffset.FromUnixTimeSeconds(item.Timestamp).UtcDateTime)
         ).ToList();
     }

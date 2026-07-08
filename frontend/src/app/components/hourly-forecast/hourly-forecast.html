@@ -1,0 +1,12 @@
+<div class="flex justify-between items-center mb-6">
+  <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">24-Hour Forecast (3h steps)</h3>
+</div>
+<div class="flex justify-between overflow-x-auto gap-2 md:gap-4 pt-6 border-t border-gray-700/50 snap-x touch-pan-x no-scrollbar pb-2">
+  @for (item of nextHours; track item.dateTime) {
+    <div class="flex-1 flex flex-col items-center gap-4 min-w-[70px] max-w-[100px] snap-center hover:bg-white/5 cursor-pointer transition-colors p-3 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" tabindex="0">
+      <span class="text-gray-400 text-sm font-medium">{{ item.dateTime | date:'HH:mm' }}</span>
+      <i class="bi {{ getIcon(item.iconCode, item.description) }} {{ getColor(item.iconCode, item.description) }} text-3xl my-2"></i>
+      <span class="text-white font-bold text-xl">{{ item.temperature | number:'1.0-0' }}&deg;</span>
+    </div>
+  }
+</div>

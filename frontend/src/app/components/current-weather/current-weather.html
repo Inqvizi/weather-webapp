@@ -1,0 +1,10 @@
+<div class="flex justify-between items-center px-4 md:px-6 py-4">
+  <div class="flex flex-col">
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-200 mb-1">{{ weather.cityName }}</h1>
+    <p class="text-gray-400 text-sm md:text-base capitalize">{{ weather.description }}</p>
+    <div class="text-7xl md:text-8xl font-black text-white mt-4 md:mt-8 tracking-tighter">{{ weather.temperature | number:'1.0-0' }}&deg;</div>
+  </div>
+  <div class="w-32 h-32 md:w-48 md:h-48 flex items-center justify-center shrink-0">
+    <i class="bi {{ iconClass }} {{ colorClass }} text-[100px] md:text-[140px]"></i>
+  </div>
+</div>

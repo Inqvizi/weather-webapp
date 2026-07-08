@@ -10,10 +10,12 @@ public sealed class WeatherForecast
     public Temperature FeelsLike { get; }
     public int Humidity { get; }
     public double WindSpeed { get; }
+    public int Pressure { get; }
     public string Description { get; }
+    public string IconCode { get; }
     public DateTime ForecastDate { get; }
 
-    private WeatherForecast(Guid id, City city, Temperature temperature, Temperature feelsLike, int humidity, double windSpeed, string description, DateTime forecastDate)
+    private WeatherForecast(Guid id, City city, Temperature temperature, Temperature feelsLike, int humidity, double windSpeed, int pressure, string description, string iconCode, DateTime forecastDate)
     {
         Id = id;
         City = city;
@@ -21,7 +23,9 @@ public sealed class WeatherForecast
         FeelsLike = feelsLike;
         Humidity = humidity;
         WindSpeed = windSpeed;
+        Pressure = pressure;
         Description = description;
+        IconCode = iconCode;
         ForecastDate = forecastDate;
     }
 
@@ -31,7 +35,9 @@ public sealed class WeatherForecast
         Temperature feelsLike,
         int humidity,
         double windSpeed,
+        int pressure,
         string description,
+        string iconCode,
         DateTime forecastDate)
     {
         ArgumentNullException.ThrowIfNull(city);
@@ -48,6 +54,11 @@ public sealed class WeatherForecast
             throw new ArgumentOutOfRangeException(nameof(windSpeed), "Wind speed cannot be negative");
         }
 
+        if (pressure < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(pressure), "Pressure cannot be negative");
+        }
+
         if (string.IsNullOrWhiteSpace(description))
         {
             throw new ArgumentException("Description cannot be empty", nameof(description));
@@ -60,7 +71,9 @@ public sealed class WeatherForecast
             feelsLike,
             humidity,
             windSpeed,
+            pressure,
             description.Trim(),
+            iconCode?.Trim() ?? string.Empty,
             forecastDate);
     }
 }
