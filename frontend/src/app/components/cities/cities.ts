@@ -35,8 +35,6 @@ export class CitiesComponent implements OnInit {
   searchResults = signal<CitySearchResultDto[]>([]);
   isSearching = signal<boolean>(false);
 
-  popularCities: string[] = ['London', 'Kyiv', 'New York', 'Tokyo', 'Paris', 'Lviv'];
-
   ngOnInit(): void {
     this.loadFavoritesWeather();
   }
@@ -87,11 +85,6 @@ export class CitiesComponent implements OnInit {
     this.favoritesService.addFavorite(city.name);
     this.newCityInput.set('');
     this.searchResults.set([]);
-    this.loadFavoritesWeather();
-  }
-
-  addPopular(cityName: string): void {
-    this.favoritesService.addFavorite(cityName);
     this.loadFavoritesWeather();
   }
 

@@ -53,22 +53,6 @@
         </div>
       }
     </div>
-
-    <!-- Popular Suggestions chips -->
-    <div class="flex items-center gap-2 mt-4 flex-wrap">
-      <span class="text-xs text-gray-400">Popular:</span>
-      @for (popular of popularCities; track popular) {
-        @if (!favoritesService.isFavorite(popular)) {
-          <button
-            type="button"
-            (click)="addPopular(popular)"
-            class="text-xs px-2.5 py-1 rounded-lg bg-[#1b2533] hover:bg-blue-500/20 text-gray-300 hover:text-blue-300 border border-gray-700 transition-colors flex items-center gap-1 cursor-pointer"
-          >
-            <i class="bi bi-plus"></i> {{ popular }}
-          </button>
-        }
-      }
-    </div>
   </div>
 
   <!-- Favorites Cards Grid -->

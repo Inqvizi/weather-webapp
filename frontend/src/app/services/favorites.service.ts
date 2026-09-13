@@ -1,7 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 
 const STORAGE_KEY = 'weatherapp_favorites';
-const DEFAULT_FAVORITES: string[] = ['Lviv', 'Kyiv', 'London', 'New York', 'Tokyo'];
 
 @Injectable({
   providedIn: 'root'
@@ -12,16 +11,26 @@ export class FavoritesService {
   private loadFavorites(): string[] {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
+      if (stored !== null) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
+          // If stored favorites are the old initial hardcoded test list, reset to clean state
+          const oldDefault = ['Lviv', 'Kyiv', 'London', 'New York', 'Tokyo'];
+          const isOldDefault =
+            parsed.length === oldDefault.length &&
+            parsed.every((val, index) => val.toLowerCase() === oldDefault[index].toLowerCase());
+
+          if (isOldDefault) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+            return [];
+          }
           return parsed;
         }
       }
     } catch {
       // ignore
     }
-    return [...DEFAULT_FAVORITES];
+    return [];
   }
 
   private saveFavorites(list: string[]): void {
