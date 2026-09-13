@@ -1,0 +1,185 @@
+<div class="flex flex-col gap-6 w-full max-w-3xl">
+  <div class="bg-[#202b3b] rounded-3xl p-6 sm:p-8 border border-gray-700 shadow-inner">
+    <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-700">
+      <div>
+        <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+          <i class="bi bi-gear-fill text-blue-400 text-xl"></i>
+          Settings
+        </h2>
+        <p class="text-sm text-gray-400 mt-1">Customize measurement units, time display, and general preferences</p>
+      </div>
+
+      @if (saveSuccess) {
+        <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+          <i class="bi bi-check-circle-fill"></i> Saved
+        </span>
+      }
+    </div>
+
+    <div class="flex flex-col gap-8">
+      <!-- Temperature Unit -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <label class="text-base font-semibold text-white">Temperature Unit</label>
+          <p class="text-xs text-gray-400">Choose between Celsius and Fahrenheit</p>
+        </div>
+        <div class="flex rounded-xl bg-[#1b2533] p-1 border border-gray-700 w-fit">
+          <button
+            type="button"
+            (click)="setTemp('celsius')"
+            [class.bg-blue-600]="settingsService.settings().temperatureUnit === 'celsius'"
+            [class.text-white]="settingsService.settings().temperatureUnit === 'celsius'"
+            [class.text-gray-400]="settingsService.settings().temperatureUnit !== 'celsius'"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer"
+          >
+            Celsius (&deg;C)
+          </button>
+          <button
+            type="button"
+            (click)="setTemp('fahrenheit')"
+            [class.bg-blue-600]="settingsService.settings().temperatureUnit === 'fahrenheit'"
+            [class.text-white]="settingsService.settings().temperatureUnit === 'fahrenheit'"
+            [class.text-gray-400]="settingsService.settings().temperatureUnit !== 'fahrenheit'"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer"
+          >
+            Fahrenheit (&deg;F)
+          </button>
+        </div>
+      </div>
+
+      <!-- Wind Speed Unit -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 border-t border-gray-700/50">
+        <div>
+          <label class="text-base font-semibold text-white">Wind Speed</label>
+          <p class="text-xs text-gray-400">Select unit for wind velocity</p>
+        </div>
+        <div class="flex rounded-xl bg-[#1b2533] p-1 border border-gray-700 w-fit">
+          <button
+            type="button"
+            (click)="setWind('kmh')"
+            [class.bg-blue-600]="settingsService.settings().windSpeedUnit === 'kmh'"
+            [class.text-white]="settingsService.settings().windSpeedUnit === 'kmh'"
+            [class.text-gray-400]="settingsService.settings().windSpeedUnit !== 'kmh'"
+            class="px-3.5 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer"
+          >
+            km/h
+          </button>
+          <button
+            type="button"
+            (click)="setWind('ms')"
+            [class.bg-blue-600]="settingsService.settings().windSpeedUnit === 'ms'"
+            [class.text-white]="settingsService.settings().windSpeedUnit === 'ms'"
+            [class.text-gray-400]="settingsService.settings().windSpeedUnit !== 'ms'"
+            class="px-3.5 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer"
+          >
+            m/s
+          </button>
+          <button
+            type="button"
+            (click)="setWind('mph')"
+            [class.bg-blue-600]="settingsService.settings().windSpeedUnit === 'mph'"
+            [class.text-white]="settingsService.settings().windSpeedUnit === 'mph'"
+            [class.text-gray-400]="settingsService.settings().windSpeedUnit !== 'mph'"
+            class="px-3.5 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer"
+          >
+            mph
+          </button>
+        </div>
+      </div>
+
+      <!-- Atmospheric Pressure Unit -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 border-t border-gray-700/50">
+        <div>
+          <label class="text-base font-semibold text-white">Atmospheric Pressure</label>
+          <p class="text-xs text-gray-400">Unit for barometric pressure</p>
+        </div>
+        <div class="flex rounded-xl bg-[#1b2533] p-1 border border-gray-700 w-fit">
+          <button
+            type="button"
+            (click)="setPressure('hPa')"
+            [class.bg-blue-600]="settingsService.settings().pressureUnit === 'hPa'"
+            [class.text-white]="settingsService.settings().pressureUnit === 'hPa'"
+            [class.text-gray-400]="settingsService.settings().pressureUnit !== 'hPa'"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer"
+          >
+            hPa
+          </button>
+          <button
+            type="button"
+            (click)="setPressure('mmHg')"
+            [class.bg-blue-600]="settingsService.settings().pressureUnit === 'mmHg'"
+            [class.text-white]="settingsService.settings().pressureUnit === 'mmHg'"
+            [class.text-gray-400]="settingsService.settings().pressureUnit !== 'mmHg'"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer"
+          >
+            mmHg
+          </button>
+        </div>
+      </div>
+
+      <!-- Time Format -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 border-t border-gray-700/50">
+        <div>
+          <label class="text-base font-semibold text-white">Time Format</label>
+          <p class="text-xs text-gray-400">Choose hourly display format</p>
+        </div>
+        <div class="flex rounded-xl bg-[#1b2533] p-1 border border-gray-700 w-fit">
+          <button
+            type="button"
+            (click)="setTime('24h')"
+            [class.bg-blue-600]="settingsService.settings().timeFormat === '24h'"
+            [class.text-white]="settingsService.settings().timeFormat === '24h'"
+            [class.text-gray-400]="settingsService.settings().timeFormat !== '24h'"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer"
+          >
+            24-Hour (14:00)
+          </button>
+          <button
+            type="button"
+            (click)="setTime('12h')"
+            [class.bg-blue-600]="settingsService.settings().timeFormat === '12h'"
+            [class.text-white]="settingsService.settings().timeFormat === '12h'"
+            [class.text-gray-400]="settingsService.settings().timeFormat !== '12h'"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer"
+          >
+            12-Hour (2:00 PM)
+          </button>
+        </div>
+      </div>
+
+      <!-- Default Startup City -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-gray-700/50">
+        <div>
+          <label class="text-base font-semibold text-white">Default City on Launch</label>
+          <p class="text-xs text-gray-400">City loaded automatically when opening the app</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <input
+            type="text"
+            [(ngModel)]="defaultCityInput"
+            class="bg-[#1b2533] text-white px-3.5 py-2 rounded-xl text-sm border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-44"
+          />
+          <button
+            type="button"
+            (click)="saveDefaultCity()"
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-medium transition-colors cursor-pointer"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+
+      <!-- Reset -->
+      <div class="pt-6 border-t border-gray-700 flex justify-end">
+        <button
+          type="button"
+          (click)="reset()"
+          class="text-xs text-gray-400 hover:text-rose-400 transition-colors flex items-center gap-1.5 cursor-pointer py-1"
+        >
+          <i class="bi bi-arrow-counterclockwise"></i>
+          Reset to default settings
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
