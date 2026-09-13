@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Memory;
 using WeatherApp.Application.Interfaces;
 using WeatherApp.Domain.Entities;
 
@@ -11,6 +11,7 @@ internal sealed class CachedWeatherApiClient : IWeatherApiClient
 
     private static readonly TimeSpan CurrentWeatherCacheDuration = TimeSpan.FromMinutes(10);
     private static readonly TimeSpan ForecastCacheDuration = TimeSpan.FromMinutes(30);
+    private static readonly TimeSpan CitiesSearchCacheDuration = TimeSpan.FromHours(24);
 
     public CachedWeatherApiClient(IWeatherApiClient inner, IMemoryCache cache)
     {
@@ -43,6 +44,22 @@ internal sealed class CachedWeatherApiClient : IWeatherApiClient
 
         var result = await inner.GetForecastAsync(cityName, cancellationToken);
         cache.Set(cacheKey, result, ForecastCacheDuration);
+        return result;
+    }
+
+    public async Task<IReadOnlyList<City>> SearchCitiesAsync(
+        string query,
+        string? language = null,
+        CancellationToken cancellationToken = default)
+    {
+        var cacheKey = $"cities:{query.ToLowerInvariant()}:{language ?? "default"}";
+        if (cache.TryGetValue(cacheKey, out IReadOnlyList<City>? cached) && cached is not null)
+        {
+            return cached;
+        }
+
+        var result = await inner.SearchCitiesAsync(query, language, cancellationToken);
+        cache.Set(cacheKey, result, CitiesSearchCacheDuration);
         return result;
     }
 }
