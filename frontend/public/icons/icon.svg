@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0b131e"/>
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="rainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded squircle -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
+  <rect width="504" height="504" x="4" y="4" rx="124" fill="none" stroke="#334155" stroke-width="4"/>
+
+  <!-- Sun Rays & Core -->
+  <g filter="url(#shadow)">
+    <circle cx="330" cy="180" r="80" fill="url(#sunGrad)"/>
+    <!-- Sun Ray Accents -->
+    <path d="M330 65 V85 M330 275 V295 M215 180 H235 M425 180 H445 M248 98 L262 112 M398 248 L412 262 M248 262 L262 248 M398 112 L412 98"
+          stroke="#f59e0b" stroke-width="12" stroke-linecap="round"/>
+  </g>
+
+  <!-- Cloud -->
+  <g filter="url(#shadow)">
+    <path d="M160 360 H360 C398.66 360 430 328.66 430 290 C430 254.4 403.4 225 368.5 220.8 C360 164 311 120 252 120 C198 120 152 157 140 208 C105.8 215 80 245.5 80 282 C80 325 115.8 360 160 360 Z"
+          fill="url(#cloudGrad)"/>
+  </g>
+
+  <!-- Raindrops -->
+  <g filter="url(#shadow)">
+    <path d="M190 395 C190 408 178 420 165 420 C152 420 140 408 140 395 C140 380 165 360 165 360 C165 360 190 380 190 395 Z" fill="url(#rainGrad)"/>
+    <path d="M260 395 C260 408 248 420 235 420 C222 420 210 408 210 395 C210 380 235 360 235 360 C235 360 260 380 260 395 Z" fill="url(#rainGrad)"/>
+    <path d="M330 395 C330 408 318 420 305 420 C292 420 280 408 280 395 C280 380 305 360 305 360 C305 360 330 380 330 395 Z" fill="url(#rainGrad)"/>
+  </g>
+</svg>
