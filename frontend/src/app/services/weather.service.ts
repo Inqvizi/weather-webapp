@@ -47,7 +47,7 @@ export interface CitySearchResultDto {
   providedIn: 'root'
 })
 export class WeatherService {
-  private apiUrl = 'https://localhost:7065/api/Weather';
+  private apiUrl = 'http://localhost:5196/api/Weather';
 
   constructor(private http: HttpClient) {}
 
