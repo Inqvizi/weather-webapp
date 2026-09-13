@@ -17,14 +17,14 @@
         {{ formatDayLabel(day.date, day.rawDateStr, i) }}
       </div>
 
-      <div class="flex items-center gap-3 flex-1 px-2 overflow-hidden">
+      <div class="flex items-center gap-3 flex-1 px-2 min-w-0">
         <app-weather-icon
           [weatherCode]="day.weatherCode"
           [isDay]="true"
           [iconCode]="day.iconCode"
           size="sm"
         ></app-weather-icon>
-        <span class="text-white font-medium text-sm capitalize truncate">{{ translateCondition(day.weatherCode, day.description) || 'N/A' }}</span>
+        <span class="text-white font-medium text-sm capitalize leading-tight">{{ translateCondition(day.weatherCode, day.description) || 'N/A' }}</span>
       </div>
 
 
