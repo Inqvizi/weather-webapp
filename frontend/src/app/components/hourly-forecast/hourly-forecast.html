@@ -1,12 +1,61 @@
-<div class="flex justify-between items-center mb-6">
-  <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">24-Hour Forecast (3h steps)</h3>
+<div class="flex justify-between items-center mb-4">
+  <div class="flex items-center gap-2">
+    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">
+      @if (selectedDate) {
+        Forecast for {{ selectedDate | date:'EEEE, MMM d' }}
+      } @else {
+        24-Hour Forecast
+      }
+    </h3>
+    @if (selectedDate) {
+      <button
+        type="button"
+        (click)="resetToToday()"
+        class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 font-medium transition-colors cursor-pointer"
+      >
+        Back to Today
+      </button>
+    }
+  </div>
+
+  <div class="hidden sm:flex items-center gap-1.5">
+    <button
+      type="button"
+      (click)="scrollLeft()"
+      title="Scroll left"
+      class="w-7 h-7 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+    >
+      <i class="bi bi-chevron-left text-xs"></i>
+    </button>
+    <button
+      type="button"
+      (click)="scrollRight()"
+      title="Scroll right"
+      class="w-7 h-7 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+    >
+      <i class="bi bi-chevron-right text-xs"></i>
+    </button>
+  </div>
 </div>
-<div class="flex justify-between overflow-x-auto gap-2 md:gap-4 pt-6 border-t border-gray-700/50 snap-x touch-pan-x no-scrollbar pb-2">
-  @for (item of nextHours; track item.dateTime) {
-    <div class="flex-1 flex flex-col items-center gap-4 min-w-[70px] max-w-[100px] snap-center hover:bg-white/5 cursor-pointer transition-colors p-3 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" tabindex="0">
-      <span class="text-gray-400 text-sm font-medium">{{ item.dateTime | date:'HH:mm' }}</span>
-      <i class="bi {{ getIcon(item.iconCode, item.description) }} {{ getColor(item.iconCode, item.description) }} text-3xl my-2"></i>
-      <span class="text-white font-bold text-xl">{{ item.temperature | number:'1.0-0' }}&deg;</span>
+
+<div
+  #scrollContainer
+  class="hourly-scroll-container flex overflow-x-auto gap-3 pt-4 border-t border-gray-700/50 snap-x touch-pan-x pb-3"
+>
+  @for (item of nextHours; track item.dateTime; let i = $index) {
+    <div
+      class="flex-shrink-0 flex flex-col items-center gap-3 min-w-[76px] sm:min-w-[86px] snap-center hover:bg-white/5 cursor-pointer transition-all p-3 rounded-2xl border border-transparent hover:border-gray-700/50"
+      [class.bg-blue-600/15]="!selectedDate && i === 0"
+      [class.border-blue-500/30]="!selectedDate && i === 0"
+      tabindex="0"
+    >
+      <span class="text-xs font-semibold" [class.text-blue-400]="!selectedDate && i === 0" [class.text-gray-400]="selectedDate || i !== 0">
+        {{ formatHour(item.dateTime, i) }}
+      </span>
+      <i class="bi {{ getIcon(item.iconCode, item.description) }} {{ getColor(item.iconCode, item.description) }} text-2xl sm:text-3xl my-1"></i>
+      <span class="text-white font-bold text-lg sm:text-xl">
+        {{ formatTemp(item.temperature) }}&deg;
+      </span>
     </div>
   }
 </div>

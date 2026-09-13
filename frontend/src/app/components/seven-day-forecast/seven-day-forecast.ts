@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ForecastResponseDto } from '../../services/weather.service';
-import { getIconClass, getIconColor } from '../../utils/icon.mapper';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ForecastResponseDto } from '../../services/weather.service';
+import { SettingsService } from '../../services/settings.service';
+import { getIconClass, getIconColor } from '../../utils/icon.mapper';
 
 @Component({
   selector: 'app-seven-day-forecast',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './seven-day-forecast.html',
   styleUrl: './seven-day-forecast.css',
@@ -14,18 +16,19 @@ export class SevenDayForecast {
   @Input() selectedDate: string | null = null;
   @Output() daySelected = new EventEmitter<string>();
 
+  settingsService = inject(SettingsService);
+
   get dailyForecast() {
     if (!this.forecast?.items) return [];
 
     const daysMap = new Map<string, any>();
 
     for (const item of this.forecast.items) {
-      const dateStr = item.dateTime.split('T')[0]; 
+      const dateStr = item.dateTime.split('T')[0];
 
       if (!daysMap.has(dateStr)) {
-
         const safeDate = new Date(dateStr + 'T12:00:00');
-        
+
         daysMap.set(dateStr, {
           date: safeDate,
           rawDateStr: dateStr,
@@ -38,15 +41,19 @@ export class SevenDayForecast {
         const day = daysMap.get(dateStr);
         if (item.temperature < day.minTemp) day.minTemp = item.temperature;
         if (item.temperature > day.maxTemp) day.maxTemp = item.temperature;
-        
-        if (item.dateTime.includes('12:00') || item.dateTime.includes('15:00')) {
+
+        if (item.dateTime.includes('12:00') || item.dateTime.includes('14:00') || item.dateTime.includes('15:00')) {
           day.iconCode = item.iconCode;
           day.description = item.description;
         }
       }
     }
 
-    return Array.from(daysMap.values()).slice(0, 5);
+    return Array.from(daysMap.values()).slice(0, 7);
+  }
+
+  formatTemp(temp: number): string {
+    return this.settingsService.formatTemp(temp);
   }
 
   onDayClick(dateStr: string) {

@@ -1,0 +1,23 @@
+.hourly-scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(96, 165, 250, 0.4) rgba(31, 41, 55, 0.4);
+}
+
+.hourly-scroll-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.hourly-scroll-container::-webkit-scrollbar-track {
+  background: rgba(31, 41, 55, 0.4);
+  border-radius: 9999px;
+}
+
+.hourly-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(96, 165, 250, 0.4);
+  border-radius: 9999px;
+  transition: background 0.2s;
+}
+
+.hourly-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(96, 165, 250, 0.8);
+}
