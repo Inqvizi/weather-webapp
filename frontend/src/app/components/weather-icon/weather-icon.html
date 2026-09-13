@@ -2,7 +2,7 @@
   @switch (iconType) {
     @case ('clear-day') {
       <!-- Clear Day (Sun) -->
-      <svg class="w-full h-full drop-shadow-md animate-sun-spin" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient [id]="uid + '_sunGrad'" x1="20" y1="20" x2="44" y2="44" gradientUnits="userSpaceOnUse">
             <stop stop-color="#fde047" />
@@ -41,9 +41,9 @@
           stroke-width="1.2"
         />
         <!-- 4-point Star Sparkles -->
-        <path d="M15 8Q15 16 7 16Q15 16 15 24Q15 16 23 16Q15 16 15 8Z" fill="#fef08a" class="animate-sparkle-1" />
-        <path d="M53 9Q53 14 48 14Q53 14 53 19Q53 14 58 14Q53 14 53 9Z" fill="#fde047" class="animate-sparkle-2" />
-        <path d="M14 35Q14 39 10 39Q14 39 14 43Q14 39 18 39Q14 39 14 35Z" fill="#fef08a" class="animate-sparkle-1" />
+        <path d="M15 8Q15 16 7 16Q15 16 15 24Q15 16 23 16Q15 16 15 8Z" fill="#fef08a" />
+        <path d="M53 9Q53 14 48 14Q53 14 53 19Q53 14 58 14Q53 14 53 9Z" fill="#fde047" />
+        <path d="M14 35Q14 39 10 39Q14 39 14 43Q14 39 18 39Q14 39 14 35Z" fill="#fef08a" />
       </svg>
     }
 
@@ -98,7 +98,7 @@
           stroke="#eab308"
           stroke-width="1"
         />
-        <path d="M47 8Q47 12 43 12Q47 12 47 16Q47 12 51 12Q47 12 47 8Z" fill="#fef08a" class="animate-sparkle-1" />
+        <path d="M47 8Q47 12 43 12Q47 12 47 16Q47 12 51 12Q47 12 47 8Z" fill="#fef08a" />
         <!-- Front Cloud -->
         <path
           d="M49 50H19C14 50 10 46 10 41C10 36.3 13.5 32.4 18.1 32C19.8 24.5 25.8 19 33 19C41.3 19 48 25.7 48 34C48 34.4 48 34.7 47.9 35.1C51.5 36.1 54 39.4 54 43.5C54 47.1 51.5 50 49 50Z"
@@ -335,7 +335,6 @@
           stroke="#ca8a04"
           stroke-width="1.5"
           stroke-linejoin="round"
-          class="animate-bolt"
         />
         <g stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round">
           <line x1="16" y1="44" x2="13" y2="53" />
