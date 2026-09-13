@@ -4,6 +4,10 @@
   "buildCommand": "cd frontend && npm install && npm run build",
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "https://weather-api-58au.onrender.com/api/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
