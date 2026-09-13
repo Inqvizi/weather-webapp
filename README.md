@@ -13,6 +13,12 @@ A modern, fast, and fully responsive weather dashboard built with **Angular 19**
 
 ## ✨ Key Features & Enhancements
 
+- **Progressive Web App (PWA) & Offline Mode:**
+  - Installable as a standalone native app on iOS, Android, and Desktop with one click.
+  - Custom Web App Manifest (`manifest.webmanifest`) with crisp high-res 192x192, 512x512, and maskable icons.
+  - Smart Service Worker (`sw.js`) with network-first caching for weather API data and app shell caching, allowing full offline browsing of the latest weather forecast.
+  - Built-in install prompt button in navigation bar and dedicated iOS installation guide for Safari users.
+
 - **Vector Meteocons SVG Icon System:**
   - Built with custom, scalable SVG weather graphics for all WMO weather codes (0–99).
   - Dynamic **day and night** variations (`is_day: 0 | 1`) ensuring nighttime clear skies show a crisp moon and daytime shows a radiant sun.
