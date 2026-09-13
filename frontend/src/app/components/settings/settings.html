@@ -32,7 +32,7 @@
             [class.text-gray-400]="settingsService.settings().theme !== 'dark'"
             class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-2"
           >
-            <i class="bi bi-moon-stars-fill text-xs"></i>
+            <i class="bi bi-moon-stars-fill text-sm"></i>
             Dark
           </button>
           <button
@@ -43,7 +43,11 @@
             [class.text-gray-400]="settingsService.settings().theme !== 'light'"
             class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-2"
           >
-            <i class="bi bi-sun-fill text-xs text-amber-400"></i>
+            <i
+              class="bi bi-sun-fill text-sm"
+              [class.text-amber-400]="settingsService.settings().theme !== 'light'"
+              [class.text-white]="settingsService.settings().theme === 'light'"
+            ></i>
             Light
           </button>
         </div>

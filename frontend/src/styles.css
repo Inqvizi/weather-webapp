@@ -218,6 +218,18 @@ html.light .text-purple-400 {
   color: #7e22ce !important;
 }
 
+/* Active solid blue buttons always have crisp white text and icons */
+html.light .bg-blue-600 *,
+html.light .bg-blue-500 *,
+html.light button.bg-blue-600 *,
+html.light button.bg-blue-500 *,
+html.light .bg-blue-600 i,
+html.light .bg-blue-500 i,
+html.light button.bg-blue-600 i,
+html.light button.bg-blue-500 i {
+  color: #ffffff !important;
+}
+
 /* Soft Badges in Light Mode */
 html.light .bg-blue-500\/15,
 html.light .bg-blue-500\/20 {
