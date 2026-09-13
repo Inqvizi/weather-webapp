@@ -1,32 +1,58 @@
 # Weather Web App 🌤️
 
-A modern, fast, and fully responsive weather dashboard built with **Angular 19** and **.NET 10**, powered by the free and open **Open-Meteo API** (Geocoding API for city search and Weather Forecast API for weather conditions).
+A modern, fast, and fully responsive weather dashboard built with **Angular 19** and **.NET 10**, powered by the free and open **Open-Meteo API** (Geocoding API for city search, Weather Forecast API for weather conditions, and direct coordinate lookups).
 
 ![Architecture: Clean & Standalone](https://img.shields.io/badge/Architecture-Clean_&_Standalone-blue)
 ![Frontend: Angular 19](https://img.shields.io/badge/Frontend-Angular_19-dd0031?logo=angular)
 ![Backend: .NET 10](https://img.shields.io/badge/Backend-.NET_10-512bd4?logo=dotnet)
 ![Styling: TailwindCSS](https://img.shields.io/badge/Styling-TailwindCSS-38bdf8?logo=tailwindcss)
 ![Weather Provider: Open--Meteo](https://img.shields.io/badge/Provider-Open--Meteo-22c55e)
+![Theme: Dark_&_Light](https://img.shields.io/badge/Theme-Dark_&_Light-yellow)
 
 ---
 
-## ✨ Key Features
+## ✨ Key Features & Enhancements
 
-- **Real-Time Weather:** Get accurate, up-to-date weather conditions for any city globally via Open-Meteo Forecast API.
-- **City Search & Autocomplete:** Real-time city search powered by Open-Meteo Geocoding API (`language=en`), with instant suggestions, country badges, and admin regions.
-- **Dynamic 24-Hour Forecast:** Shows the upcoming 24 consecutive hours starting from the current hour ("Now"), with smoothly changing temperatures, condition icons, and an interactive horizontal scrollbar with navigation arrows.
-- **7-Day Daily Forecast:** Dynamically groups daily forecasts into clean cards with min/max temperatures. Clicking on any day filters the 24-hour timeline for that specific date.
-- **Favorite Cities Management:** Dedicated "Cities" tab to save favorite locations, view live mini-weather cards, add new cities, and quickly switch forecasts. Also includes a quick-favorite heart button on the main weather card.
-- **Customizable Settings:** Dedicated "Settings" tab with reactive unit conversions:
+- **Vector Meteocons SVG Icon System:**
+  - Built with custom, scalable SVG weather graphics for all WMO weather codes (0–99).
+  - Dynamic **day and night** variations (`is_day: 0 | 1`) ensuring nighttime clear skies show a moon and daytime shows a radiant sun.
+  - Subtle floating and pulse animations for enhanced visual feedback.
+
+- **Interactive 7-Day & 24-Hour Timeline:**
+  - Clicking any day in the 7-day forecast automatically updates the 24-hour timeline to display that date's 24-hour hourly conditions.
+  - Includes an active day highlight and a one-click **"↺ Back to Today"** reset button.
+  - Hourly cards dynamically display **precipitation probability pills (`💧 X%`)** whenever precipitation chance is greater than 0%.
+
+- **One-Click Geolocation & Search History:**
+  - Crosshair location button in the search bar uses the browser's `navigator.geolocation` API to detect current coordinates and display local weather instantly.
+  - Features intelligent reverse geocoding fallback for accurate local city names.
+  - Stores recent searches (3–5 items) in `localStorage`, showing a quick dropdown menu on search bar focus with individual removal and "Clear all".
+
+- **Detailed 6-Card Air Conditions Grid:**
+  1. **Real Feel:** Apparent temperature converted to selected temperature unit.
+  2. **Wind Velocity & Direction:** Live speed with rotating compass needle and 16-point cardinal direction badge (e.g. "NW", "ESE").
+  3. **Humidity:** Relative humidity percentage.
+  4. **Atmospheric Pressure:** Real barometric surface pressure (hPa or mmHg).
+  5. **UV Index:** Max daily UV index with color-coded severity badges (*Low*, *Moderate*, *High*, *Very High*, *Extreme*).
+  6. **Sun Schedule:** Precise daily Sunrise and Sunset times.
+
+- **Light & Dark Theme Switching:**
+  - One-click theme toggle directly in the sidebar navigation and inside Settings.
+  - Sleek dark slate mode and clean, bright light mode with smooth transitions and persistent state in `localStorage`.
+
+- **Favorite Cities Management:**
+  - Dedicated "Cities" tab to save favorite locations, view live mini-cards with vector icons, add new cities, and remove them anytime.
+  - Heart toggle directly on the main current weather display for instant bookmarking.
+
+- **Customizable Measurement Settings:**
   - **Temperature:** Celsius (°C) / Fahrenheit (°F)
   - **Wind Speed:** km/h / m/s / mph
   - **Atmospheric Pressure:** hPa / mmHg
   - **Time Format:** 24-Hour (14:00) / 12-Hour (2:00 PM)
-  - **Default City:** Set preferred default city on app startup
-- **Air Conditions Grid:** Real Feel, Wind, Humidity, and Pressure with unit conversion.
-- **WMO Weather Code Mapping:** Standard WMO weather codes (0–99) accurately mapped to descriptions and day/night Bootstrap icons.
-- **Fully Responsive Design:** Optimized for mobile phones (bottom navigation, touch-scrolling), tablets (adaptive grid), and desktop monitors.
-- **Zero API Keys Required:** Runs out of the box using Open-Meteo without the need for API keys or secrets.
+  - **Default City:** Set preferred default city on app launch
+
+- **Zero API Keys Required:**
+  - Powered completely by Open-Meteo and Open-Meteo Geocoding — runs out of the box with no API keys, accounts, or tokens required.
 
 ---
 
@@ -34,17 +60,17 @@ A modern, fast, and fully responsive weather dashboard built with **Angular 19**
 
 ### Frontend (Client)
 - **Framework:** Angular 19 (Standalone Components, Signals, Modern Control Flow `@if`, `@for`)
-- **Styling:** TailwindCSS with custom scrollbars and dark-theme palette
-- **Icons:** Bootstrap Icons (`bootstrap-icons`)
+- **Styling:** TailwindCSS + Vanilla CSS custom variables for Light/Dark themes and custom scrollbars
+- **Icons:** Custom SVG Meteocons & Bootstrap Icons (`bootstrap-icons`)
 - **State & Preferences:** Angular Signals & browser `localStorage`
 
 ### Backend (Server)
 - **Framework:** ASP.NET Core 10 (Web API)
 - **Architecture:** Clean Architecture (Domain, Application, Infrastructure, API)
 - **Object Mapping:** AutoMapper
-- **Validation:** FluentValidation (Unicode letters, hyphens, and apostrophes)
-- **Caching:** In-Memory Caching with Decorator Pattern (`CachedWeatherApiClient`)
-- **External Integration:** Open-Meteo API (Geocoding & Forecast)
+- **Validation:** FluentValidation (City name and coordinate range validation)
+- **Caching:** In-Memory Caching Decorator (`CachedWeatherApiClient`) for geocoding, city forecasts, and coordinate lookups
+- **External Integration:** Open-Meteo API (Forecast, Daily, Hourly, Geocoding)
 
 ---
 
@@ -58,7 +84,7 @@ A modern, fast, and fully responsive weather dashboard built with **Angular 19**
 
 ### 1. Run the Backend (.NET 10 API)
 
-Open a terminal and run:
+Open a terminal:
 ```bash
 cd backend/WeatherApp.Api
 dotnet run
@@ -66,6 +92,7 @@ dotnet run
 The backend will launch and listen on:
 - **HTTP:** `http://localhost:5196`
 - **HTTPS:** `https://localhost:7065`
+- **Swagger UI:** `http://localhost:5196/swagger` (in Development)
 
 *No external API keys are required.*
 
@@ -73,7 +100,7 @@ The backend will launch and listen on:
 
 ### 2. Run the Frontend (Angular 19)
 
-Open a second terminal and run:
+Open a second terminal:
 ```bash
 cd frontend
 npm install
@@ -85,9 +112,21 @@ Open your browser and navigate to:
 
 ---
 
+## 🔌 API Endpoints Summary
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/Weather/current/{city}` | Current weather condition for a city |
+| `GET` | `/api/Weather/forecast/{city}` | 24-hour and 7-day daily forecast for a city |
+| `GET` | `/api/Weather/by-coordinates?latitude={lat}&longitude={lon}` | Current weather by GPS coordinates |
+| `GET` | `/api/Weather/by-coordinates/forecast?latitude={lat}&longitude={lon}` | Hourly & daily forecast by GPS coordinates |
+| `GET` | `/api/Weather/search?query={prefix}` | Geocoding city search and autocomplete suggestions |
+
+---
+
 ## 🏗️ Architecture & Clean Code Highlights
 
-- **Separation of Concerns:** Core domain entities (`City`, `WeatherForecast`, `Temperature`, `Coordinates`) remain strictly isolated from external API schemas and HTTP concerns.
+- **Clean Architecture:** Domain entities (`City`, `WeatherForecast`, `Temperature`, `Coordinates`) remain strictly isolated from external API schemas and HTTP concerns.
 - **Resilient Caching Decorator:** Geocoding and weather responses are cached in-memory (`CachedWeatherApiClient`) for rapid responses and minimal network traffic.
 - **Strict Typing:** Strong TypeScript interfaces and C# records/DTOs throughout all endpoints.
 - **Safe Area & Fluid Layouts:** Responsive layout uses `min-w-0` to contain flex scrolling containers, preventing window overflow across mobile, tablet, and desktop viewports.
