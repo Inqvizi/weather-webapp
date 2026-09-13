@@ -1,0 +1,151 @@
+<div class="flex flex-col gap-6 w-full">
+  <!-- Header & Search -->
+  <div class="bg-[#202b3b] rounded-3xl p-6 border border-gray-700 shadow-inner">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+      <div>
+        <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+          <i class="bi bi-star-fill text-yellow-400 text-xl"></i>
+          Favorite Cities
+        </h2>
+        <p class="text-sm text-gray-400 mt-1">Manage your saved cities and check their live weather conditions</p>
+      </div>
+
+      <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
+        {{ cityCards().length }} saved
+      </span>
+    </div>
+
+    <!-- Search Input to add new favorites -->
+    <div class="relative w-full">
+      <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+      @if (isSearching()) {
+        <i class="bi bi-arrow-repeat absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 animate-spin"></i>
+      }
+      <input
+        type="text"
+        placeholder="Search and add a city to favorites (e.g. London, Rome, Berlin)..."
+        [value]="newCityInput()"
+        (input)="onSearchInput($any($event.target).value)"
+        class="w-full bg-[#1b2533] text-white pl-12 pr-10 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-700 shadow-sm transition-all text-sm"
+      />
+
+      <!-- Search Autocomplete dropdown -->
+      @if (searchResults().length > 0) {
+        <div class="absolute left-0 right-0 top-full mt-2 bg-[#1b2533] border border-gray-700 rounded-xl shadow-2xl overflow-hidden z-50 divide-y divide-gray-800">
+          @for (city of searchResults(); track city.latitude + '_' + city.longitude) {
+            <button
+              type="button"
+              (click)="addCityFromSearch(city)"
+              class="w-full text-left px-4 py-3 hover:bg-blue-600/20 flex items-center justify-between transition-colors group cursor-pointer"
+            >
+              <div class="flex items-center gap-2.5">
+                <i class="bi bi-plus-circle-fill text-blue-400 group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium text-white">{{ city.name }}</span>
+                @if (city.adminRegion) {
+                  <span class="text-xs text-gray-400">({{ city.adminRegion }})</span>
+                }
+              </div>
+              <span class="text-xs font-semibold px-2 py-0.5 rounded bg-gray-800 text-gray-300">
+                {{ city.countryCode || city.country }}
+              </span>
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Popular Suggestions chips -->
+    <div class="flex items-center gap-2 mt-4 flex-wrap">
+      <span class="text-xs text-gray-400">Popular:</span>
+      @for (popular of popularCities; track popular) {
+        @if (!favoritesService.isFavorite(popular)) {
+          <button
+            type="button"
+            (click)="addPopular(popular)"
+            class="text-xs px-2.5 py-1 rounded-lg bg-[#1b2533] hover:bg-blue-500/20 text-gray-300 hover:text-blue-300 border border-gray-700 transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <i class="bi bi-plus"></i> {{ popular }}
+          </button>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Favorites Cards Grid -->
+  @if (cityCards().length > 0) {
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      @for (card of cityCards(); track card.name) {
+        <div
+          (click)="openCity(card.name)"
+          class="bg-[#202b3b] hover:bg-[#253246] rounded-3xl p-5 border border-gray-700 shadow-md transition-all hover:border-blue-500/50 hover:shadow-xl cursor-pointer flex flex-col justify-between group relative overflow-hidden"
+        >
+          <!-- Top Row: City info & delete button -->
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-xl font-bold text-white group-hover:text-blue-300 transition-colors">
+                  {{ card.weather?.cityName || card.name }}
+                </h3>
+                @if (card.weather?.countryCode) {
+                  <span class="text-xs font-semibold px-2 py-0.5 rounded bg-gray-800 text-gray-300">
+                    {{ card.weather?.countryCode }}
+                  </span>
+                }
+              </div>
+              <p class="text-xs text-gray-400 capitalize mt-0.5">
+                {{ card.weather?.description || (card.isLoading ? 'Loading weather...' : 'No data') }}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              (click)="removeFavorite(card.name, $event)"
+              title="Remove from favorites"
+              class="w-8 h-8 rounded-full bg-gray-800/80 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 flex items-center justify-center transition-colors cursor-pointer"
+            >
+              <i class="bi bi-trash text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Middle Row: Weather Icon and Temperature -->
+          @if (card.isLoading) {
+            <div class="h-20 flex items-center justify-center">
+              <i class="bi bi-arrow-repeat text-2xl text-blue-400 animate-spin"></i>
+            </div>
+          } @else if (card.weather) {
+            <div class="flex items-center justify-between my-2">
+              <div class="text-4xl font-extrabold text-white tracking-tight">
+                {{ formatTemp(card.weather.temperature) }}&deg;
+              </div>
+              <div class="w-16 h-16 flex items-center justify-center">
+                <i class="bi {{ getIcon(card.weather.iconCode, card.weather.description) }} {{ getColor(card.weather.iconCode, card.weather.description) }} text-4xl"></i>
+              </div>
+            </div>
+
+            <!-- Bottom Row: Wind & Humidity indicators -->
+            <div class="pt-3 border-t border-gray-700/50 flex justify-between text-xs text-gray-400">
+              <span class="flex items-center gap-1.5">
+                <i class="bi bi-wind text-blue-400"></i>
+                {{ formatWind(card.weather.windSpeed) }}
+              </span>
+              <span class="flex items-center gap-1.5">
+                <i class="bi bi-droplet-fill text-blue-400"></i>
+                {{ card.weather.humidity }}%
+              </span>
+            </div>
+          } @else {
+            <div class="py-4 text-center text-xs text-rose-400">
+              {{ card.error || 'Failed to load weather' }}
+            </div>
+          }
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="bg-[#202b3b] rounded-3xl p-12 border border-gray-700 text-center flex flex-col items-center justify-center">
+      <i class="bi bi-heart text-5xl text-gray-600 mb-4"></i>
+      <h3 class="text-lg font-bold text-white mb-1">No Favorite Cities Yet</h3>
+      <p class="text-sm text-gray-400 max-w-sm mb-6">Use the search bar above or click the heart icon on any city to add it to your favorites.</p>
+    </div>
+  }
+</div>

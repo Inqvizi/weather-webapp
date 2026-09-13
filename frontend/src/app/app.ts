@@ -1,27 +1,54 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { Sidebar } from './components/sidebar/sidebar';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Sidebar, AppTab } from './components/sidebar/sidebar';
 import { SearchBar } from './components/search-bar/search-bar';
 import { CurrentWeather } from './components/current-weather/current-weather';
 import { HourlyForecast } from './components/hourly-forecast/hourly-forecast';
 import { AirConditions } from './components/air-conditions/air-conditions';
 import { SevenDayForecast } from './components/seven-day-forecast/seven-day-forecast';
+import { CitiesComponent } from './components/cities/cities';
+import { SettingsComponent } from './components/settings/settings';
 import { WeatherService, WeatherResponseDto, ForecastResponseDto } from './services/weather.service';
+import { SettingsService } from './services/settings.service';
 
 @Component({
   selector: 'app-root',
-  imports: [Sidebar, SearchBar, CurrentWeather, HourlyForecast, AirConditions, SevenDayForecast],
+  standalone: true,
+  imports: [
+    CommonModule,
+    Sidebar,
+    SearchBar,
+    CurrentWeather,
+    HourlyForecast,
+    AirConditions,
+    SevenDayForecast,
+    CitiesComponent,
+    SettingsComponent,
+  ],
   templateUrl: './app.html',
 })
 export class App implements OnInit {
+  activeTab = signal<AppTab>('weather');
   currentWeather = signal<WeatherResponseDto | null>(null);
   forecast = signal<ForecastResponseDto | null>(null);
   errorMessage = signal<string | null>(null);
   selectedDate = signal<string | null>(null);
 
-  constructor(private weatherService: WeatherService) {}
+  weatherService = inject(WeatherService);
+  settingsService = inject(SettingsService);
 
   ngOnInit() {
-    this.searchCity('Lviv');
+    const startupCity = this.settingsService.settings().defaultCity || 'Lviv';
+    this.searchCity(startupCity);
+  }
+
+  onTabChange(tab: AppTab) {
+    this.activeTab.set(tab);
+  }
+
+  onCityFromList(city: string) {
+    this.searchCity(city);
+    this.activeTab.set('weather');
   }
 
   searchCity(city: string) {
@@ -47,7 +74,6 @@ export class App implements OnInit {
         this.forecast.set(data);
       },
       error: (err) => {
-        // We can just log or set a generic message, but usually the current weather error handles the UI state.
         if (err?.status !== 404) {
           this.errorMessage.set('Unable to load weather forecast.');
         }
