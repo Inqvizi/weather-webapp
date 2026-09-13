@@ -1,20 +1,20 @@
 export function getIconClass(iconCode: string, description: string = ''): string {
   const desc = description.toLowerCase();
 
-  if ((desc.includes('heavy') || desc.includes('сильн')) && (desc.includes('rain') || desc.includes('дощ') || desc.includes('злив'))) {
+  if (desc.includes('heavy') && (desc.includes('rain') || desc.includes('shower'))) {
     return 'bi-cloud-rain-heavy';
   }
-  if ((desc.includes('light') || desc.includes('невелик')) && (desc.includes('rain') || desc.includes('дощ') || desc.includes('мряк'))) {
+  if (desc.includes('light') && (desc.includes('rain') || desc.includes('drizzle'))) {
     return 'bi-cloud-drizzle';
   }
-  if (desc.includes('moderate') || desc.includes('помірн') || desc.includes('дощ') || desc.includes('rain')) {
-    if (desc.includes('rain') || desc.includes('дощ')) return 'bi-cloud-rain';
+  if (desc.includes('moderate') && desc.includes('rain')) {
+    return 'bi-cloud-rain';
   }
 
-  if (desc.includes('few') || desc.includes('scattered') || desc.includes('мінлива')) {
+  if (desc.includes('few') || desc.includes('scattered') || desc.includes('partly')) {
     return iconCode?.includes('n') ? 'bi-cloud-moon' : 'bi-cloud-sun';
   }
-  if (desc.includes('broken') || desc.includes('overcast') || desc.includes('хмар') || desc.includes('похмуро')) {
+  if (desc.includes('broken') || desc.includes('overcast') || desc.includes('clouds')) {
     return 'bi-clouds';
   }
 
@@ -43,22 +43,22 @@ export function getIconClass(iconCode: string, description: string = ''): string
     return iconMap[iconCode];
   }
 
-  if (desc.includes('sun') || desc.includes('clear') || desc.includes('ясн')) {
+  if (desc.includes('sun') || desc.includes('clear')) {
     return iconCode?.includes('n') ? 'bi-moon' : 'bi-sun';
   }
-  if (desc.includes('rain') || desc.includes('drizzle') || desc.includes('дощ') || desc.includes('мряк')) {
+  if (desc.includes('rain') || desc.includes('drizzle')) {
     return 'bi-cloud-rain';
   }
-  if (desc.includes('snow') || desc.includes('сніг') || desc.includes('град')) {
+  if (desc.includes('snow') || desc.includes('hail')) {
     return 'bi-cloud-snow';
   }
-  if (desc.includes('storm') || desc.includes('thunder') || desc.includes('гроз')) {
+  if (desc.includes('storm') || desc.includes('thunder')) {
     return 'bi-cloud-lightning-rain';
   }
-  if (desc.includes('fog') || desc.includes('туман') || desc.includes('паморозь')) {
+  if (desc.includes('fog') || desc.includes('haze') || desc.includes('rime')) {
     return 'bi-cloud-haze';
   }
-  if (desc.includes('cloud') || desc.includes('хмар')) {
+  if (desc.includes('cloud')) {
     return 'bi-cloud';
   }
 
@@ -71,10 +71,10 @@ export function getIconColor(iconCode: string, description: string = ''): string
   let codeToMatch = iconCode;
 
   if (!iconCode) {
-    if (desc.includes('sun') || desc.includes('clear') || desc.includes('ясн')) codeToMatch = '01d';
-    else if (desc.includes('rain') || desc.includes('drizzle') || desc.includes('дощ') || desc.includes('мряк')) codeToMatch = '09d';
-    else if (desc.includes('snow') || desc.includes('сніг') || desc.includes('град')) codeToMatch = '13d';
-    else if (desc.includes('storm') || desc.includes('thunder') || desc.includes('гроз')) codeToMatch = '11d';
+    if (desc.includes('sun') || desc.includes('clear')) codeToMatch = '01d';
+    else if (desc.includes('rain') || desc.includes('drizzle')) codeToMatch = '09d';
+    else if (desc.includes('snow') || desc.includes('hail')) codeToMatch = '13d';
+    else if (desc.includes('storm') || desc.includes('thunder')) codeToMatch = '11d';
   }
 
   if (!codeToMatch) return 'text-gray-300';

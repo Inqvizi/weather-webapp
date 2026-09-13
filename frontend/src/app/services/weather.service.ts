@@ -59,7 +59,7 @@ export class WeatherService {
     return this.http.get<ForecastResponseDto>(`${this.apiUrl}/${encodeURIComponent(city.trim())}/forecast`);
   }
 
-  searchCities(query: string, language: string = 'uk'): Observable<CitySearchResultDto[]> {
+  searchCities(query: string, language: string = 'en'): Observable<CitySearchResultDto[]> {
     const params = new HttpParams()
       .set('query', query.trim())
       .set('language', language);
