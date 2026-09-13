@@ -80,4 +80,29 @@ export class App implements OnInit {
       }
     });
   }
+
+  searchByCoordinates(coords: { latitude: number; longitude: number; cityName?: string }) {
+    this.errorMessage.set(null);
+    this.currentWeather.set(null);
+    this.selectedDate.set(null);
+
+    this.weatherService.getCurrentWeatherByCoordinates(coords.latitude, coords.longitude, coords.cityName).subscribe({
+      next: (data) => {
+        this.currentWeather.set(data);
+      },
+      error: () => {
+        this.errorMessage.set('Unable to load weather data for your coordinates.');
+      }
+    });
+
+    this.weatherService.getForecastByCoordinates(coords.latitude, coords.longitude, coords.cityName).subscribe({
+      next: (data) => {
+        this.forecast.set(data);
+      },
+      error: () => {
+        this.errorMessage.set('Unable to load weather forecast for your coordinates.');
+      }
+    });
+  }
 }
+

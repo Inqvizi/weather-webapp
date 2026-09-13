@@ -7,7 +7,12 @@
     <!-- Main Content Area: min-w-0 prevents child overflow from breaking flex container -->
     @if (activeTab() === 'weather') {
       <div class="flex-1 min-w-0 flex flex-col gap-4 lg:gap-6">
-        <app-search-bar (search)="searchCity($event)"></app-search-bar>
+        <app-search-bar
+          (search)="searchCity($event)"
+          (coordinatesSelected)="searchByCoordinates($event)"
+        ></app-search-bar>
+
+
 
         @if (errorMessage()) {
           <div class="text-red-400 text-lg sm:text-xl font-bold bg-red-500/10 p-6 rounded-3xl border border-red-500/30 text-center flex items-center justify-center min-h-[12rem] motion-safe:animate-fade-in">
