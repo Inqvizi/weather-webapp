@@ -2,31 +2,31 @@
   <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Air Conditions</h3>
 </div>
 
-<div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+<div class="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
   <!-- 1. Real Feel -->
-  <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40">
+  <div class="flex items-start gap-2.5 sm:gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40 min-w-0">
     <div class="w-8 h-8 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
       <i class="bi bi-thermometer-half text-orange-400 text-lg"></i>
     </div>
-    <div class="flex flex-col min-w-0">
-      <span class="text-gray-400 text-xs mb-0.5">Real Feel</span>
-      <span class="text-xl sm:text-2xl font-bold text-white tracking-tight">{{ formatFeelsLike() }}&deg;</span>
+    <div class="flex flex-col min-w-0 flex-1">
+      <span class="text-gray-400 text-xs mb-0.5 truncate">Real Feel</span>
+      <span class="text-lg sm:text-2xl font-bold text-white tracking-tight">{{ formatFeelsLike() }}&deg;</span>
     </div>
   </div>
 
   <!-- 2. Wind Speed & Direction -->
-  <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40">
+  <div class="flex items-start gap-2.5 sm:gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40 min-w-0">
     <div class="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
       <i
         class="bi bi-arrow-up text-blue-400 text-lg transition-transform inline-block"
         [style.transform]="'rotate(' + windRotation + 'deg)'"
       ></i>
     </div>
-    <div class="flex flex-col min-w-0">
-      <span class="text-gray-400 text-xs mb-0.5">Wind</span>
-      <div class="flex items-baseline gap-1.5 flex-wrap">
-        <span class="text-xl sm:text-2xl font-bold text-white tracking-tight">{{ formatWind() }}</span>
-        <span class="text-xs font-bold text-blue-400 bg-blue-500/15 px-1.5 py-0.5 rounded border border-blue-500/20">
+    <div class="flex flex-col min-w-0 flex-1">
+      <span class="text-gray-400 text-xs mb-0.5 truncate">Wind</span>
+      <div class="flex items-center gap-1.5 flex-wrap">
+        <span class="text-lg sm:text-2xl font-bold text-white tracking-tight">{{ formatWind() }}</span>
+        <span class="text-[11px] font-bold text-blue-400 bg-blue-500/15 px-1.5 py-0.5 rounded border border-blue-500/20">
           {{ windCompass }}
         </span>
       </div>
@@ -34,60 +34,61 @@
   </div>
 
   <!-- 3. Humidity -->
-  <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40">
+  <div class="flex items-start gap-2.5 sm:gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40 min-w-0">
     <div class="w-8 h-8 rounded-xl bg-cyan-500/10 flex items-center justify-center shrink-0">
       <i class="bi bi-droplet-fill text-cyan-400 text-lg"></i>
     </div>
-    <div class="flex flex-col min-w-0">
-      <span class="text-gray-400 text-xs mb-0.5">Humidity</span>
-      <span class="text-xl sm:text-2xl font-bold text-white tracking-tight">{{ weather.humidity }}%</span>
+    <div class="flex flex-col min-w-0 flex-1">
+      <span class="text-gray-400 text-xs mb-0.5 truncate">Humidity</span>
+      <span class="text-lg sm:text-2xl font-bold text-white tracking-tight">{{ weather.humidity }}%</span>
     </div>
   </div>
 
   <!-- 4. Pressure -->
-  <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40">
+  <div class="flex items-start gap-2.5 sm:gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40 min-w-0">
     <div class="w-8 h-8 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0">
       <i class="bi bi-speedometer2 text-indigo-400 text-lg"></i>
     </div>
-    <div class="flex flex-col min-w-0">
-      <span class="text-gray-400 text-xs mb-0.5">Pressure</span>
-      <span class="text-xl sm:text-2xl font-bold text-white tracking-tight">{{ formatPressure() }}</span>
+    <div class="flex flex-col min-w-0 flex-1">
+      <span class="text-gray-400 text-xs mb-0.5 truncate">Pressure</span>
+      <span class="text-lg sm:text-2xl font-bold text-white tracking-tight">{{ formatPressure() }}</span>
     </div>
   </div>
 
   <!-- 5. UV Index -->
-  <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40">
+  <div class="flex items-start gap-2.5 sm:gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40 min-w-0">
     <div class="w-8 h-8 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
       <i class="bi bi-brightness-high-fill text-amber-400 text-lg"></i>
     </div>
-    <div class="flex flex-col min-w-0">
-      <span class="text-gray-400 text-xs mb-0.5">UV Index</span>
-      <div class="flex items-baseline gap-2 flex-wrap">
-        <span class="text-xl sm:text-2xl font-bold text-white tracking-tight">{{ weather.uvIndex?.toFixed(1) || '0.0' }}</span>
-        <span class="text-xs font-semibold px-2 py-0.5 rounded-full border {{ uvInfo.badgeClass }}">
+    <div class="flex flex-col min-w-0 flex-1">
+      <span class="text-gray-400 text-xs mb-0.5 truncate">UV Index</span>
+      <div class="flex items-center gap-1.5 flex-wrap">
+        <span class="text-lg sm:text-2xl font-bold text-white tracking-tight">{{ weather.uvIndex?.toFixed(1) || '0.0' }}</span>
+        <span class="text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full border {{ uvInfo.badgeClass }}">
           {{ uvInfo.label }}
         </span>
       </div>
     </div>
   </div>
 
-  <!-- 6. Sunrise & Sunset -->
-  <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40">
+  <!-- 6. Sunrise & Sunset (Sun Schedule) -->
+  <div class="flex items-start gap-2.5 sm:gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40 min-w-0">
     <div class="w-8 h-8 rounded-xl bg-yellow-500/10 flex items-center justify-center shrink-0">
       <i class="bi bi-sunset-fill text-yellow-400 text-lg"></i>
     </div>
-    <div class="flex flex-col min-w-0">
-      <span class="text-gray-400 text-xs mb-0.5">Sun Schedule</span>
-      <div class="flex items-center gap-3 text-xs sm:text-sm text-gray-200 mt-1">
-        <span class="flex items-center gap-1">
-          <i class="bi bi-sunrise text-amber-400"></i>
-          {{ formattedSunrise }}
-        </span>
-        <span class="text-gray-600">|</span>
-        <span class="flex items-center gap-1">
-          <i class="bi bi-sunset text-orange-400"></i>
-          {{ formattedSunset }}
-        </span>
+    <div class="flex flex-col min-w-0 flex-1">
+      <span class="text-gray-400 text-xs mb-0.5 truncate">Sun Schedule</span>
+      <div class="flex flex-col gap-1 mt-0.5 min-w-0">
+        <div class="flex items-center gap-1.5 text-xs">
+          <i class="bi bi-sunrise text-amber-400 text-xs shrink-0"></i>
+          <span class="text-gray-400 text-[11px]">Rise:</span>
+          <span class="font-bold text-white tracking-tight">{{ formattedSunrise }}</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs">
+          <i class="bi bi-sunset text-orange-400 text-xs shrink-0"></i>
+          <span class="text-gray-400 text-[11px]">Set:</span>
+          <span class="font-bold text-white tracking-tight">{{ formattedSunset }}</span>
+        </div>
       </div>
     </div>
   </div>
