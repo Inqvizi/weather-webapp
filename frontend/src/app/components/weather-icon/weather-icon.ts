@@ -86,22 +86,25 @@ export class WeatherIcon {
     return day ? 'clear-day' : 'clear-night';
   });
 
+  private static instanceCounter = 0;
+  readonly uid = `wi_${++WeatherIcon.instanceCounter}`;
+
   get sizeClass(): string {
     switch (this.size) {
       case 'xs':
-        return 'w-4 h-4';
-      case 'sm':
         return 'w-6 h-6';
+      case 'sm':
+        return 'w-8 h-8';
       case 'md':
-        return 'w-9 h-9';
+        return 'w-11 h-11';
       case 'lg':
-        return 'w-12 h-12';
+        return 'w-14 h-14';
       case 'xl':
-        return 'w-16 h-16';
+        return 'w-20 h-20';
       case 'hero':
-        return 'w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-44 lg:h-44';
+        return 'w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-48 lg:h-48';
       default:
-        return 'w-9 h-9';
+        return 'w-11 h-11';
     }
   }
 

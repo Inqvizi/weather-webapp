@@ -2,207 +2,345 @@
   @switch (iconType()) {
     @case ('clear-day') {
       <!-- Clear Day (Sun) -->
-      <svg class="w-full h-full drop-shadow-md animate-pulse-gentle" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="32" cy="32" r="14" fill="url(#sunGrad)" />
-        <g stroke="#f59e0b" stroke-width="3" stroke-linecap="round">
+      <svg class="w-full h-full drop-shadow-md animate-sun-spin" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient [id]="uid + '_sunGrad'" x1="20" y1="20" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#fde047" />
+            <stop offset="1" stop-color="#f59e0b" />
+          </linearGradient>
+        </defs>
+        <circle cx="32" cy="32" r="14" [attr.fill]="'url(#' + uid + '_sunGrad)'" />
+        <circle cx="32" cy="32" r="14.5" stroke="#fde047" stroke-width="1.5" stroke-opacity="0.6" />
+        <g stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round">
           <line x1="32" y1="6" x2="32" y2="12" />
           <line x1="32" y1="52" x2="32" y2="58" />
           <line x1="6" y1="32" x2="12" y2="32" />
           <line x1="52" y1="32" x2="58" y2="32" />
-          <line x1="13.6" y1="13.6" x2="17.8" y2="17.8" />
-          <line x1="46.2" y1="46.2" x2="50.4" y2="50.4" />
-          <line x1="13.6" y1="50.4" x2="17.8" y2="46.2" />
-          <line x1="46.2" y1="17.8" x2="50.4" y2="13.6" />
+          <line x1="13.6" y1="13.6" x2="18" y2="18" />
+          <line x1="46" y1="46" x2="50.4" y2="50.4" />
+          <line x1="13.6" y1="50.4" x2="18" y2="46" />
+          <line x1="46" y1="18" x2="50.4" y2="13.6" />
         </g>
-        <defs>
-          <linearGradient id="sunGrad" x1="20" y1="20" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#fbbf24" />
-            <stop offset="1" stop-color="#f59e0b" />
-          </linearGradient>
-        </defs>
       </svg>
     }
 
     @case ('clear-night') {
-      <!-- Clear Night (Moon & Stars) -->
+      <!-- Clear Night (Bold Golden Crescent Moon & Stars) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M42 36C42 45.94 33.94 54 24 54C19.78 54 15.93 52.55 12.87 50.12C15.42 51.34 18.27 52.02 21.28 52.02C33.43 52.02 43.28 42.17 43.28 30.02C43.28 21.73 38.68 14.51 31.91 10.82C38.03 14.18 42 20.61 42 28C42 30.73 41.4 33.32 40.32 35.65C41.4 35.88 42 36 42 36Z" fill="url(#moonGrad)" />
-        <circle cx="48" cy="16" r="1.5" fill="#93c5fd" class="animate-ping-slow" />
-        <circle cx="54" cy="28" r="1" fill="#bfdbfe" />
-        <circle cx="16" cy="18" r="1.2" fill="#93c5fd" />
         <defs>
-          <linearGradient id="moonGrad" x1="16" y1="12" x2="42" y2="52" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#bfdbfe" />
-            <stop offset="1" stop-color="#60a5fa" />
+          <linearGradient [id]="uid + '_moonGrad'" x1="22" y1="8" x2="54" y2="50" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#fef08a" />
+            <stop offset="1" stop-color="#facc15" />
           </linearGradient>
         </defs>
+        <!-- Luminous Crescent Moon -->
+        <path
+          d="M33 8C45.15 8 55 17.85 55 30C55 42.15 45.15 52 33 52C28.5 52 24.3 50.6 20.8 48.3C31.5 45.5 39.5 35.8 39.5 24.2C39.5 17.6 36.3 11.8 31.4 8.2C31.9 8.1 32.4 8 33 8Z"
+          [attr.fill]="'url(#' + uid + '_moonGrad)'"
+          stroke="#eab308"
+          stroke-width="1.2"
+        />
+        <!-- 4-point Star Sparkles -->
+        <path d="M15 8Q15 16 7 16Q15 16 15 24Q15 16 23 16Q15 16 15 8Z" fill="#fef08a" class="animate-sparkle-1" />
+        <path d="M53 9Q53 14 48 14Q53 14 53 19Q53 14 58 14Q53 14 53 9Z" fill="#fde047" class="animate-sparkle-2" />
+        <path d="M14 35Q14 39 10 39Q14 39 14 43Q14 39 18 39Q14 39 14 35Z" fill="#fef08a" class="animate-sparkle-1" />
       </svg>
     }
 
     @case ('partly-cloudy-day') {
-      <!-- Partly Cloudy Day (Sun + Cloud) -->
+      <!-- Partly Cloudy Day (Sun + White Cloud) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="24" cy="24" r="10" fill="url(#sunGrad2)" />
-        <g stroke="#f59e0b" stroke-width="2" stroke-linecap="round">
-          <line x1="24" y1="8" x2="24" y2="11" />
-          <line x1="10" y1="24" x2="13" y2="24" />
-          <line x1="13" y1="13" x2="15" y2="15" />
-          <line x1="33" y1="15" x2="35" y2="13" />
-        </g>
-        <path d="M47 48H20C15.58 48 12 44.42 12 40C12 35.85 15.15 32.44 19.2 32.04C20.67 26.33 25.83 22 32 22C39.18 22 45 27.82 45 35C45 35.34 44.99 35.67 44.96 36C48.37 36.87 51 39.99 51 44C51 46.21 49.21 48 47 48Z" fill="url(#cloudGradLight)" filter="url(#shadow)" />
         <defs>
-          <linearGradient id="sunGrad2" x1="16" y1="16" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+          <linearGradient [id]="uid + '_sunGrad2'" x1="14" y1="14" x2="32" y2="32" gradientUnits="userSpaceOnUse">
             <stop stop-color="#fde047" />
             <stop offset="1" stop-color="#f59e0b" />
           </linearGradient>
-          <linearGradient id="cloudGradLight" x1="12" y1="24" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+          <linearGradient [id]="uid + '_cloudGradLight'" x1="12" y1="20" x2="52" y2="52" gradientUnits="userSpaceOnUse">
             <stop stop-color="#ffffff" />
-            <stop offset="1" stop-color="#cbd5e1" />
+            <stop offset="1" stop-color="#e0f2fe" />
           </linearGradient>
-          <filter id="shadow" x="8" y="20" width="46" height="32" filterUnits="userSpaceOnUse">
-            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15" />
-          </filter>
         </defs>
+        <!-- Sun peaking behind -->
+        <circle cx="23" cy="23" r="11" [attr.fill]="'url(#' + uid + '_sunGrad2)'" />
+        <g stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round">
+          <line x1="23" y1="7" x2="23" y2="10" />
+          <line x1="7" y1="23" x2="10" y2="23" />
+          <line x1="12" y1="12" x2="14.5" y2="14.5" />
+          <line x1="32" y1="14.5" x2="34.5" y2="12" />
+        </g>
+        <!-- Crisp White Front Cloud -->
+        <path
+          d="M49 50H19C14 50 10 46 10 41C10 36.3 13.5 32.4 18.1 32C19.8 24.5 25.8 19 33 19C41.3 19 48 25.7 48 34C48 34.4 48 34.7 47.9 35.1C51.5 36.1 54 39.4 54 43.5C54 47.1 51.5 50 49 50Z"
+          [attr.fill]="'url(#' + uid + '_cloudGradLight)'"
+          stroke="#f8fafc"
+          stroke-width="1.2"
+        />
       </svg>
     }
 
     @case ('partly-cloudy-night') {
       <!-- Partly Cloudy Night (Moon + Cloud) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M30 14C30 20.63 24.63 26 18 26C16.3 26 14.68 25.64 13.22 25C15.5 29.5 20.3 32 25.5 32C32.4 32 38 26.4 38 19.5C38 15.4 36.1 11.7 33 9.4C31.5 10.6 30 12.2 30 14Z" fill="url(#moonGrad2)" />
-        <path d="M47 48H20C15.58 48 12 44.42 12 40C12 35.85 15.15 32.44 19.2 32.04C20.67 26.33 25.83 22 32 22C39.18 22 45 27.82 45 35C45 35.34 44.99 35.67 44.96 36C48.37 36.87 51 39.99 51 44C51 46.21 49.21 48 47 48Z" fill="url(#cloudGradNight)" />
         <defs>
-          <linearGradient id="moonGrad2" x1="16" y1="10" x2="38" y2="32" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#bfdbfe" />
-            <stop offset="1" stop-color="#60a5fa" />
+          <linearGradient [id]="uid + '_moonGrad2'" x1="16" y1="8" x2="38" y2="34" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#fef08a" />
+            <stop offset="1" stop-color="#facc15" />
           </linearGradient>
-          <linearGradient id="cloudGradNight" x1="12" y1="24" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#e2e8f0" />
-            <stop offset="1" stop-color="#94a3b8" />
+          <linearGradient [id]="uid + '_cloudGradNight'" x1="12" y1="20" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#f1f5f9" />
+            <stop offset="1" stop-color="#cbd5e1" />
           </linearGradient>
         </defs>
+        <!-- Moon peaking behind -->
+        <path
+          d="M25 8C33 8 39.5 14.5 39.5 22.5C39.5 30.5 33 37 25 37C21.8 37 18.8 36 16.3 34.3C23.9 32.3 29.5 25.3 29.5 17C29.5 13.4 28.1 10.1 25.8 7.7C25.5 7.6 25.3 7.6 25 8Z"
+          [attr.fill]="'url(#' + uid + '_moonGrad2)'"
+          stroke="#eab308"
+          stroke-width="1"
+        />
+        <path d="M47 8Q47 12 43 12Q47 12 47 16Q47 12 51 12Q47 12 47 8Z" fill="#fef08a" class="animate-sparkle-1" />
+        <!-- Front Cloud -->
+        <path
+          d="M49 50H19C14 50 10 46 10 41C10 36.3 13.5 32.4 18.1 32C19.8 24.5 25.8 19 33 19C41.3 19 48 25.7 48 34C48 34.4 48 34.7 47.9 35.1C51.5 36.1 54 39.4 54 43.5C54 47.1 51.5 50 49 50Z"
+          [attr.fill]="'url(#' + uid + '_cloudGradNight)'"
+          stroke="#cbd5e1"
+          stroke-width="1.2"
+        />
       </svg>
     }
 
     @case ('overcast') {
       <!-- Overcast (Layered Clouds) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M42 22C37.5 22 33.6 24.6 31.8 28.3C30.6 27.5 29.1 27 27.5 27C23.4 27 20 30.4 20 34.5C20 34.9 20 35.2 20.1 35.6C17.2 36.4 15 39 15 42C15 45.9 18.1 49 22 49H42C46.4 49 50 45.4 50 41C50 36.8 46.8 33.3 42.6 33C42.8 32.4 43 31.7 43 31C43 26 39 22 42 22Z" fill="#64748b" opacity="0.6" />
-        <path d="M46 50H19C14.58 50 11 46.42 11 42C11 37.85 14.15 34.44 18.2 34.04C19.67 28.33 24.83 24 31 24C38.18 24 44 29.82 44 37C44 37.34 43.99 37.67 43.96 38C47.37 38.87 50 41.99 50 46C50 48.21 48.21 50 46 50Z" fill="url(#cloudGradDark)" />
         <defs>
-          <linearGradient id="cloudGradDark" x1="11" y1="24" x2="50" y2="50" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#cbd5e1" />
+          <linearGradient [id]="uid + '_cloudGradFront'" x1="12" y1="20" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#ffffff" />
+            <stop offset="1" stop-color="#cbd5e1" />
+          </linearGradient>
+          <linearGradient [id]="uid + '_cloudGradBack'" x1="16" y1="14" x2="50" y2="38" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#94a3b8" />
             <stop offset="1" stop-color="#64748b" />
           </linearGradient>
         </defs>
+        <!-- Back Cloud -->
+        <path
+          d="M46 36H24C20.5 36 17.5 33 17.5 29.5C17.5 26.2 20 23.5 23.2 23.1C24.4 17.8 29.1 14 34.5 14C41 14 46.2 19.2 46.2 25.7C46.2 26 46.2 26.3 46.1 26.6C48.9 27.4 51 30 51 33C51 34.7 49 36 46 36Z"
+          [attr.fill]="'url(#' + uid + '_cloudGradBack)'"
+          stroke="#94a3b8"
+          stroke-width="1"
+        />
+        <!-- Front Cloud -->
+        <path
+          d="M49 50H19C14 50 10 46 10 41C10 36.3 13.5 32.4 18.1 32C19.8 24.5 25.8 19 33 19C41.3 19 48 25.7 48 34C48 34.4 48 34.7 47.9 35.1C51.5 36.1 54 39.4 54 43.5C54 47.1 51.5 50 49 50Z"
+          [attr.fill]="'url(#' + uid + '_cloudGradFront)'"
+          stroke="#e2e8f0"
+          stroke-width="1.2"
+        />
       </svg>
     }
 
     @case ('fog') {
-      <!-- Fog (Cloud + Mist Lines) -->
+      <!-- Fog (Cloud + Distinct Mist Bars) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M44 36H20C16.69 36 14 33.31 14 30C14 26.89 16.36 24.33 19.4 24.03C20.5 19.75 24.37 16.5 29 16.5C34.38 16.5 38.75 20.87 38.75 26.25C38.75 26.51 38.74 26.75 38.72 27C41.28 27.65 43.25 29.99 43.25 33C43.25 34.66 41.91 36 44 36Z" fill="url(#cloudGradLight)" />
-        <g stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round">
-          <line x1="14" y1="42" x2="50" y2="42" stroke-dasharray="24 6" />
-          <line x1="18" y1="48" x2="46" y2="48" stroke-dasharray="16 8" />
-          <line x1="22" y1="54" x2="42" y2="54" />
+        <defs>
+          <linearGradient [id]="uid + '_fogCloudGrad'" x1="12" y1="12" x2="48" y2="40" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#ffffff" />
+            <stop offset="1" stop-color="#cbd5e1" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M47 38H19C15 38 12 35 12 31C12 27.2 14.8 24.1 18.5 23.7C19.9 17.7 25.2 13 31.5 13C38.9 13 45 19.1 45 26.5C45 26.8 45 27.1 44.9 27.4C47.9 28.3 50 31 50 34.2C50 36.3 48.7 38 47 38Z"
+          [attr.fill]="'url(#' + uid + '_fogCloudGrad)'"
+          stroke="#e2e8f0"
+          stroke-width="1.2"
+        />
+        <g stroke="#94a3b8" stroke-width="3" stroke-linecap="round">
+          <line x1="12" y1="44" x2="52" y2="44" />
+          <line x1="16" y1="50" x2="48" y2="50" stroke-dasharray="18 8" />
+          <line x1="22" y1="56" x2="42" y2="56" />
         </g>
       </svg>
     }
 
     @case ('drizzle') {
-      <!-- Drizzle (Cloud + Light Drops) -->
+      <!-- Drizzle (Cloud + Distinct Cyan Drops) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M47 38H20C15.58 38 12 34.42 12 30C12 25.85 15.15 22.44 19.2 22.04C20.67 16.33 25.83 12 32 12C39.18 12 45 17.82 45 25C45 25.34 44.99 25.67 44.96 26C48.37 26.87 51 29.99 51 34C51 36.21 49.21 38 47 38Z" fill="url(#cloudGradLight)" />
-        <g stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round">
-          <line x1="22" y1="44" x2="20" y2="49" />
-          <line x1="32" y1="44" x2="30" y2="49" />
-          <line x1="42" y1="44" x2="40" y2="49" />
-        </g>
+        <defs>
+          <linearGradient [id]="uid + '_drizzleCloudGrad'" x1="12" y1="12" x2="48" y2="40" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#ffffff" />
+            <stop offset="1" stop-color="#e0f2fe" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M47 38H19C15 38 12 35 12 31C12 27.2 14.8 24.1 18.5 23.7C19.9 17.7 25.2 13 31.5 13C38.9 13 45 19.1 45 26.5C45 26.8 45 27.1 44.9 27.4C47.9 28.3 50 31 50 34.2C50 36.3 48.7 38 47 38Z"
+          [attr.fill]="'url(#' + uid + '_drizzleCloudGrad)'"
+          stroke="#f8fafc"
+          stroke-width="1.2"
+        />
+        <!-- 3 Vibrant Teardrop Droplets -->
+        <path d="M21 43C21 43 18 46 18 48.5C18 50.4 19.3 52 21 52C22.7 52 24 50.4 24 48.5C24 46 21 43 21 43Z" fill="#38bdf8" />
+        <path d="M32 41C32 41 29 44 29 46.5C29 48.4 30.3 50 32 50C33.7 50 35 48.4 35 46.5C35 44 32 41 32 41Z" fill="#38bdf8" />
+        <path d="M43 44C43 44 40 47 40 49.5C40 51.4 41.3 53 43 53C44.7 53 46 51.4 46 49.5C46 47 43 44 43 44Z" fill="#38bdf8" />
       </svg>
     }
 
     @case ('rain') {
-      <!-- Rain (Cloud + Heavy Rain Streaks) -->
+      <!-- Rain (Dark Rain Cloud + 4 Vibrant Angled Streaks) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M47 36H20C15.58 36 12 32.42 12 28C12 23.85 15.15 20.44 19.2 20.04C20.67 14.33 25.83 10 32 10C39.18 10 45 15.82 45 23C45 23.34 44.99 23.67 44.96 24C48.37 24.87 51 27.99 51 32C51 34.21 49.21 36 47 36Z" fill="url(#cloudGradDark)" />
-        <g stroke="#60a5fa" stroke-width="3" stroke-linecap="round">
-          <line x1="20" y1="42" x2="16" y2="52" />
-          <line x1="30" y1="42" x2="26" y2="52" />
-          <line x1="40" y1="42" x2="36" y2="52" />
-          <line x1="26" y1="48" x2="22" y2="58" />
-          <line x1="36" y1="48" x2="32" y2="58" />
+        <defs>
+          <linearGradient [id]="uid + '_rainCloudGrad'" x1="12" y1="10" x2="48" y2="38" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#94a3b8" />
+            <stop offset="1" stop-color="#475569" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M47 36H19C15 36 12 33 12 29C12 25.2 14.8 22.1 18.5 21.7C19.9 15.7 25.2 11 31.5 11C38.9 11 45 17.1 45 24.5C45 24.8 45 25.1 44.9 25.4C47.9 26.3 50 29 50 32.2C50 34.3 48.7 36 47 36Z"
+          [attr.fill]="'url(#' + uid + '_rainCloudGrad)'"
+          stroke="#cbd5e1"
+          stroke-width="1.2"
+        />
+        <g stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round">
+          <line x1="20" y1="42" x2="16" y2="55" />
+          <line x1="29" y1="42" x2="25" y2="55" />
+          <line x1="38" y1="42" x2="34" y2="55" />
+          <line x1="47" y1="42" x2="43" y2="55" />
         </g>
       </svg>
     }
 
     @case ('snow') {
-      <!-- Snow (Cloud + Snowflakes) -->
+      <!-- Snow (Cloud + Crisp 6-Point Snowflakes) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M47 36H20C15.58 36 12 32.42 12 28C12 23.85 15.15 20.44 19.2 20.04C20.67 14.33 25.83 10 32 10C39.18 10 45 15.82 45 23C45 23.34 44.99 23.67 44.96 24C48.37 24.87 51 27.99 51 32C51 34.21 49.21 36 47 36Z" fill="url(#cloudGradDark)" />
-        <!-- Snowflake 1 -->
-        <g stroke="#bae6fd" stroke-width="2" stroke-linecap="round">
-          <line x1="22" y1="44" x2="22" y2="52" />
-          <line x1="18" y1="48" x2="26" y2="48" />
-          <line x1="19" y1="45" x2="25" y2="51" />
-          <line x1="19" y1="51" x2="25" y2="45" />
+        <defs>
+          <linearGradient [id]="uid + '_snowCloudGrad'" x1="12" y1="10" x2="48" y2="38" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#cbd5e1" />
+            <stop offset="1" stop-color="#64748b" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M47 36H19C15 36 12 33 12 29C12 25.2 14.8 22.1 18.5 21.7C19.9 15.7 25.2 11 31.5 11C38.9 11 45 17.1 45 24.5C45 24.8 45 25.1 44.9 25.4C47.9 26.3 50 29 50 32.2C50 34.3 48.7 36 47 36Z"
+          [attr.fill]="'url(#' + uid + '_snowCloudGrad)'"
+          stroke="#e2e8f0"
+          stroke-width="1.2"
+        />
+        <!-- Snowflake 1 at (24, 49) -->
+        <g stroke="#bae6fd" stroke-width="2.2" stroke-linecap="round">
+          <line x1="24" y1="42" x2="24" y2="56" />
+          <line x1="17" y1="49" x2="31" y2="49" />
+          <line x1="19" y1="44" x2="29" y2="54" />
+          <line x1="19" y1="54" x2="29" y2="44" />
         </g>
-        <!-- Snowflake 2 -->
-        <g stroke="#bae6fd" stroke-width="2" stroke-linecap="round">
-          <line x1="38" y1="46" x2="38" y2="54" />
-          <line x1="34" y1="50" x2="42" y2="50" />
-          <line x1="35" y1="47" x2="41" y2="53" />
-          <line x1="35" y1="53" x2="41" y2="47" />
+        <!-- Snowflake 2 at (42, 49) -->
+        <g stroke="#bae6fd" stroke-width="2.2" stroke-linecap="round">
+          <line x1="42" y1="42" x2="42" y2="56" />
+          <line x1="35" y1="49" x2="49" y2="49" />
+          <line x1="37" y1="44" x2="47" y2="54" />
+          <line x1="37" y1="54" x2="47" y2="44" />
         </g>
       </svg>
     }
 
     @case ('rain-showers-day') {
-      <!-- Rain Showers Day (Sun + Cloud + Rain) -->
+      <!-- Rain Showers Day (Sun + Cloud + Rain Streaks) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="22" cy="20" r="8" fill="url(#sunGrad2)" />
-        <path d="M47 38H20C15.58 38 12 34.42 12 30C12 25.85 15.15 22.44 19.2 22.04C20.67 16.33 25.83 12 32 12C39.18 12 45 17.82 45 25C45 25.34 44.99 25.67 44.96 26C48.37 26.87 51 29.99 51 34C51 36.21 49.21 38 47 38Z" fill="url(#cloudGradLight)" />
-        <g stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round">
-          <line x1="22" y1="44" x2="19" y2="52" />
-          <line x1="32" y1="44" x2="29" y2="52" />
-          <line x1="42" y1="44" x2="39" y2="52" />
+        <defs>
+          <linearGradient [id]="uid + '_sunGrad3'" x1="14" y1="14" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#fde047" />
+            <stop offset="1" stop-color="#f59e0b" />
+          </linearGradient>
+          <linearGradient [id]="uid + '_showerCloudGradDay'" x1="12" y1="16" x2="48" y2="44" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#ffffff" />
+            <stop offset="1" stop-color="#e0f2fe" />
+          </linearGradient>
+        </defs>
+        <!-- Sun peaking behind -->
+        <circle cx="23" cy="21" r="9" [attr.fill]="'url(#' + uid + '_sunGrad3)'" />
+        <g stroke="#f59e0b" stroke-width="2" stroke-linecap="round">
+          <line x1="23" y1="7" x2="23" y2="10" />
+          <line x1="9" y1="21" x2="12" y2="21" />
+          <line x1="13" y1="11" x2="15.5" y2="13.5" />
+          <line x1="31" y1="13.5" x2="33.5" y2="11" />
+        </g>
+        <path
+          d="M47 37H19C15 37 12 34 12 30C12 26.2 14.8 23.1 18.5 22.7C19.9 16.7 25.2 12 31.5 12C38.9 12 45 18.1 45 25.5C45 25.8 45 26.1 44.9 26.4C47.9 27.3 50 30 50 33.2C50 35.3 48.7 37 47 37Z"
+          [attr.fill]="'url(#' + uid + '_showerCloudGradDay)'"
+          stroke="#f8fafc"
+          stroke-width="1.2"
+        />
+        <g stroke="#38bdf8" stroke-width="3" stroke-linecap="round">
+          <line x1="23" y1="43" x2="19" y2="55" />
+          <line x1="33" y1="43" x2="29" y2="55" />
+          <line x1="43" y1="43" x2="39" y2="55" />
         </g>
       </svg>
     }
 
     @case ('rain-showers-night') {
-      <!-- Rain Showers Night (Moon + Cloud + Rain) -->
+      <!-- Rain Showers Night (Moon + Cloud + Rain Streaks) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M28 12C28 17 24 21 19 21C17.5 21 16.2 20.7 15 20.2C17 23.5 20.8 25.5 25 25.5C30.5 25.5 35 21 35 15.5C35 12.2 33.5 9.3 31 7.5C29.5 8.7 28 10.3 28 12Z" fill="url(#moonGrad2)" />
-        <path d="M47 38H20C15.58 38 12 34.42 12 30C12 25.85 15.15 22.44 19.2 22.04C20.67 16.33 25.83 12 32 12C39.18 12 45 17.82 45 25C45 25.34 44.99 25.67 44.96 26C48.37 26.87 51 29.99 51 34C51 36.21 49.21 38 47 38Z" fill="url(#cloudGradNight)" />
-        <g stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round">
-          <line x1="22" y1="44" x2="19" y2="52" />
-          <line x1="32" y1="44" x2="29" y2="52" />
-          <line x1="42" y1="44" x2="39" y2="52" />
+        <defs>
+          <linearGradient [id]="uid + '_moonGrad3'" x1="16" y1="8" x2="36" y2="32" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#fef08a" />
+            <stop offset="1" stop-color="#facc15" />
+          </linearGradient>
+          <linearGradient [id]="uid + '_showerCloudGradNight'" x1="12" y1="16" x2="48" y2="44" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#f1f5f9" />
+            <stop offset="1" stop-color="#cbd5e1" />
+          </linearGradient>
+        </defs>
+        <!-- Moon peaking behind -->
+        <path
+          d="M24 7C31 7 37 13 37 20C37 27 31 33 24 33C21 33 18.2 32 16 30.5C23 28.5 28 22.5 28 15C28 11.8 26.8 8.9 24.8 6.7C24.5 6.6 24.3 6.6 24 7Z"
+          [attr.fill]="'url(#' + uid + '_moonGrad3)'"
+          stroke="#eab308"
+          stroke-width="1"
+        />
+        <path
+          d="M47 37H19C15 37 12 34 12 30C12 26.2 14.8 23.1 18.5 22.7C19.9 16.7 25.2 12 31.5 12C38.9 12 45 18.1 45 25.5C45 25.8 45 26.1 44.9 26.4C47.9 27.3 50 30 50 33.2C50 35.3 48.7 37 47 37Z"
+          [attr.fill]="'url(#' + uid + '_showerCloudGradNight)'"
+          stroke="#cbd5e1"
+          stroke-width="1.2"
+        />
+        <g stroke="#38bdf8" stroke-width="3" stroke-linecap="round">
+          <line x1="23" y1="43" x2="19" y2="55" />
+          <line x1="33" y1="43" x2="29" y2="55" />
+          <line x1="43" y1="43" x2="39" y2="55" />
         </g>
       </svg>
     }
 
     @case ('thunderstorm') {
-      <!-- Thunderstorm (Cloud + Lightning Bolt + Rain) -->
+      <!-- Thunderstorm (Dark Cloud + Prominent Electric Bolt) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M47 34H20C15.58 34 12 30.42 12 26C12 21.85 15.15 18.44 19.2 18.04C20.67 12.33 25.83 8 32 8C39.18 8 45 13.82 45 21C45 21.34 44.99 21.67 44.96 22C48.37 22.87 51 25.99 51 30C51 32.21 49.21 34 47 34Z" fill="url(#stormCloudGrad)" />
-        <!-- Electric Lightning Bolt -->
-        <polygon points="32,32 23,46 31,46 27,60 41,43 33,43" fill="url(#lightningGrad)" stroke="#f59e0b" stroke-width="1.5" stroke-linejoin="round" class="animate-pulse" />
-        <g stroke="#38bdf8" stroke-width="2" stroke-linecap="round">
-          <line x1="17" y1="42" x2="14" y2="50" />
-          <line x1="47" y1="42" x2="44" y2="50" />
-        </g>
         <defs>
-          <linearGradient id="stormCloudGrad" x1="12" y1="8" x2="48" y2="34" gradientUnits="userSpaceOnUse">
+          <linearGradient [id]="uid + '_stormCloudGrad'" x1="12" y1="8" x2="48" y2="34" gradientUnits="userSpaceOnUse">
             <stop stop-color="#475569" />
             <stop offset="1" stop-color="#1e293b" />
           </linearGradient>
-          <linearGradient id="lightningGrad" x1="24" y1="32" x2="40" y2="60" gradientUnits="userSpaceOnUse">
+          <linearGradient [id]="uid + '_lightningGrad'" x1="24" y1="26" x2="40" y2="60" gradientUnits="userSpaceOnUse">
             <stop stop-color="#fef08a" />
             <stop offset="1" stop-color="#eab308" />
           </linearGradient>
         </defs>
+        <path
+          d="M47 34H19C15 34 12 31 12 27C12 23.2 14.8 20.1 18.5 19.7C19.9 13.7 25.2 9 31.5 9C38.9 9 45 15.1 45 22.5C45 22.8 45 23.1 44.9 23.4C47.9 24.3 50 27 50 30.2C50 32.3 48.7 34 47 34Z"
+          [attr.fill]="'url(#' + uid + '_stormCloudGrad)'"
+          stroke="#64748b"
+          stroke-width="1.2"
+        />
+        <!-- Electric Lightning Bolt -->
+        <polygon
+          points="33,26 21,43 31,43 25,60 43,38 33,38"
+          [attr.fill]="'url(#' + uid + '_lightningGrad)'"
+          stroke="#ca8a04"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+          class="animate-bolt"
+        />
+        <g stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round">
+          <line x1="16" y1="44" x2="13" y2="53" />
+          <line x1="48" y1="44" x2="45" y2="53" />
+        </g>
       </svg>
     }
   }
