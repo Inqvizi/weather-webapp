@@ -117,9 +117,15 @@
               <div class="text-4xl font-extrabold text-white tracking-tight">
                 {{ formatTemp(card.weather.temperature) }}&deg;
               </div>
-              <div class="w-16 h-16 flex items-center justify-center">
-                <i class="bi {{ getIcon(card.weather.iconCode, card.weather.description) }} {{ getColor(card.weather.iconCode, card.weather.description) }} text-4xl"></i>
+              <div class="flex items-center justify-center">
+                <app-weather-icon
+                  [weatherCode]="card.weather.weatherCode"
+                  [isDay]="card.weather.isDay ?? true"
+                  [iconCode]="card.weather.iconCode"
+                  size="md"
+                ></app-weather-icon>
               </div>
+
             </div>
 
             <!-- Bottom Row: Wind & Humidity indicators -->

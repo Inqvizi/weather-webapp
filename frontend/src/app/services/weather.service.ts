@@ -9,7 +9,13 @@ export interface WeatherResponseDto {
   feelsLike: number;
   humidity: number;
   windSpeed: number;
+  windDirection?: number;
   pressure?: number;
+  uvIndex?: number;
+  sunrise?: string;
+  sunset?: string;
+  isDay?: boolean;
+  weatherCode?: number;
   description: string;
   iconCode: string;
   measuredAt: string;
@@ -23,15 +29,34 @@ export interface ForecastItemDto {
   feelsLike: number;
   humidity: number;
   windSpeed: number;
+  windDirection?: number;
   pressure?: number;
+  precipitationProbability?: number;
+  isDay?: boolean;
+  weatherCode?: number;
   description: string;
   iconCode: string;
+}
+
+export interface DailyForecastItemDto {
+  date: string;
+  weatherCode: number;
+  description: string;
+  iconCode: string;
+  minTemp: number;
+  maxTemp: number;
+  sunrise: string;
+  sunset: string;
+  uvIndexMax: number;
 }
 
 export interface ForecastResponseDto {
   cityName: string;
   countryCode: string;
+  latitude?: number;
+  longitude?: number;
   items: ForecastItemDto[];
+  daily?: DailyForecastItemDto[];
 }
 
 export interface CitySearchResultDto {
@@ -59,6 +84,30 @@ export class WeatherService {
     return this.http.get<ForecastResponseDto>(`${this.apiUrl}/${encodeURIComponent(city.trim())}/forecast`);
   }
 
+  getCurrentWeatherByCoordinates(latitude: number, longitude: number, cityName?: string): Observable<WeatherResponseDto> {
+    let params = new HttpParams()
+      .set('latitude', latitude.toString())
+      .set('longitude', longitude.toString());
+
+    if (cityName) {
+      params = params.set('cityName', cityName);
+    }
+
+    return this.http.get<WeatherResponseDto>(`${this.apiUrl}/by-coordinates`, { params });
+  }
+
+  getForecastByCoordinates(latitude: number, longitude: number, cityName?: string): Observable<ForecastResponseDto> {
+    let params = new HttpParams()
+      .set('latitude', latitude.toString())
+      .set('longitude', longitude.toString());
+
+    if (cityName) {
+      params = params.set('cityName', cityName);
+    }
+
+    return this.http.get<ForecastResponseDto>(`${this.apiUrl}/by-coordinates/forecast`, { params });
+  }
+
   searchCities(query: string, language: string = 'en'): Observable<CitySearchResultDto[]> {
     const params = new HttpParams()
       .set('query', query.trim())
@@ -66,4 +115,10 @@ export class WeatherService {
 
     return this.http.get<CitySearchResultDto[]>(`${this.apiUrl}/search`, { params });
   }
+
+  reverseGeocode(latitude: number, longitude: number): Observable<any> {
+    const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`;
+    return this.http.get<any>(url);
+  }
 }
+

@@ -18,9 +18,15 @@
       </div>
 
       <div class="flex items-center gap-3 flex-1 px-2 overflow-hidden">
-        <i class="bi {{ getIcon(day.iconCode, day.description) }} {{ getColor(day.iconCode, day.description) }} text-xl min-w-[24px] text-center"></i>
+        <app-weather-icon
+          [weatherCode]="day.weatherCode"
+          [isDay]="true"
+          [iconCode]="day.iconCode"
+          size="sm"
+        ></app-weather-icon>
         <span class="text-white font-medium text-sm capitalize truncate">{{ day.description || 'N/A' }}</span>
       </div>
+
 
       <div class="flex items-center justify-end w-20 shrink-0">
         <span class="text-white font-bold">{{ formatTemp(day.maxTemp) }}&deg;</span>

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { WeatherService, WeatherResponseDto, CitySearchResultDto } from '../../services/weather.service';
 import { FavoritesService } from '../../services/favorites.service';
 import { SettingsService } from '../../services/settings.service';
-import { getIconClass, getIconColor } from '../../utils/icon.mapper';
+import { WeatherIcon } from '../weather-icon/weather-icon';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -18,11 +18,12 @@ interface CityCardData {
 @Component({
   selector: 'app-cities',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, WeatherIcon],
   templateUrl: './cities.html',
   styleUrl: './cities.css',
 })
 export class CitiesComponent implements OnInit {
+
   @Output() selectCity = new EventEmitter<string>();
 
   weatherService = inject(WeatherService);
@@ -113,12 +114,5 @@ export class CitiesComponent implements OnInit {
     if (wind === undefined || wind === null) return '--';
     return this.settingsService.formatWind(wind);
   }
-
-  getIcon(code?: string, desc?: string): string {
-    return getIconClass(code || '', desc || '');
-  }
-
-  getColor(code?: string, desc?: string): string {
-    return getIconColor(code || '', desc || '');
-  }
 }
+

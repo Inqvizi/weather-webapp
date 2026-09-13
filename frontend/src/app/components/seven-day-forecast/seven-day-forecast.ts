@@ -2,12 +2,12 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ForecastResponseDto } from '../../services/weather.service';
 import { SettingsService } from '../../services/settings.service';
-import { getIconClass, getIconColor } from '../../utils/icon.mapper';
+import { WeatherIcon } from '../weather-icon/weather-icon';
 
 @Component({
   selector: 'app-seven-day-forecast',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, WeatherIcon],
   templateUrl: './seven-day-forecast.html',
   styleUrl: './seven-day-forecast.css',
 })
@@ -19,6 +19,21 @@ export class SevenDayForecast {
   settingsService = inject(SettingsService);
 
   get dailyForecast() {
+    if (this.forecast?.daily && this.forecast.daily.length > 0) {
+      return this.forecast.daily.map(d => ({
+        date: new Date(d.date + 'T12:00:00'),
+        rawDateStr: d.date,
+        minTemp: d.minTemp,
+        maxTemp: d.maxTemp,
+        weatherCode: d.weatherCode,
+        iconCode: d.iconCode,
+        description: d.description,
+        uvIndex: d.uvIndexMax,
+        sunrise: d.sunrise,
+        sunset: d.sunset
+      }));
+    }
+
     if (!this.forecast?.items) return [];
 
     const daysMap = new Map<string, any>();
@@ -34,6 +49,7 @@ export class SevenDayForecast {
           rawDateStr: dateStr,
           minTemp: item.temperature,
           maxTemp: item.temperature,
+          weatherCode: item.weatherCode,
           iconCode: item.iconCode,
           description: item.description
         });
@@ -43,6 +59,7 @@ export class SevenDayForecast {
         if (item.temperature > day.maxTemp) day.maxTemp = item.temperature;
 
         if (item.dateTime.includes('12:00') || item.dateTime.includes('14:00') || item.dateTime.includes('15:00')) {
+          day.weatherCode = item.weatherCode ?? day.weatherCode;
           day.iconCode = item.iconCode;
           day.description = item.description;
         }
@@ -59,7 +76,5 @@ export class SevenDayForecast {
   onDayClick(dateStr: string) {
     this.daySelected.emit(dateStr);
   }
-
-  getIcon(code: string, desc: string) { return getIconClass(code, desc); }
-  getColor(code: string, desc: string) { return getIconColor(code, desc); }
 }
+

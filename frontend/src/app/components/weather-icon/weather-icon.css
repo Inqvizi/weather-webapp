@@ -1,0 +1,29 @@
+@keyframes pulseGentle {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.4));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.7));
+  }
+}
+
+.animate-pulse-gentle {
+  animation: pulseGentle 4s ease-in-out infinite;
+}
+
+@keyframes pingSlow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.animate-ping-slow {
+  animation: pingSlow 2.5s ease-in-out infinite;
+}

@@ -2,16 +2,17 @@ import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild }
 import { CommonModule } from '@angular/common';
 import { ForecastResponseDto } from '../../services/weather.service';
 import { SettingsService } from '../../services/settings.service';
-import { getIconClass, getIconColor } from '../../utils/icon.mapper';
+import { WeatherIcon } from '../weather-icon/weather-icon';
 
 @Component({
   selector: 'app-hourly-forecast',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, WeatherIcon],
   templateUrl: './hourly-forecast.html',
   styleUrl: './hourly-forecast.css',
 })
 export class HourlyForecast {
+
   @Input({ required: true }) forecast!: ForecastResponseDto;
   @Input() selectedDate: string | null = null;
   @Output() clearSelectedDate = new EventEmitter<void>();
@@ -73,7 +74,5 @@ export class HourlyForecast {
   resetToToday(): void {
     this.clearSelectedDate.emit();
   }
-
-  getIcon(code: string, desc: string) { return getIconClass(code, desc); }
-  getColor(code: string, desc: string) { return getIconColor(code, desc); }
 }
+

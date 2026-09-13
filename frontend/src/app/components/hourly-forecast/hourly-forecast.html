@@ -52,10 +52,22 @@
       <span class="text-xs font-semibold" [class.text-blue-400]="!selectedDate && i === 0" [class.text-gray-400]="selectedDate || i !== 0">
         {{ formatHour(item.dateTime, i) }}
       </span>
-      <i class="bi {{ getIcon(item.iconCode, item.description) }} {{ getColor(item.iconCode, item.description) }} text-2xl sm:text-3xl my-1"></i>
+      <app-weather-icon
+        [weatherCode]="item.weatherCode"
+        [isDay]="item.isDay ?? true"
+        [iconCode]="item.iconCode"
+        size="sm"
+        customClass="my-1"
+      ></app-weather-icon>
+      @if ((item.precipitationProbability ?? 0) > 0) {
+        <span class="text-[10px] font-semibold text-sky-400 bg-sky-500/15 px-1.5 py-0.5 rounded-full -mt-2">
+          💧 {{ item.precipitationProbability }}%
+        </span>
+      }
       <span class="text-white font-bold text-lg sm:text-xl">
         {{ formatTemp(item.temperature) }}&deg;
       </span>
+
     </div>
   }
 </div>
