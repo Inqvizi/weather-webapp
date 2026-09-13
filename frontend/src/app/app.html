@@ -1,5 +1,5 @@
 <div class="min-h-screen w-full bg-[#0b131e] overflow-x-hidden">
-  <div class="max-w-[1440px] mx-auto p-3 sm:p-4 md:p-6 pb-24 lg:pb-6 flex flex-col lg:flex-row gap-4 lg:gap-6 min-h-screen">
+  <div class="max-w-[1440px] mx-auto p-3 sm:p-4 md:p-6 pb-36 sm:pb-40 lg:pb-8 flex flex-col lg:flex-row gap-4 lg:gap-6 min-h-screen">
 
     <!-- Sidebar with responsive positioning (bottom bar on mobile/tablet, vertical sidebar on desktop) -->
     <app-sidebar [activeTab]="activeTab()" (tabChange)="onTabChange($event)"></app-sidebar>
@@ -27,7 +27,7 @@
             </div>
 
             <!-- Hourly Forecast Card -->
-            <div class="bg-[#202b3b] rounded-3xl p-4 sm:p-6 shadow-inner border border-gray-700 min-w-0 overflow-hidden">
+            <div id="hourly-forecast-card" class="bg-[#202b3b] rounded-3xl p-4 sm:p-6 shadow-inner border border-gray-700 min-w-0 overflow-hidden scroll-mt-4 sm:scroll-mt-6">
               <app-hourly-forecast
                 [forecast]="forecast()!"
                 [selectedDate]="selectedDate()"
@@ -57,7 +57,7 @@
             <app-seven-day-forecast
               [forecast]="forecast()!"
               [selectedDate]="selectedDate()"
-              (daySelected)="selectedDate.set($event)"
+              (daySelected)="onDaySelected($event)"
             ></app-seven-day-forecast>
           </div>
         } @else {

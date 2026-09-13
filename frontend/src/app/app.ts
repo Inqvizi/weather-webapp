@@ -49,6 +49,23 @@ export class App implements OnInit {
   onCityFromList(city: string) {
     this.searchCity(city);
     this.activeTab.set('weather');
+    this.scrollToHourlyForecast();
+  }
+
+  onDaySelected(date: string) {
+    this.selectedDate.set(date);
+    this.scrollToHourlyForecast();
+  }
+
+  scrollToHourlyForecast() {
+    if (typeof window !== 'undefined') {
+      setTimeout(() => {
+        const el = document.getElementById('hourly-forecast-card');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
   }
 
   searchCity(city: string) {
