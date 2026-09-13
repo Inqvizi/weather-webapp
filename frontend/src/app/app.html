@@ -1,26 +1,28 @@
-<div class="min-h-screen w-full bg-[#0b131e]">
-  <div class="max-w-[1400px] mx-auto p-4 lg:p-6 pb-24 lg:pb-6 flex flex-col lg:flex-row gap-6 min-h-screen">
+<div class="min-h-screen w-full bg-[#0b131e] overflow-x-hidden">
+  <div class="max-w-[1440px] mx-auto p-3 sm:p-4 md:p-6 pb-24 lg:pb-6 flex flex-col lg:flex-row gap-4 lg:gap-6 min-h-screen">
 
-    <!-- Sidebar with tab switcher -->
+    <!-- Sidebar with responsive positioning (bottom bar on mobile/tablet, vertical sidebar on desktop) -->
     <app-sidebar [activeTab]="activeTab()" (tabChange)="onTabChange($event)"></app-sidebar>
 
-    <!-- Main Content Area -->
+    <!-- Main Content Area: min-w-0 prevents child overflow from breaking flex container -->
     @if (activeTab() === 'weather') {
-      <div class="flex-1 flex flex-col gap-6 w-full max-w-[100vw]">
+      <div class="flex-1 min-w-0 flex flex-col gap-4 lg:gap-6">
         <app-search-bar (search)="searchCity($event)"></app-search-bar>
 
         @if (errorMessage()) {
-          <div class="text-red-500 text-xl font-bold bg-red-500/10 p-6 rounded-3xl border border-red-500 text-center flex items-center justify-center h-48 motion-safe:animate-fade-in">
-            <i class="bi bi-exclamation-triangle-fill mr-3 text-3xl"></i>
+          <div class="text-red-400 text-lg sm:text-xl font-bold bg-red-500/10 p-6 rounded-3xl border border-red-500/30 text-center flex items-center justify-center min-h-[12rem] motion-safe:animate-fade-in">
+            <i class="bi bi-exclamation-triangle-fill mr-3 text-2xl sm:text-3xl text-red-500"></i>
             {{ errorMessage() }}
           </div>
         } @else if (currentWeather() && forecast()) {
-          <div class="flex flex-col gap-6 motion-safe:animate-slide-up">
-            <div class="px-2 pt-2 lg:pt-4 pb-2">
+          <div class="flex flex-col gap-4 lg:gap-6 motion-safe:animate-slide-up min-w-0">
+            <!-- Current Weather Card -->
+            <div class="px-1 sm:px-2 pt-1 lg:pt-2">
               <app-current-weather [weather]="currentWeather()!"></app-current-weather>
             </div>
 
-            <div class="bg-[#202b3b] rounded-3xl p-4 lg:p-6 shadow-inner border border-gray-700">
+            <!-- Hourly Forecast Card -->
+            <div class="bg-[#202b3b] rounded-3xl p-4 sm:p-6 shadow-inner border border-gray-700 min-w-0 overflow-hidden">
               <app-hourly-forecast
                 [forecast]="forecast()!"
                 [selectedDate]="selectedDate()"
@@ -28,21 +30,23 @@
               ></app-hourly-forecast>
             </div>
 
-            <div class="bg-[#202b3b] rounded-3xl p-4 lg:p-6 shadow-inner border border-gray-700">
+            <!-- Air Conditions Card -->
+            <div class="bg-[#202b3b] rounded-3xl p-4 sm:p-6 shadow-inner border border-gray-700">
               <app-air-conditions [weather]="currentWeather()!"></app-air-conditions>
             </div>
           </div>
         } @else {
-          <div class="flex flex-col gap-6 motion-safe:animate-fade-in">
-            <div class="h-48 rounded-3xl bg-[#202b3b]/50 animate-pulse border border-gray-700/50"></div>
-            <div class="h-48 rounded-3xl bg-[#202b3b]/50 animate-pulse border border-gray-700/50"></div>
+          <!-- Skeleton Loading State -->
+          <div class="flex flex-col gap-4 lg:gap-6 motion-safe:animate-fade-in">
+            <div class="h-40 rounded-3xl bg-[#202b3b]/50 animate-pulse border border-gray-700/50"></div>
+            <div class="h-44 rounded-3xl bg-[#202b3b]/50 animate-pulse border border-gray-700/50"></div>
             <div class="h-48 rounded-3xl bg-[#202b3b]/50 animate-pulse border border-gray-700/50"></div>
           </div>
         }
       </div>
 
-      <!-- Right Column: 7-Day Forecast -->
-      <div class="w-full lg:w-[400px] lg:min-w-[400px] shrink-0 bg-[#202b3b] rounded-3xl p-4 lg:p-6 shadow-inner border border-gray-700 h-fit mb-24 lg:mb-0">
+      <!-- Right Column: 7-Day Forecast (stacks below on <lg, sits to the right on >=lg) -->
+      <div class="w-full lg:w-[330px] xl:w-[380px] shrink-0 bg-[#202b3b] rounded-3xl p-4 sm:p-6 shadow-inner border border-gray-700 h-fit mb-6 lg:mb-0">
         @if (forecast() && !errorMessage()) {
           <div class="motion-safe:animate-slide-up">
             <app-seven-day-forecast
@@ -56,11 +60,11 @@
         }
       </div>
     } @else if (activeTab() === 'cities') {
-      <div class="flex-1 w-full motion-safe:animate-fade-in">
+      <div class="flex-1 min-w-0 w-full motion-safe:animate-fade-in">
         <app-cities (selectCity)="onCityFromList($event)"></app-cities>
       </div>
     } @else if (activeTab() === 'settings') {
-      <div class="flex-1 w-full motion-safe:animate-fade-in">
+      <div class="flex-1 min-w-0 w-full motion-safe:animate-fade-in">
         <app-settings></app-settings>
       </div>
     }

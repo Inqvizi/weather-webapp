@@ -1,16 +1,16 @@
-<div class="fixed bottom-0 left-0 w-full z-50 flex flex-row justify-around items-center bg-[#202b3b] py-3 border-t border-gray-700 lg:static lg:w-24 lg:flex-col lg:py-8 lg:gap-6 lg:border-t-0 lg:border lg:rounded-3xl lg:h-fit">
+<div class="fixed bottom-0 left-0 w-full z-50 flex flex-row justify-around items-center bg-[#1b2533]/95 backdrop-blur-md py-2 px-3 border-t border-gray-700 shadow-2xl lg:static lg:w-20 xl:w-24 lg:flex-col lg:py-8 lg:px-2 lg:gap-6 lg:border-t-0 lg:border lg:rounded-3xl lg:h-fit lg:bg-[#202b3b] shrink-0">
   <!-- Weather Tab -->
   <button
     type="button"
     (click)="selectTab('weather')"
-    class="flex flex-col items-center cursor-pointer transition-all rounded-2xl p-2.5 w-16 lg:w-16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+    class="flex flex-col items-center cursor-pointer transition-all rounded-2xl p-2 sm:p-2.5 w-16 sm:w-20 lg:w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
     [class.text-blue-400]="activeTab === 'weather'"
     [class.bg-blue-500\/10]="activeTab === 'weather'"
     [class.text-gray-400]="activeTab !== 'weather'"
     [class.hover:text-white]="activeTab !== 'weather'"
     title="Weather Forecast"
   >
-    <i class="bi bi-cloud-sun-fill text-2xl lg:mb-1"></i>
+    <i class="bi bi-cloud-sun-fill text-xl sm:text-2xl lg:mb-1"></i>
     <span class="text-[10px] lg:text-xs font-semibold">Weather</span>
   </button>
 
@@ -18,14 +18,14 @@
   <button
     type="button"
     (click)="selectTab('cities')"
-    class="flex flex-col items-center cursor-pointer transition-all rounded-2xl p-2.5 w-16 lg:w-16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+    class="flex flex-col items-center cursor-pointer transition-all rounded-2xl p-2 sm:p-2.5 w-16 sm:w-20 lg:w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
     [class.text-blue-400]="activeTab === 'cities'"
     [class.bg-blue-500\/10]="activeTab === 'cities'"
     [class.text-gray-400]="activeTab !== 'cities'"
     [class.hover:text-white]="activeTab !== 'cities'"
     title="Favorite Cities"
   >
-    <i class="bi bi-list-ul text-2xl lg:mb-1"></i>
+    <i class="bi bi-list-ul text-xl sm:text-2xl lg:mb-1"></i>
     <span class="text-[10px] lg:text-xs font-semibold">Cities</span>
   </button>
 
@@ -33,14 +33,14 @@
   <button
     type="button"
     (click)="selectTab('settings')"
-    class="flex flex-col items-center cursor-pointer transition-all rounded-2xl p-2.5 w-16 lg:w-16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 lg:mt-auto"
+    class="flex flex-col items-center cursor-pointer transition-all rounded-2xl p-2 sm:p-2.5 w-16 sm:w-20 lg:w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 lg:mt-auto"
     [class.text-blue-400]="activeTab === 'settings'"
     [class.bg-blue-500\/10]="activeTab === 'settings'"
     [class.text-gray-400]="activeTab !== 'settings'"
     [class.hover:text-white]="activeTab !== 'settings'"
     title="Settings"
   >
-    <i class="bi bi-gear-fill text-2xl lg:mb-1"></i>
+    <i class="bi bi-gear-fill text-xl sm:text-2xl lg:mb-1"></i>
     <span class="text-[10px] lg:text-xs font-semibold">Settings</span>
   </button>
 </div>
