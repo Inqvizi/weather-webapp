@@ -31,6 +31,18 @@ public class WeatherService : IWeatherService
         return mapper.Map<WeatherResponseDto>(weatherEntity);
     }
 
+    public async Task<WeatherResponseDto> GetCurrentWeatherByCoordinatesAsync(
+        double latitude,
+        double longitude,
+        string? cityName = null,
+        CancellationToken cancellationToken = default)
+    {
+        ValidateCoordinates(latitude, longitude);
+
+        var weatherEntity = await weatherApiClient.GetCurrentWeatherByCoordinatesAsync(latitude, longitude, cityName, cancellationToken);
+        return mapper.Map<WeatherResponseDto>(weatherEntity);
+    }
+
     public async Task<ForecastResponseDto> GetForecastAsync(string cityName, CancellationToken cancellationToken = default)
     {
         var validationResult = await validator.ValidateAsync(cityName, cancellationToken);
@@ -39,13 +51,37 @@ public class WeatherService : IWeatherService
             throw new ValidationException(validationResult.Errors.First().ErrorMessage);
         }
 
-        var items = await weatherApiClient.GetForecastAsync(cityName, cancellationToken);
+        var forecastData = await weatherApiClient.GetForecastAsync(cityName, cancellationToken);
 
-        return new ForecastResponseDto()
+        return new ForecastResponseDto
         {
-            CityName = items.FirstOrDefault()?.City.Name ?? cityName,
-            CountryCode = items.FirstOrDefault()?.City.CountryCode ?? string.Empty,
-            Items = mapper.Map<IReadOnlyList<ForecastItemDto>>(items),
+            CityName = forecastData.City.Name,
+            CountryCode = forecastData.City.CountryCode,
+            Latitude = forecastData.City.Coordinates.Latitude,
+            Longitude = forecastData.City.Coordinates.Longitude,
+            Items = mapper.Map<IReadOnlyList<ForecastItemDto>>(forecastData.Hourly),
+            Daily = forecastData.Daily
+        };
+    }
+
+    public async Task<ForecastResponseDto> GetForecastByCoordinatesAsync(
+        double latitude,
+        double longitude,
+        string? cityName = null,
+        CancellationToken cancellationToken = default)
+    {
+        ValidateCoordinates(latitude, longitude);
+
+        var forecastData = await weatherApiClient.GetForecastByCoordinatesAsync(latitude, longitude, cityName, cancellationToken);
+
+        return new ForecastResponseDto
+        {
+            CityName = forecastData.City.Name,
+            CountryCode = forecastData.City.CountryCode,
+            Latitude = forecastData.City.Coordinates.Latitude,
+            Longitude = forecastData.City.Coordinates.Longitude,
+            Items = mapper.Map<IReadOnlyList<ForecastItemDto>>(forecastData.Hourly),
+            Daily = forecastData.Daily
         };
     }
 
@@ -60,4 +96,17 @@ public class WeatherService : IWeatherService
         var cities = await weatherApiClient.SearchCitiesAsync(query, language, cancellationToken);
         return mapper.Map<IReadOnlyList<CitySearchResultDto>>(cities);
     }
-}
+
+    private static void ValidateCoordinates(double latitude, double longitude)
+    {
+        if (latitude is < -90 or > 90)
+        {
+            throw new ValidationException("Latitude must be between -90 and 90 degrees");
+        }
+
+        if (longitude is < -180 or > 180)
+        {
+            throw new ValidationException("Longitude must be between -180 and 180 degrees");
+        }
+    }
+}

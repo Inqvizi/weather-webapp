@@ -3,7 +3,9 @@ using System.Net;
 using System.Net.Http.Json;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using WeatherApp.Application.DTOs;
 using WeatherApp.Application.Interfaces;
+using WeatherApp.Application.Models;
 using WeatherApp.Domain.Entities;
 using WeatherApp.Domain.Exceptions;
 using WeatherApp.Domain.ValueObjects;
@@ -12,6 +14,7 @@ using WeatherApp.Infrastructure.ExternalApis.OpenMeteo.Models;
 using WeatherApp.Infrastructure.ExternalApis.OpenMeteo.Options;
 
 namespace WeatherApp.Infrastructure.ExternalApis.OpenMeteo;
+
 
 internal sealed class OpenMeteoClient : IWeatherApiClient
 {
@@ -80,7 +83,43 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
         CancellationToken cancellationToken = default)
     {
         var city = await ResolveCityAsync(cityName, cancellationToken);
+        return await GetCurrentWeatherForCityAsync(city, cancellationToken);
+    }
 
+    public async Task<WeatherForecast> GetCurrentWeatherByCoordinatesAsync(
+        double latitude,
+        double longitude,
+        string? cityName = null,
+        CancellationToken cancellationToken = default)
+    {
+        var resolvedName = string.IsNullOrWhiteSpace(cityName) ? "Current Location" : cityName.Trim();
+        var city = City.Create(resolvedName, string.Empty, Coordinates.Create(latitude, longitude));
+        return await GetCurrentWeatherForCityAsync(city, cancellationToken);
+    }
+
+    public async Task<ForecastData> GetForecastAsync(
+        string cityName,
+        CancellationToken cancellationToken = default)
+    {
+        var city = await ResolveCityAsync(cityName, cancellationToken);
+        return await GetForecastForCityAsync(city, cancellationToken);
+    }
+
+    public async Task<ForecastData> GetForecastByCoordinatesAsync(
+        double latitude,
+        double longitude,
+        string? cityName = null,
+        CancellationToken cancellationToken = default)
+    {
+        var resolvedName = string.IsNullOrWhiteSpace(cityName) ? "Current Location" : cityName.Trim();
+        var city = City.Create(resolvedName, string.Empty, Coordinates.Create(latitude, longitude));
+        return await GetForecastForCityAsync(city, cancellationToken);
+    }
+
+    private async Task<WeatherForecast> GetCurrentWeatherForCityAsync(
+        City city,
+        CancellationToken cancellationToken)
+    {
         var forecastResponse = await FetchForecastAsync(city.Coordinates.Latitude, city.Coordinates.Longitude, cancellationToken);
         var current = forecastResponse.Current
                       ?? throw new WeatherApiException("Received empty current weather block from Open-Meteo", (int)HttpStatusCode.BadGateway);
@@ -93,6 +132,17 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
             ? DateTime.SpecifyKind(parsedDate, DateTimeKind.Unspecified)
             : DateTime.UtcNow;
 
+        var sunrise = string.Empty;
+        var sunset = string.Empty;
+        var uvIndex = 0.0;
+
+        if (forecastResponse.Daily is not null && forecastResponse.Daily.Time.Count > 0)
+        {
+            sunrise = forecastResponse.Daily.Sunrise.Count > 0 ? forecastResponse.Daily.Sunrise[0] : string.Empty;
+            sunset = forecastResponse.Daily.Sunset.Count > 0 ? forecastResponse.Daily.Sunset[0] : string.Empty;
+            uvIndex = forecastResponse.Daily.UvIndexMax.Count > 0 ? forecastResponse.Daily.UvIndexMax[0] : 0.0;
+        }
+
         return WeatherForecast.Create(
             city,
             Temperature.FromCelsius(current.Temperature2m),
@@ -102,15 +152,20 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
             Math.Max(0, (int)Math.Round(current.SurfacePressure)),
             description,
             iconCode,
-            measuredAt);
+            measuredAt,
+            windDirection: current.WindDirection10m,
+            precipitationProbability: 0,
+            uvIndex: uvIndex,
+            sunrise: sunrise,
+            sunset: sunset,
+            isDay: isDay,
+            weatherCode: current.WeatherCode);
     }
 
-    public async Task<IReadOnlyList<WeatherForecast>> GetForecastAsync(
-        string cityName,
-        CancellationToken cancellationToken = default)
+    private async Task<ForecastData> GetForecastForCityAsync(
+        City city,
+        CancellationToken cancellationToken)
     {
-        var city = await ResolveCityAsync(cityName, cancellationToken);
-
         var forecastResponse = await FetchForecastAsync(city.Coordinates.Latitude, city.Coordinates.Longitude, cancellationToken);
         var hourly = forecastResponse.Hourly
                      ?? throw new WeatherApiException("Received empty hourly forecast block from Open-Meteo", (int)HttpStatusCode.BadGateway);
@@ -125,7 +180,9 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
             var feels = i < hourly.ApparentTemperature.Count ? hourly.ApparentTemperature[i] : temp;
             var humidity = i < hourly.RelativeHumidity2m.Count ? hourly.RelativeHumidity2m[i] : 0;
             var wind = i < hourly.WindSpeed10m.Count ? hourly.WindSpeed10m[i] : 0;
+            var windDir = i < hourly.WindDirection10m.Count ? hourly.WindDirection10m[i] : 0;
             var pressure = i < hourly.SurfacePressure.Count ? (int)Math.Round(hourly.SurfacePressure[i]) : 0;
+            var precipProb = i < hourly.PrecipitationProbability.Count ? hourly.PrecipitationProbability[i] : 0;
             var weatherCode = i < hourly.WeatherCode.Count ? hourly.WeatherCode[i] : 0;
             var isDay = i < hourly.IsDay.Count ? hourly.IsDay[i] == 1 : true;
 
@@ -145,10 +202,45 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
                 Math.Max(0, pressure),
                 description,
                 iconCode,
-                date));
+                date,
+                windDirection: windDir,
+                precipitationProbability: precipProb,
+                uvIndex: 0,
+                sunrise: string.Empty,
+                sunset: string.Empty,
+                isDay: isDay,
+                weatherCode: weatherCode));
         }
 
-        return forecasts;
+        var dailyList = new List<DailyForecastItemDto>();
+        if (forecastResponse.Daily is not null)
+        {
+            var dailyCount = forecastResponse.Daily.Time.Count;
+            for (var i = 0; i < dailyCount; i++)
+            {
+                var code = i < forecastResponse.Daily.WeatherCode.Count ? forecastResponse.Daily.WeatherCode[i] : 0;
+                var minTemp = i < forecastResponse.Daily.Temperature2mMin.Count ? forecastResponse.Daily.Temperature2mMin[i] : 0.0;
+                var maxTemp = i < forecastResponse.Daily.Temperature2mMax.Count ? forecastResponse.Daily.Temperature2mMax[i] : 0.0;
+                var sunrise = i < forecastResponse.Daily.Sunrise.Count ? forecastResponse.Daily.Sunrise[i] : string.Empty;
+                var sunset = i < forecastResponse.Daily.Sunset.Count ? forecastResponse.Daily.Sunset[i] : string.Empty;
+                var uvMax = i < forecastResponse.Daily.UvIndexMax.Count ? forecastResponse.Daily.UvIndexMax[i] : 0.0;
+
+                dailyList.Add(new DailyForecastItemDto
+                {
+                    Date = forecastResponse.Daily.Time[i],
+                    WeatherCode = code,
+                    Description = WmoWeatherCodeMapper.GetDescription(code, options.Language),
+                    IconCode = WmoWeatherCodeMapper.GetIconCode(code, true),
+                    MinTemp = minTemp,
+                    MaxTemp = maxTemp,
+                    Sunrise = sunrise,
+                    Sunset = sunset,
+                    UvIndexMax = uvMax
+                });
+            }
+        }
+
+        return new ForecastData(city, forecasts, dailyList);
     }
 
     private async Task<City> ResolveCityAsync(string cityName, CancellationToken cancellationToken)
@@ -179,8 +271,9 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
         var lon = longitude.ToString("F5", CultureInfo.InvariantCulture);
 
         var url = $"{options.WeatherBaseUrl.TrimEnd('/')}/forecast?latitude={lat}&longitude={lon}" +
-                  "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m,is_day" +
-                  "&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m,is_day" +
+                  "&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m" +
+                  "&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,is_day" +
+                  "&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max" +
                   "&timezone=auto";
 
         try

@@ -18,6 +18,9 @@ public sealed class OpenMeteoForecastResponse
 
     [JsonPropertyName("hourly")]
     public HourlyWeatherBlock? Hourly { get; set; }
+
+    [JsonPropertyName("daily")]
+    public DailyWeatherBlock? Daily { get; set; }
 }
 
 public sealed class CurrentWeatherBlock
@@ -43,6 +46,9 @@ public sealed class CurrentWeatherBlock
     [JsonPropertyName("wind_speed_10m")]
     public double WindSpeed10m { get; set; }
 
+    [JsonPropertyName("wind_direction_10m")]
+    public int WindDirection10m { get; set; }
+
     [JsonPropertyName("is_day")]
     public int IsDay { get; set; }
 }
@@ -61,6 +67,9 @@ public sealed class HourlyWeatherBlock
     [JsonPropertyName("apparent_temperature")]
     public List<double> ApparentTemperature { get; set; } = [];
 
+    [JsonPropertyName("precipitation_probability")]
+    public List<int> PrecipitationProbability { get; set; } = [];
+
     [JsonPropertyName("weather_code")]
     public List<int> WeatherCode { get; set; } = [];
 
@@ -70,6 +79,34 @@ public sealed class HourlyWeatherBlock
     [JsonPropertyName("wind_speed_10m")]
     public List<double> WindSpeed10m { get; set; } = [];
 
+    [JsonPropertyName("wind_direction_10m")]
+    public List<int> WindDirection10m { get; set; } = [];
+
     [JsonPropertyName("is_day")]
     public List<int> IsDay { get; set; } = [];
 }
+
+public sealed class DailyWeatherBlock
+{
+    [JsonPropertyName("time")]
+    public List<string> Time { get; set; } = [];
+
+    [JsonPropertyName("weather_code")]
+    public List<int> WeatherCode { get; set; } = [];
+
+    [JsonPropertyName("temperature_2m_max")]
+    public List<double> Temperature2mMax { get; set; } = [];
+
+    [JsonPropertyName("temperature_2m_min")]
+    public List<double> Temperature2mMin { get; set; } = [];
+
+    [JsonPropertyName("sunrise")]
+    public List<string> Sunrise { get; set; } = [];
+
+    [JsonPropertyName("sunset")]
+    public List<string> Sunset { get; set; } = [];
+
+    [JsonPropertyName("uv_index_max")]
+    public List<double> UvIndexMax { get; set; } = [];
+}
+

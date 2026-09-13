@@ -1,5 +1,7 @@
+using System.Globalization;
 using Microsoft.Extensions.Caching.Memory;
 using WeatherApp.Application.Interfaces;
+using WeatherApp.Application.Models;
 using WeatherApp.Domain.Entities;
 
 namespace WeatherApp.Infrastructure.ExternalApis.Caching;
@@ -32,17 +34,57 @@ internal sealed class CachedWeatherApiClient : IWeatherApiClient
         return result;
     }
 
-    public async Task<IReadOnlyList<WeatherForecast>> GetForecastAsync(
+    public async Task<WeatherForecast> GetCurrentWeatherByCoordinatesAsync(
+        double latitude,
+        double longitude,
+        string? cityName = null,
+        CancellationToken cancellationToken = default)
+    {
+        var latStr = latitude.ToString("F3", CultureInfo.InvariantCulture);
+        var lonStr = longitude.ToString("F3", CultureInfo.InvariantCulture);
+        var cacheKey = $"weather:coord:{latStr}:{lonStr}";
+
+        if (cache.TryGetValue(cacheKey, out WeatherForecast? cached) && cached is not null)
+        {
+            return cached;
+        }
+
+        var result = await inner.GetCurrentWeatherByCoordinatesAsync(latitude, longitude, cityName, cancellationToken);
+        cache.Set(cacheKey, result, CurrentWeatherCacheDuration);
+        return result;
+    }
+
+    public async Task<ForecastData> GetForecastAsync(
         string cityName,
         CancellationToken cancellationToken = default)
     {
         var cacheKey = $"forecast:{cityName.ToLowerInvariant()}";
-        if (cache.TryGetValue(cacheKey, out IReadOnlyList<WeatherForecast>? cached) && cached is not null)
+        if (cache.TryGetValue(cacheKey, out ForecastData? cached) && cached is not null)
         {
             return cached;
         }
 
         var result = await inner.GetForecastAsync(cityName, cancellationToken);
+        cache.Set(cacheKey, result, ForecastCacheDuration);
+        return result;
+    }
+
+    public async Task<ForecastData> GetForecastByCoordinatesAsync(
+        double latitude,
+        double longitude,
+        string? cityName = null,
+        CancellationToken cancellationToken = default)
+    {
+        var latStr = latitude.ToString("F3", CultureInfo.InvariantCulture);
+        var lonStr = longitude.ToString("F3", CultureInfo.InvariantCulture);
+        var cacheKey = $"forecast:coord:{latStr}:{lonStr}";
+
+        if (cache.TryGetValue(cacheKey, out ForecastData? cached) && cached is not null)
+        {
+            return cached;
+        }
+
+        var result = await inner.GetForecastByCoordinatesAsync(latitude, longitude, cityName, cancellationToken);
         cache.Set(cacheKey, result, ForecastCacheDuration);
         return result;
     }
@@ -62,4 +104,4 @@ internal sealed class CachedWeatherApiClient : IWeatherApiClient
         cache.Set(cacheKey, result, CitiesSearchCacheDuration);
         return result;
     }
-}
+}

@@ -8,10 +8,16 @@ public sealed class WeatherResponseDto
     public double FeelsLike { get; init; }
     public int Humidity { get; init; }
     public double WindSpeed { get; init; }
+    public int WindDirection { get; init; }
     public int Pressure { get; init; }
+    public double UvIndex { get; init; }
+    public string Sunrise { get; init; } = string.Empty;
+    public string Sunset { get; init; } = string.Empty;
+    public bool IsDay { get; init; } = true;
+    public int WeatherCode { get; init; }
     public string Description { get; init; } = string.Empty;
     public string IconCode { get; init; } = string.Empty;
     public DateTime MeasuredAt { get; init; }
     public double Latitude { get; init; }
     public double Longitude { get; init; }
-}
+}

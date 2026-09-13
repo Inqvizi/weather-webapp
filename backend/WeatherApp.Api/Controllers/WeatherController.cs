@@ -28,6 +28,32 @@ public sealed class WeatherController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("by-coordinates")]
+    [ProducesResponseType(typeof(WeatherResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<WeatherResponseDto>> GetCurrentWeatherByCoordinates(
+        [FromQuery] double latitude,
+        [FromQuery] double longitude,
+        [FromQuery] string? cityName = null,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await weatherService.GetCurrentWeatherByCoordinatesAsync(latitude, longitude, cityName, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpGet("by-coordinates/forecast")]
+    [ProducesResponseType(typeof(ForecastResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ForecastResponseDto>> GetForecastByCoordinates(
+        [FromQuery] double latitude,
+        [FromQuery] double longitude,
+        [FromQuery] string? cityName = null,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await weatherService.GetForecastByCoordinatesAsync(latitude, longitude, cityName, cancellationToken);
+        return Ok(result);
+    }
+
     [HttpGet("{cityName}")]
     [ProducesResponseType(typeof(WeatherResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -51,4 +77,4 @@ public sealed class WeatherController : ControllerBase
         var result = await weatherService.GetForecastAsync(cityName, cancellationToken);
         return Ok(result);
     }
-}
+}
