@@ -10,6 +10,7 @@ import { CitiesComponent } from './components/cities/cities';
 import { SettingsComponent } from './components/settings/settings';
 import { WeatherService, WeatherResponseDto, ForecastResponseDto } from './services/weather.service';
 import { SettingsService } from './services/settings.service';
+import { PwaService } from './services/pwa.service';
 
 @Component({
   selector: 'app-root',
@@ -36,6 +37,7 @@ export class App implements OnInit {
 
   weatherService = inject(WeatherService);
   settingsService = inject(SettingsService);
+  pwaService = inject(PwaService);
 
   ngOnInit() {
     const startupCity = this.settingsService.settings().defaultCity || 'Lviv';

@@ -44,11 +44,25 @@
     <span class="text-[10px] lg:text-xs font-semibold">Settings</span>
   </button>
 
+  <!-- PWA Install Button -->
+  @if (pwaService.isInstallable() && !pwaService.isInstalled()) {
+    <button
+      type="button"
+      (click)="pwaService.promptInstall()"
+      class="flex flex-col items-center cursor-pointer transition-all rounded-2xl p-2 sm:p-2.5 w-16 sm:w-20 lg:w-full text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 lg:mt-auto"
+      title="Install WeatherApp as native app"
+    >
+      <i class="bi bi-download text-xl sm:text-2xl lg:mb-1"></i>
+      <span class="text-[10px] lg:text-xs font-semibold">Install</span>
+    </button>
+  }
+
   <!-- Theme Toggle Button -->
   <button
     type="button"
     (click)="toggleTheme()"
-    class="flex flex-col items-center cursor-pointer transition-all rounded-2xl p-2 sm:p-2.5 w-16 sm:w-20 lg:w-full text-gray-400 hover:text-amber-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 lg:mt-auto"
+    class="flex flex-col items-center cursor-pointer transition-all rounded-2xl p-2 sm:p-2.5 w-16 sm:w-20 lg:w-full text-gray-400 hover:text-amber-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+    [class.lg:mt-auto]="!pwaService.isInstallable() || pwaService.isInstalled()"
     [title]="settingsService.settings().theme === 'dark' ? 'Switch to Light theme' : 'Switch to Dark theme'"
   >
     @if (settingsService.settings().theme === 'dark') {

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SettingsService } from '../../services/settings.service';
+import { PwaService } from '../../services/pwa.service';
 
 export type AppTab = 'weather' | 'cities' | 'settings';
 
@@ -16,6 +17,7 @@ export class Sidebar {
   @Output() tabChange = new EventEmitter<AppTab>();
 
   settingsService = inject(SettingsService);
+  pwaService = inject(PwaService);
 
   selectTab(tab: AppTab): void {
     this.tabChange.emit(tab);
