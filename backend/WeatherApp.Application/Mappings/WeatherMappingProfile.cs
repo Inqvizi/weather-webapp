@@ -31,5 +31,13 @@ public sealed class WeatherMappingProfile : Profile
             .ForMember(dest => dest.Pressure,    opt => opt.MapFrom(src => src.Pressure))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.IconCode,    opt => opt.MapFrom(src => src.IconCode));
+
+        CreateMap<City, CitySearchResultDto>()
+            .ForMember(dest => dest.Name,        opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.Country,     opt => opt.MapFrom(src => src.Country))
+            .ForMember(dest => dest.CountryCode, opt => opt.MapFrom(src => src.CountryCode))
+            .ForMember(dest => dest.AdminRegion, opt => opt.MapFrom(src => src.AdminRegion))
+            .ForMember(dest => dest.Latitude,    opt => opt.MapFrom(src => src.Coordinates.Latitude))
+            .ForMember(dest => dest.Longitude,   opt => opt.MapFrom(src => src.Coordinates.Longitude));
     }
 }

@@ -1,4 +1,4 @@
-﻿using WeatherApp.Domain.ValueObjects;
+using WeatherApp.Domain.ValueObjects;
 
 namespace WeatherApp.Domain.Entities;
 
@@ -8,30 +8,40 @@ public sealed class City
     public string Name { get; }
     public string CountryCode { get; }
     public Coordinates Coordinates { get; }
+    public string Country { get; }
+    public string AdminRegion { get; }
 
-    private City(Guid id, string name, string countryCode, Coordinates coordinates)
+    private City(Guid id, string name, string countryCode, Coordinates coordinates, string country, string adminRegion)
     {
         Id = id;
         Name = name;
         CountryCode = countryCode;
         Coordinates = coordinates;
+        Country = country;
+        AdminRegion = adminRegion;
     }
-    public static City Create(string name, string countryCode, Coordinates coordinates)
+
+    public static City Create(string name, string countryCode, Coordinates coordinates, string country = "", string adminRegion = "")
     {
         if (string.IsNullOrWhiteSpace(name))
         {
             throw new ArgumentException("City name cannot be empty", nameof(name));
         }
 
-        if (string.IsNullOrWhiteSpace(countryCode))
-        {
-            throw new ArgumentException("Country code cannot be empty", nameof(countryCode));
-        }
-
         ArgumentNullException.ThrowIfNull(coordinates);
 
-        return new City(Guid.NewGuid(), name.Trim(), countryCode.ToUpperInvariant(), coordinates);
+        var normalizedCountryCode = string.IsNullOrWhiteSpace(countryCode) ? string.Empty : countryCode.Trim().ToUpperInvariant();
+
+        return new City(
+            Guid.NewGuid(),
+            name.Trim(),
+            normalizedCountryCode,
+            coordinates,
+            country?.Trim() ?? string.Empty,
+            adminRegion?.Trim() ?? string.Empty);
     }
 
-    public override string ToString() => $"{Name}, {CountryCode}";
+    public override string ToString() => string.IsNullOrWhiteSpace(CountryCode)
+        ? Name
+        : $"{Name}, {CountryCode}";
 }

@@ -48,4 +48,16 @@ public class WeatherService : IWeatherService
             Items = mapper.Map<IReadOnlyList<ForecastItemDto>>(items),
         };
     }
+
+    public async Task<IReadOnlyList<CitySearchResultDto>> SearchCitiesAsync(string query, string? language = null, CancellationToken cancellationToken = default)
+    {
+        var validationResult = await validator.ValidateAsync(query, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors.First().ErrorMessage);
+        }
+
+        var cities = await weatherApiClient.SearchCitiesAsync(query, language, cancellationToken);
+        return mapper.Map<IReadOnlyList<CitySearchResultDto>>(cities);
+    }
 }
