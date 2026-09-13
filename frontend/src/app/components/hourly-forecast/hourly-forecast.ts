@@ -48,6 +48,12 @@ export class HourlyForecast {
     return !!this.selectedDate;
   }
 
+  get selectedDateDisplay(): Date | null {
+    if (!this.selectedDate) return null;
+    return new Date(this.selectedDate + 'T12:00:00');
+  }
+
+
   formatHour(dateTimeStr: string, index: number): string {
     if (!this.selectedDate && index === 0) {
       return 'Now';

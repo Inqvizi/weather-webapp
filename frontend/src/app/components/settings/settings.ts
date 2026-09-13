@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SettingsService, TemperatureUnit, WindSpeedUnit, PressureUnit, TimeFormat } from '../../services/settings.service';
+import { SettingsService, TemperatureUnit, WindSpeedUnit, PressureUnit, TimeFormat, ThemeMode } from '../../services/settings.service';
 
 @Component({
   selector: 'app-settings',
@@ -15,6 +15,10 @@ export class SettingsComponent {
 
   defaultCityInput = this.settingsService.settings().defaultCity;
   saveSuccess = false;
+
+  setTheme(theme: ThemeMode): void {
+    this.settingsService.setTheme(theme);
+  }
 
   setTemp(unit: TemperatureUnit): void {
     this.settingsService.setTemperatureUnit(unit);
@@ -31,6 +35,7 @@ export class SettingsComponent {
   setTime(format: TimeFormat): void {
     this.settingsService.setTimeFormat(format);
   }
+
 
   saveDefaultCity(): void {
     if (this.defaultCityInput.trim()) {

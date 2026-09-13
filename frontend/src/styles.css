@@ -11,6 +11,7 @@ html, body {
   max-width: 100vw;
   margin: 0;
   padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 @layer utilities {
@@ -38,4 +39,103 @@ html, body {
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   LIGHT THEME OVERRIDES (Activates when <html class="light">)
+   ============================================================ */
+
+html.light, html.light body {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html.light .bg-\[\#0b131e\] {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .bg-\[\#202b3b\] {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light .bg-\[\#1b2533\] {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .bg-\[\#1b2533\]\/95 {
+  background-color: rgba(248, 250, 252, 0.95) !important;
+}
+
+html.light .hover\:bg-\[\#253246\]:hover {
+  background-color: #f8fafc !important;
+}
+
+html.light .text-white {
+  color: #0f172a !important;
+}
+
+html.light .text-gray-100 {
+  color: #0f172a !important;
+}
+
+html.light .text-gray-200 {
+  color: #1e293b !important;
+}
+
+html.light .text-gray-300 {
+  color: #334155 !important;
+}
+
+html.light .text-gray-400 {
+  color: #64748b !important;
+}
+
+html.light .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+html.light .border-gray-700 {
+  border-color: #e2e8f0 !important;
+}
+
+html.light .border-gray-800 {
+  border-color: #f1f5f9 !important;
+}
+
+html.light .divide-gray-800 > * + * {
+  border-color: #f1f5f9 !important;
+}
+
+html.light .bg-gray-800 {
+  background-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+html.light .bg-gray-800\/80 {
+  background-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+html.light .bg-gray-900\/40 {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .bg-white\/\[0\.02\] {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .bg-white\/5 {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light .bg-white\/10 {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light .placeholder\:text-gray-500::placeholder {
+  color: #94a3b8 !important;
 }

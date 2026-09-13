@@ -4,6 +4,7 @@ export type TemperatureUnit = 'celsius' | 'fahrenheit';
 export type WindSpeedUnit = 'kmh' | 'ms' | 'mph';
 export type PressureUnit = 'hPa' | 'mmHg';
 export type TimeFormat = '24h' | '12h';
+export type ThemeMode = 'dark' | 'light';
 
 export interface AppSettings {
   temperatureUnit: TemperatureUnit;
@@ -11,6 +12,7 @@ export interface AppSettings {
   pressureUnit: PressureUnit;
   timeFormat: TimeFormat;
   defaultCity: string;
+  theme: ThemeMode;
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
@@ -19,6 +21,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   pressureUnit: 'hPa',
   timeFormat: '24h',
   defaultCity: 'Lviv',
+  theme: 'dark',
 };
 
 const STORAGE_KEY = 'weatherapp_settings';
@@ -28,6 +31,10 @@ const STORAGE_KEY = 'weatherapp_settings';
 })
 export class SettingsService {
   readonly settings = signal<AppSettings>(this.loadSettings());
+
+  constructor() {
+    this.applyTheme(this.settings().theme);
+  }
 
   private loadSettings(): AppSettings {
     try {
@@ -40,6 +47,7 @@ export class SettingsService {
     }
     return { ...DEFAULT_SETTINGS };
   }
+
 
   private saveSettings(settings: AppSettings): void {
     try {
@@ -73,9 +81,34 @@ export class SettingsService {
     }
   }
 
+  setTheme(theme: ThemeMode): void {
+    this.saveSettings({ ...this.settings(), theme });
+    this.applyTheme(theme);
+  }
+
+  toggleTheme(): void {
+    const next = this.settings().theme === 'dark' ? 'light' : 'dark';
+    this.setTheme(next);
+  }
+
+  applyTheme(theme: ThemeMode): void {
+    if (typeof document !== 'undefined') {
+      const root = document.documentElement;
+      if (theme === 'light') {
+        root.classList.remove('dark');
+        root.classList.add('light');
+      } else {
+        root.classList.remove('light');
+        root.classList.add('dark');
+      }
+    }
+  }
+
   resetToDefaults(): void {
     this.saveSettings({ ...DEFAULT_SETTINGS });
+    this.applyTheme(DEFAULT_SETTINGS.theme);
   }
+
 
   // Formatters
   formatTemp(celsius: number): string {

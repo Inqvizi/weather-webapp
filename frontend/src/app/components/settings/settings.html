@@ -17,12 +17,45 @@
     </div>
 
     <div class="flex flex-col gap-8">
-      <!-- Temperature Unit -->
+      <!-- Theme / Appearance -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <label class="text-base font-semibold text-white">Appearance Theme</label>
+          <p class="text-xs text-gray-400">Switch between sleek Dark and bright Light mode</p>
+        </div>
+        <div class="flex rounded-xl bg-[#1b2533] p-1 border border-gray-700 w-fit">
+          <button
+            type="button"
+            (click)="setTheme('dark')"
+            [class.bg-blue-600]="settingsService.settings().theme === 'dark'"
+            [class.text-white]="settingsService.settings().theme === 'dark'"
+            [class.text-gray-400]="settingsService.settings().theme !== 'dark'"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-2"
+          >
+            <i class="bi bi-moon-stars-fill text-xs"></i>
+            Dark
+          </button>
+          <button
+            type="button"
+            (click)="setTheme('light')"
+            [class.bg-blue-600]="settingsService.settings().theme === 'light'"
+            [class.text-white]="settingsService.settings().theme === 'light'"
+            [class.text-gray-400]="settingsService.settings().theme !== 'light'"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-2"
+          >
+            <i class="bi bi-sun-fill text-xs text-amber-400"></i>
+            Light
+          </button>
+        </div>
+      </div>
+
+      <!-- Temperature Unit -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 border-t border-gray-700/50">
         <div>
           <label class="text-base font-semibold text-white">Temperature Unit</label>
           <p class="text-xs text-gray-400">Choose between Celsius and Fahrenheit</p>
         </div>
+
         <div class="flex rounded-xl bg-[#1b2533] p-1 border border-gray-700 w-fit">
           <button
             type="button"

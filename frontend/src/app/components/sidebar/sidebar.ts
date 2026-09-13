@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SettingsService } from '../../services/settings.service';
 
 export type AppTab = 'weather' | 'cities' | 'settings';
 
@@ -14,7 +15,14 @@ export class Sidebar {
   @Input() activeTab: AppTab = 'weather';
   @Output() tabChange = new EventEmitter<AppTab>();
 
+  settingsService = inject(SettingsService);
+
   selectTab(tab: AppTab): void {
     this.tabChange.emit(tab);
   }
+
+  toggleTheme(): void {
+    this.settingsService.toggleTheme();
+  }
 }
+
