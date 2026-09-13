@@ -48,7 +48,7 @@
     }
 
     @case ('partly-cloudy-day') {
-      <!-- Partly Cloudy Day (Sun + White Cloud) -->
+      <!-- Partly Cloudy Day (Sun + Volumetric Cloud) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient [id]="uid + '_sunGrad2'" x1="14" y1="14" x2="32" y2="32" gradientUnits="userSpaceOnUse">
@@ -57,7 +57,7 @@
           </linearGradient>
           <linearGradient [id]="uid + '_cloudGradLight'" x1="12" y1="20" x2="52" y2="52" gradientUnits="userSpaceOnUse">
             <stop stop-color="#ffffff" />
-            <stop offset="1" stop-color="#e0f2fe" />
+            <stop offset="1" stop-color="#cbd5e1" />
           </linearGradient>
         </defs>
         <!-- Sun peaking behind -->
@@ -68,12 +68,13 @@
           <line x1="12" y1="12" x2="14.5" y2="14.5" />
           <line x1="32" y1="14.5" x2="34.5" y2="12" />
         </g>
-        <!-- Crisp White Front Cloud -->
+        <!-- Front Cloud with Crisp Outline and Shading -->
         <path
           d="M49 50H19C14 50 10 46 10 41C10 36.3 13.5 32.4 18.1 32C19.8 24.5 25.8 19 33 19C41.3 19 48 25.7 48 34C48 34.4 48 34.7 47.9 35.1C51.5 36.1 54 39.4 54 43.5C54 47.1 51.5 50 49 50Z"
           [attr.fill]="'url(#' + uid + '_cloudGradLight)'"
-          stroke="#f8fafc"
-          stroke-width="1.2"
+          stroke="#94a3b8"
+          stroke-width="1.5"
+          class="cloud-body"
         />
       </svg>
     }
@@ -87,7 +88,7 @@
             <stop offset="1" stop-color="#facc15" />
           </linearGradient>
           <linearGradient [id]="uid + '_cloudGradNight'" x1="12" y1="20" x2="52" y2="52" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#f1f5f9" />
+            <stop stop-color="#f8fafc" />
             <stop offset="1" stop-color="#cbd5e1" />
           </linearGradient>
         </defs>
@@ -103,8 +104,9 @@
         <path
           d="M49 50H19C14 50 10 46 10 41C10 36.3 13.5 32.4 18.1 32C19.8 24.5 25.8 19 33 19C41.3 19 48 25.7 48 34C48 34.4 48 34.7 47.9 35.1C51.5 36.1 54 39.4 54 43.5C54 47.1 51.5 50 49 50Z"
           [attr.fill]="'url(#' + uid + '_cloudGradNight)'"
-          stroke="#cbd5e1"
-          stroke-width="1.2"
+          stroke="#94a3b8"
+          stroke-width="1.5"
+          class="cloud-body"
         />
       </svg>
     }
@@ -126,15 +128,16 @@
         <path
           d="M46 36H24C20.5 36 17.5 33 17.5 29.5C17.5 26.2 20 23.5 23.2 23.1C24.4 17.8 29.1 14 34.5 14C41 14 46.2 19.2 46.2 25.7C46.2 26 46.2 26.3 46.1 26.6C48.9 27.4 51 30 51 33C51 34.7 49 36 46 36Z"
           [attr.fill]="'url(#' + uid + '_cloudGradBack)'"
-          stroke="#94a3b8"
-          stroke-width="1"
+          stroke="#64748b"
+          stroke-width="1.2"
         />
         <!-- Front Cloud -->
         <path
           d="M49 50H19C14 50 10 46 10 41C10 36.3 13.5 32.4 18.1 32C19.8 24.5 25.8 19 33 19C41.3 19 48 25.7 48 34C48 34.4 48 34.7 47.9 35.1C51.5 36.1 54 39.4 54 43.5C54 47.1 51.5 50 49 50Z"
           [attr.fill]="'url(#' + uid + '_cloudGradFront)'"
-          stroke="#e2e8f0"
-          stroke-width="1.2"
+          stroke="#94a3b8"
+          stroke-width="1.5"
+          class="cloud-body"
         />
       </svg>
     }
@@ -151,8 +154,9 @@
         <path
           d="M47 38H19C15 38 12 35 12 31C12 27.2 14.8 24.1 18.5 23.7C19.9 17.7 25.2 13 31.5 13C38.9 13 45 19.1 45 26.5C45 26.8 45 27.1 44.9 27.4C47.9 28.3 50 31 50 34.2C50 36.3 48.7 38 47 38Z"
           [attr.fill]="'url(#' + uid + '_fogCloudGrad)'"
-          stroke="#e2e8f0"
-          stroke-width="1.2"
+          stroke="#94a3b8"
+          stroke-width="1.5"
+          class="cloud-body"
         />
         <g stroke="#94a3b8" stroke-width="3" stroke-linecap="round">
           <line x1="12" y1="44" x2="52" y2="44" />
@@ -168,14 +172,15 @@
         <defs>
           <linearGradient [id]="uid + '_drizzleCloudGrad'" x1="12" y1="12" x2="48" y2="40" gradientUnits="userSpaceOnUse">
             <stop stop-color="#ffffff" />
-            <stop offset="1" stop-color="#e0f2fe" />
+            <stop offset="1" stop-color="#cbd5e1" />
           </linearGradient>
         </defs>
         <path
           d="M47 38H19C15 38 12 35 12 31C12 27.2 14.8 24.1 18.5 23.7C19.9 17.7 25.2 13 31.5 13C38.9 13 45 19.1 45 26.5C45 26.8 45 27.1 44.9 27.4C47.9 28.3 50 31 50 34.2C50 36.3 48.7 38 47 38Z"
           [attr.fill]="'url(#' + uid + '_drizzleCloudGrad)'"
-          stroke="#f8fafc"
-          stroke-width="1.2"
+          stroke="#94a3b8"
+          stroke-width="1.5"
+          class="cloud-body"
         />
         <!-- 3 Vibrant Teardrop Droplets -->
         <path d="M21 43C21 43 18 46 18 48.5C18 50.4 19.3 52 21 52C22.7 52 24 50.4 24 48.5C24 46 21 43 21 43Z" fill="#38bdf8" />
@@ -196,8 +201,9 @@
         <path
           d="M47 36H19C15 36 12 33 12 29C12 25.2 14.8 22.1 18.5 21.7C19.9 15.7 25.2 11 31.5 11C38.9 11 45 17.1 45 24.5C45 24.8 45 25.1 44.9 25.4C47.9 26.3 50 29 50 32.2C50 34.3 48.7 36 47 36Z"
           [attr.fill]="'url(#' + uid + '_rainCloudGrad)'"
-          stroke="#cbd5e1"
-          stroke-width="1.2"
+          stroke="#64748b"
+          stroke-width="1.5"
+          class="cloud-body"
         />
         <g stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round">
           <line x1="20" y1="42" x2="16" y2="55" />
@@ -220,8 +226,9 @@
         <path
           d="M47 36H19C15 36 12 33 12 29C12 25.2 14.8 22.1 18.5 21.7C19.9 15.7 25.2 11 31.5 11C38.9 11 45 17.1 45 24.5C45 24.8 45 25.1 44.9 25.4C47.9 26.3 50 29 50 32.2C50 34.3 48.7 36 47 36Z"
           [attr.fill]="'url(#' + uid + '_snowCloudGrad)'"
-          stroke="#e2e8f0"
-          stroke-width="1.2"
+          stroke="#64748b"
+          stroke-width="1.5"
+          class="cloud-body"
         />
         <!-- Snowflake 1 at (24, 49) -->
         <g stroke="#bae6fd" stroke-width="2.2" stroke-linecap="round">
@@ -241,7 +248,7 @@
     }
 
     @case ('rain-showers-day') {
-      <!-- Rain Showers Day (Sun + Cloud + Rain Streaks) -->
+      <!-- Rain Showers Day (Sun + Volumetric Cloud + Rain Streaks) -->
       <svg class="w-full h-full drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient [id]="uid + '_sunGrad3'" x1="14" y1="14" x2="32" y2="32" gradientUnits="userSpaceOnUse">
@@ -250,7 +257,7 @@
           </linearGradient>
           <linearGradient [id]="uid + '_showerCloudGradDay'" x1="12" y1="16" x2="48" y2="44" gradientUnits="userSpaceOnUse">
             <stop stop-color="#ffffff" />
-            <stop offset="1" stop-color="#e0f2fe" />
+            <stop offset="1" stop-color="#cbd5e1" />
           </linearGradient>
         </defs>
         <!-- Sun peaking behind -->
@@ -264,8 +271,9 @@
         <path
           d="M47 37H19C15 37 12 34 12 30C12 26.2 14.8 23.1 18.5 22.7C19.9 16.7 25.2 12 31.5 12C38.9 12 45 18.1 45 25.5C45 25.8 45 26.1 44.9 26.4C47.9 27.3 50 30 50 33.2C50 35.3 48.7 37 47 37Z"
           [attr.fill]="'url(#' + uid + '_showerCloudGradDay)'"
-          stroke="#f8fafc"
-          stroke-width="1.2"
+          stroke="#94a3b8"
+          stroke-width="1.5"
+          class="cloud-body"
         />
         <g stroke="#38bdf8" stroke-width="3" stroke-linecap="round">
           <line x1="23" y1="43" x2="19" y2="55" />
@@ -284,7 +292,7 @@
             <stop offset="1" stop-color="#facc15" />
           </linearGradient>
           <linearGradient [id]="uid + '_showerCloudGradNight'" x1="12" y1="16" x2="48" y2="44" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#f1f5f9" />
+            <stop stop-color="#f8fafc" />
             <stop offset="1" stop-color="#cbd5e1" />
           </linearGradient>
         </defs>
@@ -298,8 +306,9 @@
         <path
           d="M47 37H19C15 37 12 34 12 30C12 26.2 14.8 23.1 18.5 22.7C19.9 16.7 25.2 12 31.5 12C38.9 12 45 18.1 45 25.5C45 25.8 45 26.1 44.9 26.4C47.9 27.3 50 30 50 33.2C50 35.3 48.7 37 47 37Z"
           [attr.fill]="'url(#' + uid + '_showerCloudGradNight)'"
-          stroke="#cbd5e1"
-          stroke-width="1.2"
+          stroke="#94a3b8"
+          stroke-width="1.5"
+          class="cloud-body"
         />
         <g stroke="#38bdf8" stroke-width="3" stroke-linecap="round">
           <line x1="23" y1="43" x2="19" y2="55" />
@@ -326,7 +335,8 @@
           d="M47 34H19C15 34 12 31 12 27C12 23.2 14.8 20.1 18.5 19.7C19.9 13.7 25.2 9 31.5 9C38.9 9 45 15.1 45 22.5C45 22.8 45 23.1 44.9 23.4C47.9 24.3 50 27 50 30.2C50 32.3 48.7 34 47 34Z"
           [attr.fill]="'url(#' + uid + '_stormCloudGrad)'"
           stroke="#64748b"
-          stroke-width="1.2"
+          stroke-width="1.5"
+          class="cloud-body"
         />
         <!-- Electric Lightning Bolt -->
         <polygon

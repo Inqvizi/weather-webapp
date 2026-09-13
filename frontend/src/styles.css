@@ -73,6 +73,7 @@ html.light .hover\:bg-\[\#253246\]:hover {
   background-color: #f8fafc !important;
 }
 
+/* Base text hierarchy in light mode */
 html.light .text-white {
   color: #0f172a !important;
 }
@@ -90,13 +91,14 @@ html.light .text-gray-300 {
 }
 
 html.light .text-gray-400 {
-  color: #64748b !important;
+  color: #475569 !important;
 }
 
 html.light .text-gray-500 {
-  color: #94a3b8 !important;
+  color: #64748b !important;
 }
 
+/* Borders in light mode */
 html.light .border-gray-700 {
   border-color: #e2e8f0 !important;
 }
@@ -109,6 +111,12 @@ html.light .divide-gray-800 > * + * {
   border-color: #f1f5f9 !important;
 }
 
+html.light .border-gray-700\/40,
+html.light .border-gray-700\/50 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Background cards & containers */
 html.light .bg-gray-800 {
   background-color: #e2e8f0 !important;
   color: #334155 !important;
@@ -138,4 +146,177 @@ html.light .bg-white\/10 {
 
 html.light .placeholder\:text-gray-500::placeholder {
   color: #94a3b8 !important;
+}
+
+/* ============================================================
+   ACTIVE BUTTONS & HIGHLIGHTS FIX (Image 2)
+   Ensures white text on solid blue/colored buttons in light mode
+   ============================================================ */
+
+html.light .bg-blue-600,
+html.light .bg-blue-500,
+html.light button.bg-blue-600,
+html.light button.bg-blue-500,
+html.light .bg-blue-600.text-white,
+html.light .bg-blue-500.text-white,
+html.light [class*="bg-blue-600"],
+html.light [class*="bg-blue-500"] {
+  color: #ffffff !important;
+}
+
+html.light .bg-blue-600 *,
+html.light .bg-blue-500 * {
+  color: #ffffff !important;
+}
+
+/* ============================================================
+   HIGH-CONTRAST ACCENT COLORS FOR LIGHT MODE (Image 1)
+   Maps dark-mode pale text (400-series) to accessible dark tones (600/700-series)
+   ============================================================ */
+
+html.light .text-blue-400 {
+  color: #1d4ed8 !important;
+}
+
+html.light .text-blue-300 {
+  color: #1e40af !important;
+}
+
+html.light .text-sky-400 {
+  color: #0369a1 !important;
+}
+
+html.light .text-cyan-400 {
+  color: #0e7490 !important;
+}
+
+html.light .text-amber-400 {
+  color: #b45309 !important;
+}
+
+html.light .text-orange-400 {
+  color: #c2410c !important;
+}
+
+html.light .text-yellow-400 {
+  color: #a16207 !important;
+}
+
+html.light .text-emerald-400 {
+  color: #15803d !important;
+}
+
+html.light .text-rose-400 {
+  color: #be123c !important;
+}
+
+html.light .text-indigo-400 {
+  color: #4338ca !important;
+}
+
+html.light .text-purple-400 {
+  color: #7e22ce !important;
+}
+
+/* Soft Badges in Light Mode */
+html.light .bg-blue-500\/15,
+html.light .bg-blue-500\/20 {
+  background-color: #dbeafe !important;
+  border-color: #bfdbfe !important;
+  color: #1d4ed8 !important;
+}
+
+html.light .bg-sky-500\/15,
+html.light .bg-sky-500\/20 {
+  background-color: #e0f2fe !important;
+  border-color: #bae6fd !important;
+  color: #0369a1 !important;
+}
+
+html.light .bg-emerald-500\/10,
+html.light .bg-emerald-500\/20 {
+  background-color: #dcfce7 !important;
+  border-color: #bbf7d0 !important;
+  color: #15803d !important;
+}
+
+html.light .bg-amber-500\/10,
+html.light .bg-amber-500\/20 {
+  background-color: #fef3c7 !important;
+  border-color: #fde68a !important;
+  color: #b45309 !important;
+}
+
+html.light .bg-orange-500\/10,
+html.light .bg-orange-500\/20 {
+  background-color: #ffedd5 !important;
+  border-color: #fed7aa !important;
+  color: #c2410c !important;
+}
+
+html.light .bg-rose-500\/10,
+html.light .bg-rose-500\/20 {
+  background-color: #ffe4e6 !important;
+  border-color: #fecdd3 !important;
+  color: #be123c !important;
+}
+
+html.light .bg-purple-500\/10,
+html.light .bg-purple-500\/20 {
+  background-color: #f3e8ff !important;
+  border-color: #e9d5ff !important;
+  color: #7e22ce !important;
+}
+
+html.light .bg-cyan-500\/10 {
+  background-color: #cffafe !important;
+}
+
+html.light .bg-indigo-500\/10 {
+  background-color: #e0e7ff !important;
+}
+
+html.light .bg-blue-500\/10 {
+  background-color: #dbeafe !important;
+}
+
+html.light .bg-yellow-500\/10 {
+  background-color: #fef9c3 !important;
+}
+
+/* ============================================================
+   WEATHER ICONS VISIBILITY IN LIGHT MODE (Image 3)
+   Gives clouds clean dark outlines and crisp shading on white
+   ============================================================ */
+
+html.light app-weather-icon svg {
+  filter: drop-shadow(0 2px 5px rgba(15, 23, 42, 0.12)) !important;
+}
+
+/* Ensure cloud strokes are clearly visible on white cards */
+html.light app-weather-icon path[stroke="#f8fafc"],
+html.light app-weather-icon path[stroke="#f1f5f9"],
+html.light app-weather-icon path[stroke="#e2e8f0"],
+html.light app-weather-icon path[stroke="#cbd5e1"],
+html.light app-weather-icon .cloud-body {
+  stroke: #64748b !important;
+  stroke-width: 1.6px !important;
+}
+
+/* Ensure mist/fog lines stand out */
+html.light app-weather-icon line[stroke="#94a3b8"] {
+  stroke: #475569 !important;
+  stroke-width: 3.2px !important;
+}
+
+/* Rain streaks and droplets: rich visible cyan/blue */
+html.light app-weather-icon line[stroke="#38bdf8"],
+html.light app-weather-icon path[fill="#38bdf8"] {
+  stroke: #0284c7 !important;
+  fill: #0284c7 !important;
+}
+
+/* Snowflakes: sharp ice-blue */
+html.light app-weather-icon g[stroke="#bae6fd"] {
+  stroke: #0284c7 !important;
 }
