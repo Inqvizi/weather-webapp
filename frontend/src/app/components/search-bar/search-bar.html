@@ -8,7 +8,7 @@
 
     <input
       type="text"
-      placeholder="Search for cities (e.g. London, New York, Tokyo)"
+      [placeholder]="'search.placeholder' | translate"
       [value]="inputValue()"
       (input)="onInput($event)"
       (focus)="onFocus()"
@@ -49,14 +49,14 @@
         <div class="flex justify-between items-center px-4 py-2.5 border-b border-gray-800 bg-gray-900/40">
           <span class="text-xs font-semibold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
             <i class="bi bi-clock-history"></i>
-            Recent Searches
+            {{ 'search.recentSearches' | translate }}
           </span>
           <button
             type="button"
             (click)="clearHistory()"
             class="text-[11px] text-gray-400 hover:text-rose-400 font-medium transition-colors cursor-pointer"
           >
-            Clear all
+            {{ 'search.clearAll' | translate }}
           </button>
         </div>
 
@@ -90,7 +90,7 @@
     type="button"
     (click)="locateMe()"
     [disabled]="isLocating()"
-    title="Use current location"
+    [title]="'search.locateMeTitle' | translate"
     class="h-12 w-12 rounded-2xl bg-[#1b2533] hover:bg-blue-600/20 text-gray-300 hover:text-blue-400 border border-gray-700 shadow-sm flex items-center justify-center transition-all cursor-pointer shrink-0 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
   >
     @if (isLocating()) {

@@ -1,14 +1,16 @@
 import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WeatherResponseDto } from '../../services/weather.service';
+import { WeatherService, WeatherResponseDto } from '../../services/weather.service';
 import { SettingsService } from '../../services/settings.service';
 import { FavoritesService } from '../../services/favorites.service';
+import { TranslationService } from '../../services/translation.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { WeatherIcon } from '../weather-icon/weather-icon';
 
 @Component({
   selector: 'app-current-weather',
   standalone: true,
-  imports: [CommonModule, WeatherIcon],
+  imports: [CommonModule, WeatherIcon, TranslatePipe],
   templateUrl: './current-weather.html',
   styleUrl: './current-weather.css',
 })
@@ -18,6 +20,11 @@ export class CurrentWeather {
 
   settingsService = inject(SettingsService);
   favoritesService = inject(FavoritesService);
+  translationService = inject(TranslationService);
+
+  get weatherDescription(): string {
+    return this.translationService.translateCondition(this.weather?.weatherCode, this.weather?.description);
+  }
 
   get isFavorite(): boolean {
 

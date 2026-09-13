@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { WeatherService, WeatherResponseDto, CitySearchResultDto } from '../../services/weather.service';
 import { FavoritesService } from '../../services/favorites.service';
 import { SettingsService } from '../../services/settings.service';
+import { TranslationService } from '../../services/translation.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { WeatherIcon } from '../weather-icon/weather-icon';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -18,7 +20,7 @@ interface CityCardData {
 @Component({
   selector: 'app-cities',
   standalone: true,
-  imports: [CommonModule, FormsModule, WeatherIcon],
+  imports: [CommonModule, FormsModule, WeatherIcon, TranslatePipe],
   templateUrl: './cities.html',
   styleUrl: './cities.css',
 })
@@ -29,6 +31,7 @@ export class CitiesComponent implements OnInit {
   weatherService = inject(WeatherService);
   favoritesService = inject(FavoritesService);
   settingsService = inject(SettingsService);
+  translationService = inject(TranslationService);
 
   cityCards = signal<CityCardData[]>([]);
   newCityInput = signal<string>('');

@@ -2,13 +2,14 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SettingsService } from '../../services/settings.service';
 import { PwaService } from '../../services/pwa.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 export type AppTab = 'weather' | 'cities' | 'settings';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
 })

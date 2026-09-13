@@ -4,10 +4,13 @@ import { ForecastResponseDto } from '../../services/weather.service';
 import { SettingsService } from '../../services/settings.service';
 import { WeatherIcon } from '../weather-icon/weather-icon';
 
+import { TranslationService } from '../../services/translation.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+
 @Component({
   selector: 'app-hourly-forecast',
   standalone: true,
-  imports: [CommonModule, WeatherIcon],
+  imports: [CommonModule, WeatherIcon, TranslatePipe],
   templateUrl: './hourly-forecast.html',
   styleUrl: './hourly-forecast.css',
 })
@@ -20,6 +23,7 @@ export class HourlyForecast {
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
 
   settingsService = inject(SettingsService);
+  translationService = inject(TranslationService);
 
   get nextHours() {
     if (!this.forecast?.items || this.forecast.items.length === 0) return [];
@@ -53,10 +57,14 @@ export class HourlyForecast {
     return new Date(this.selectedDate + 'T12:00:00');
   }
 
+  get formattedSelectedDate(): string {
+    if (!this.selectedDateDisplay) return '';
+    return this.translationService.formatDate(this.selectedDateDisplay, 'weekdayMonth');
+  }
 
   formatHour(dateTimeStr: string, index: number): string {
     if (!this.selectedDate && index === 0) {
-      return 'Now';
+      return this.translationService.t('weather.now');
     }
     return this.settingsService.formatTime(dateTimeStr);
   }

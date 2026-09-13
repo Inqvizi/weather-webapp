@@ -8,10 +8,10 @@
     [class.bg-blue-500\/10]="activeTab === 'weather'"
     [class.text-gray-400]="activeTab !== 'weather'"
     [class.hover:text-white]="activeTab !== 'weather'"
-    title="Weather Forecast"
+    [title]="'nav.weather' | translate"
   >
     <i class="bi bi-cloud-sun-fill text-xl sm:text-2xl lg:mb-1"></i>
-    <span class="text-[10px] lg:text-xs font-semibold">Weather</span>
+    <span class="text-[10px] lg:text-xs font-semibold">{{ 'nav.weather' | translate }}</span>
   </button>
 
   <!-- Cities Tab -->
@@ -23,10 +23,10 @@
     [class.bg-blue-500\/10]="activeTab === 'cities'"
     [class.text-gray-400]="activeTab !== 'cities'"
     [class.hover:text-white]="activeTab !== 'cities'"
-    title="Favorite Cities"
+    [title]="'nav.cities' | translate"
   >
     <i class="bi bi-list-ul text-xl sm:text-2xl lg:mb-1"></i>
-    <span class="text-[10px] lg:text-xs font-semibold">Cities</span>
+    <span class="text-[10px] lg:text-xs font-semibold">{{ 'nav.cities' | translate }}</span>
   </button>
 
   <!-- Settings Tab -->
@@ -38,10 +38,10 @@
     [class.bg-blue-500\/10]="activeTab === 'settings'"
     [class.text-gray-400]="activeTab !== 'settings'"
     [class.hover:text-white]="activeTab !== 'settings'"
-    title="Settings"
+    [title]="'nav.settings' | translate"
   >
     <i class="bi bi-gear-fill text-xl sm:text-2xl lg:mb-1"></i>
-    <span class="text-[10px] lg:text-xs font-semibold">Settings</span>
+    <span class="text-[10px] lg:text-xs font-semibold">{{ 'nav.settings' | translate }}</span>
   </button>
 
   <!-- PWA Install Button -->
@@ -50,10 +50,10 @@
       type="button"
       (click)="pwaService.promptInstall()"
       class="flex flex-col items-center cursor-pointer transition-all rounded-2xl p-2 sm:p-2.5 w-16 sm:w-20 lg:w-full text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 lg:mt-auto"
-      title="Install WeatherApp as native app"
+      [title]="'nav.install' | translate"
     >
       <i class="bi bi-download text-xl sm:text-2xl lg:mb-1"></i>
-      <span class="text-[10px] lg:text-xs font-semibold">Install</span>
+      <span class="text-[10px] lg:text-xs font-semibold">{{ 'nav.install' | translate }}</span>
     </button>
   }
 
@@ -63,14 +63,14 @@
     (click)="toggleTheme()"
     class="flex flex-col items-center cursor-pointer transition-all rounded-2xl p-2 sm:p-2.5 w-16 sm:w-20 lg:w-full text-gray-400 hover:text-amber-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
     [class.lg:mt-auto]="!pwaService.isInstallable() || pwaService.isInstalled()"
-    [title]="settingsService.settings().theme === 'dark' ? 'Switch to Light theme' : 'Switch to Dark theme'"
+    [title]="(settingsService.settings().theme === 'dark' ? 'nav.light' : 'nav.dark') | translate"
   >
     @if (settingsService.settings().theme === 'dark') {
       <i class="bi bi-sun-fill text-xl sm:text-2xl lg:mb-1 text-amber-400"></i>
-      <span class="text-[10px] lg:text-xs font-semibold text-amber-400">Light</span>
+      <span class="text-[10px] lg:text-xs font-semibold text-amber-400">{{ 'nav.light' | translate }}</span>
     } @else {
       <i class="bi bi-moon-stars-fill text-xl sm:text-2xl lg:mb-1 text-indigo-500"></i>
-      <span class="text-[10px] lg:text-xs font-semibold text-indigo-500">Dark</span>
+      <span class="text-[10px] lg:text-xs font-semibold text-indigo-500">{{ 'nav.dark' | translate }}</span>
     }
   </button>
 </div>

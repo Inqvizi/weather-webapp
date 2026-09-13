@@ -16,7 +16,7 @@
         @if (!pwaService.isOnline()) {
           <div class="bg-amber-500/15 border border-amber-500/30 text-amber-400 px-4 py-2.5 rounded-2xl flex items-center justify-center gap-2 text-xs sm:text-sm font-medium animate-fade-in">
             <i class="bi bi-wifi-off text-base"></i>
-            <span>Offline Mode &mdash; Showing cached forecast data</span>
+            <span>{{ 'pwa.offlineMode' | translate }}</span>
           </div>
         }
 
@@ -91,7 +91,7 @@
         <div class="w-14 h-14 rounded-2xl bg-blue-500/20 flex items-center justify-center text-blue-400 text-2xl">
           <i class="bi bi-phone"></i>
         </div>
-        <h4 class="text-lg font-bold text-white">Install on iPhone / iPad</h4>
+        <h4 class="text-lg font-bold text-white">{{ 'pwa.iosTitle' | translate }}</h4>
         <p class="text-sm text-gray-300 leading-relaxed">
           Tap <span class="inline-flex items-center px-1.5 py-0.5 rounded bg-gray-700 text-white font-semibold text-xs"><i class="bi bi-box-arrow-up mr-1"></i> Share</span> in Safari, scroll down and tap <span class="inline-flex items-center px-1.5 py-0.5 rounded bg-gray-700 text-white font-semibold text-xs"><i class="bi bi-plus-square mr-1"></i> Add to Home Screen</span>.
         </p>

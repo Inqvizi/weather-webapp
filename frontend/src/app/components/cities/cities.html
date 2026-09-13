@@ -11,7 +11,7 @@
       </div>
 
       <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
-        {{ cityCards().length }} saved
+        {{ cityCards().length }} {{ 'cities.savedCount' | translate }}
       </span>
     </div>
 
@@ -23,7 +23,7 @@
       }
       <input
         type="text"
-        placeholder="Search and add a city to favorites (e.g. London, Rome, Berlin)..."
+        [placeholder]="'cities.searchPlaceholder' | translate"
         [value]="newCityInput()"
         (input)="onSearchInput($any($event.target).value)"
         class="w-full bg-[#1b2533] text-white pl-12 pr-10 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-700 shadow-sm transition-all text-sm"
@@ -84,7 +84,7 @@
             <button
               type="button"
               (click)="removeFavorite(card.name, $event)"
-              title="Remove from favorites"
+              [title]="'cities.removeFromFavorites' | translate"
               class="w-8 h-8 rounded-full bg-gray-800/80 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 flex items-center justify-center transition-colors cursor-pointer"
             >
               <i class="bi bi-trash text-sm"></i>
@@ -134,8 +134,8 @@
   } @else {
     <div class="bg-[#202b3b] rounded-3xl p-12 border border-gray-700 text-center flex flex-col items-center justify-center">
       <i class="bi bi-heart text-5xl text-gray-600 mb-4"></i>
-      <h3 class="text-lg font-bold text-white mb-1">No Favorite Cities Yet</h3>
-      <p class="text-sm text-gray-400 max-w-sm mb-6">Use the search bar above or click the heart icon on any city to add it to your favorites.</p>
+      <h3 class="text-lg font-bold text-white mb-1">{{ 'cities.emptyTitle' | translate }}</h3>
+      <p class="text-sm text-gray-400 max-w-sm mb-6">{{ 'cities.emptySubtitle' | translate }}</p>
     </div>
   }
 </div>

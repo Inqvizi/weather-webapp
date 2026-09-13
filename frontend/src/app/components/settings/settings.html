@@ -4,24 +4,56 @@
       <div>
         <h2 class="text-2xl font-bold text-white flex items-center gap-2">
           <i class="bi bi-gear-fill text-blue-400 text-xl"></i>
-          Settings
+          {{ 'settings.title' | translate }}
         </h2>
-        <p class="text-sm text-gray-400 mt-1">Customize measurement units, time display, and general preferences</p>
+        <p class="text-sm text-gray-400 mt-1">{{ 'settings.subtitle' | translate }}</p>
       </div>
 
       @if (saveSuccess) {
         <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
-          <i class="bi bi-check-circle-fill"></i> Saved
+          <i class="bi bi-check-circle-fill"></i> {{ 'settings.saved' | translate }}
         </span>
       }
     </div>
 
     <div class="flex flex-col gap-8">
-      <!-- Theme / Appearance -->
+      <!-- Language Selector -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <label class="text-base font-semibold text-white">Appearance Theme</label>
-          <p class="text-xs text-gray-400">Switch between sleek Dark and bright Light mode</p>
+          <label class="text-base font-semibold text-white">{{ 'settings.language' | translate }}</label>
+          <p class="text-xs text-gray-400">{{ 'settings.languageDesc' | translate }}</p>
+        </div>
+        <div class="flex rounded-xl bg-[#1b2533] p-1 border border-gray-700 w-fit">
+          <button
+            type="button"
+            (click)="setLanguage('uk')"
+            [class.bg-blue-600]="settingsService.settings().language === 'uk'"
+            [class.text-white]="settingsService.settings().language === 'uk'"
+            [class.text-gray-400]="settingsService.settings().language !== 'uk'"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-2"
+          >
+            <span class="text-base leading-none">🇺🇦</span>
+            Українська
+          </button>
+          <button
+            type="button"
+            (click)="setLanguage('en')"
+            [class.bg-blue-600]="settingsService.settings().language === 'en'"
+            [class.text-white]="settingsService.settings().language === 'en'"
+            [class.text-gray-400]="settingsService.settings().language !== 'en'"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-2"
+          >
+            <span class="text-base leading-none">🇬🇧</span>
+            English
+          </button>
+        </div>
+      </div>
+
+      <!-- Theme / Appearance -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 border-t border-gray-700/50">
+        <div>
+          <label class="text-base font-semibold text-white">{{ 'settings.appearance' | translate }}</label>
+          <p class="text-xs text-gray-400">{{ 'settings.appearanceDesc' | translate }}</p>
         </div>
         <div class="flex rounded-xl bg-[#1b2533] p-1 border border-gray-700 w-fit">
           <button
@@ -33,7 +65,7 @@
             class="px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-2"
           >
             <i class="bi bi-moon-stars-fill text-sm"></i>
-            Dark
+            {{ 'settings.dark' | translate }}
           </button>
           <button
             type="button"
@@ -48,7 +80,7 @@
               [class.text-amber-400]="settingsService.settings().theme !== 'light'"
               [class.text-white]="settingsService.settings().theme === 'light'"
             ></i>
-            Light
+            {{ 'settings.light' | translate }}
           </button>
         </div>
       </div>
@@ -56,8 +88,8 @@
       <!-- Temperature Unit -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 border-t border-gray-700/50">
         <div>
-          <label class="text-base font-semibold text-white">Temperature Unit</label>
-          <p class="text-xs text-gray-400">Choose between Celsius and Fahrenheit</p>
+          <label class="text-base font-semibold text-white">{{ 'settings.tempUnit' | translate }}</label>
+          <p class="text-xs text-gray-400">{{ 'settings.tempUnitDesc' | translate }}</p>
         </div>
 
         <div class="flex rounded-xl bg-[#1b2533] p-1 border border-gray-700 w-fit">
@@ -87,8 +119,8 @@
       <!-- Wind Speed Unit -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 border-t border-gray-700/50">
         <div>
-          <label class="text-base font-semibold text-white">Wind Speed</label>
-          <p class="text-xs text-gray-400">Select unit for wind velocity</p>
+          <label class="text-base font-semibold text-white">{{ 'settings.windUnit' | translate }}</label>
+          <p class="text-xs text-gray-400">{{ 'settings.windUnitDesc' | translate }}</p>
         </div>
         <div class="flex rounded-xl bg-[#1b2533] p-1 border border-gray-700 w-fit">
           <button
@@ -127,8 +159,8 @@
       <!-- Atmospheric Pressure Unit -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 border-t border-gray-700/50">
         <div>
-          <label class="text-base font-semibold text-white">Atmospheric Pressure</label>
-          <p class="text-xs text-gray-400">Unit for barometric pressure</p>
+          <label class="text-base font-semibold text-white">{{ 'settings.pressureUnit' | translate }}</label>
+          <p class="text-xs text-gray-400">{{ 'settings.pressureUnitDesc' | translate }}</p>
         </div>
         <div class="flex rounded-xl bg-[#1b2533] p-1 border border-gray-700 w-fit">
           <button
@@ -157,8 +189,8 @@
       <!-- Time Format -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 border-t border-gray-700/50">
         <div>
-          <label class="text-base font-semibold text-white">Time Format</label>
-          <p class="text-xs text-gray-400">Choose hourly display format</p>
+          <label class="text-base font-semibold text-white">{{ 'settings.timeFormat' | translate }}</label>
+          <p class="text-xs text-gray-400">{{ 'settings.timeFormatDesc' | translate }}</p>
         </div>
         <div class="flex rounded-xl bg-[#1b2533] p-1 border border-gray-700 w-fit">
           <button
@@ -187,8 +219,8 @@
       <!-- Default Startup City -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-gray-700/50">
         <div>
-          <label class="text-base font-semibold text-white">Default City on Launch</label>
-          <p class="text-xs text-gray-400">City loaded automatically when opening the app</p>
+          <label class="text-base font-semibold text-white">{{ 'settings.defaultCity' | translate }}</label>
+          <p class="text-xs text-gray-400">{{ 'settings.defaultCityDesc' | translate }}</p>
         </div>
         <div class="flex items-center gap-2">
           <input
@@ -201,7 +233,7 @@
             (click)="saveDefaultCity()"
             class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-medium transition-colors cursor-pointer"
           >
-            Save
+            {{ 'settings.save' | translate }}
           </button>
         </div>
       </div>
@@ -214,7 +246,7 @@
           class="text-xs text-gray-400 hover:text-rose-400 transition-colors flex items-center gap-1.5 cursor-pointer py-1"
         >
           <i class="bi bi-arrow-counterclockwise"></i>
-          Reset to default settings
+          {{ 'settings.reset' | translate }}
         </button>
       </div>
     </div>

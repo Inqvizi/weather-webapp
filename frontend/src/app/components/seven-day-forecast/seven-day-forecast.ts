@@ -2,12 +2,14 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ForecastResponseDto } from '../../services/weather.service';
 import { SettingsService } from '../../services/settings.service';
+import { TranslationService } from '../../services/translation.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { WeatherIcon } from '../weather-icon/weather-icon';
 
 @Component({
   selector: 'app-seven-day-forecast',
   standalone: true,
-  imports: [CommonModule, WeatherIcon],
+  imports: [CommonModule, WeatherIcon, TranslatePipe],
   templateUrl: './seven-day-forecast.html',
   styleUrl: './seven-day-forecast.css',
 })
@@ -17,6 +19,7 @@ export class SevenDayForecast {
   @Output() daySelected = new EventEmitter<string>();
 
   settingsService = inject(SettingsService);
+  translationService = inject(TranslationService);
 
   get dailyForecast() {
     if (this.forecast?.daily && this.forecast.daily.length > 0) {
@@ -71,6 +74,18 @@ export class SevenDayForecast {
 
   formatTemp(temp: number): string {
     return this.settingsService.formatTemp(temp);
+  }
+
+  formatDayLabel(dayDate: Date, rawDateStr: string, index: number): string {
+    const isToday = (!this.selectedDate && index === 0) || (this.selectedDate === rawDateStr && index === 0);
+    if (isToday) {
+      return this.translationService.t('weather.today');
+    }
+    return this.translationService.formatDate(dayDate, 'dayMonth');
+  }
+
+  translateCondition(weatherCode?: number, description?: string): string {
+    return this.translationService.translateCondition(weatherCode, description);
   }
 
   onDayClick(dateStr: string) {

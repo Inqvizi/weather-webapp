@@ -2,11 +2,13 @@ import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WeatherResponseDto } from '../../services/weather.service';
 import { SettingsService } from '../../services/settings.service';
+import { TranslationService } from '../../services/translation.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-air-conditions',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './air-conditions.html',
   styleUrl: './air-conditions.css',
 })
@@ -14,6 +16,7 @@ export class AirConditions {
   @Input({ required: true }) weather!: WeatherResponseDto;
 
   settingsService = inject(SettingsService);
+  translationService = inject(TranslationService);
 
   formatFeelsLike(): string {
     return this.settingsService.formatTemp(this.weather.feelsLike);
@@ -31,7 +34,8 @@ export class AirConditions {
     const deg = this.weather.windDirection ?? 0;
     const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
     const index = Math.round((deg % 360) / 45) % 8;
-    return directions[index];
+    const rawDir = directions[index];
+    return this.translationService.translateWindDirection(rawDir);
   }
 
   get windRotation(): number {
@@ -41,18 +45,18 @@ export class AirConditions {
   get uvInfo(): { label: string; badgeClass: string } {
     const uv = this.weather.uvIndex ?? 0;
     if (uv <= 2.9) {
-      return { label: 'Low', badgeClass: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' };
+      return { label: this.translationService.t('airConditions.uvLow'), badgeClass: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' };
     }
     if (uv <= 5.9) {
-      return { label: 'Moderate', badgeClass: 'bg-amber-500/20 text-amber-400 border-amber-500/30' };
+      return { label: this.translationService.t('airConditions.uvModerate'), badgeClass: 'bg-amber-500/20 text-amber-400 border-amber-500/30' };
     }
     if (uv <= 7.9) {
-      return { label: 'High', badgeClass: 'bg-orange-500/20 text-orange-400 border-orange-500/30' };
+      return { label: this.translationService.t('airConditions.uvHigh'), badgeClass: 'bg-orange-500/20 text-orange-400 border-orange-500/30' };
     }
     if (uv <= 10.9) {
-      return { label: 'Very High', badgeClass: 'bg-rose-500/20 text-rose-400 border-rose-500/30' };
+      return { label: this.translationService.t('airConditions.uvVeryHigh'), badgeClass: 'bg-rose-500/20 text-rose-400 border-rose-500/30' };
     }
-    return { label: 'Extreme', badgeClass: 'bg-purple-500/20 text-purple-400 border-purple-500/30' };
+    return { label: this.translationService.t('airConditions.uvExtreme'), badgeClass: 'bg-purple-500/20 text-purple-400 border-purple-500/30' };
   }
 
   get formattedSunrise(): string {

@@ -4,13 +4,15 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { WeatherService, CitySearchResultDto } from '../../services/weather.service';
+import { TranslationService } from '../../services/translation.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 const HISTORY_STORAGE_KEY = 'weather_search_history';
 
 @Component({
   selector: 'app-search-bar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './search-bar.html',
   styleUrl: './search-bar.css',
 })
@@ -19,6 +21,7 @@ export class SearchBar implements OnInit {
   @Output() coordinatesSelected = new EventEmitter<{ latitude: number; longitude: number; cityName?: string }>();
 
   private weatherService = inject(WeatherService);
+  translationService = inject(TranslationService);
   private elementRef = inject(ElementRef);
   private searchSubject = new Subject<string>();
 
@@ -43,7 +46,8 @@ export class SearchBar implements OnInit {
           return of([]);
         }
         this.isLoading.set(true);
-        return this.weatherService.searchCities(query).pipe(
+        const lang = this.translationService.currentLanguage();
+        return this.weatherService.searchCities(query, lang).pipe(
           catchError(() => of([]))
         );
       })

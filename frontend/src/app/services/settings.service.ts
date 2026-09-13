@@ -5,6 +5,7 @@ export type WindSpeedUnit = 'kmh' | 'ms' | 'mph';
 export type PressureUnit = 'hPa' | 'mmHg';
 export type TimeFormat = '24h' | '12h';
 export type ThemeMode = 'dark' | 'light';
+export type AppLanguage = 'en' | 'uk';
 
 export interface AppSettings {
   temperatureUnit: TemperatureUnit;
@@ -13,6 +14,7 @@ export interface AppSettings {
   timeFormat: TimeFormat;
   defaultCity: string;
   theme: ThemeMode;
+  language: AppLanguage;
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
@@ -22,6 +24,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   timeFormat: '24h',
   defaultCity: 'Lviv',
   theme: 'dark',
+  language: 'uk',
 };
 
 const STORAGE_KEY = 'weatherapp_settings';
@@ -89,6 +92,10 @@ export class SettingsService {
   toggleTheme(): void {
     const next = this.settings().theme === 'dark' ? 'light' : 'dark';
     this.setTheme(next);
+  }
+
+  setLanguage(language: AppLanguage): void {
+    this.saveSettings({ ...this.settings(), language });
   }
 
   applyTheme(theme: ThemeMode): void {

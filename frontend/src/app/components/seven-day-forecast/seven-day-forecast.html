@@ -1,5 +1,5 @@
 <div class="flex justify-between items-center mb-6">
-  <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">7-Day Forecast</h3>
+  <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">{{ 'weather.forecast7d' | translate }}</h3>
 </div>
 
 <div class="flex flex-col gap-2">
@@ -14,7 +14,7 @@
       [class.border-blue-500\/30]="selectedDate === day.rawDateStr || (!selectedDate && i === 0)"
     >
       <div class="text-gray-400 w-20 font-medium whitespace-nowrap text-sm" [class.text-blue-400]="selectedDate === day.rawDateStr || (!selectedDate && i === 0)">
-        {{ (!selectedDate && i === 0) || (selectedDate === day.rawDateStr && i === 0) ? 'Today' : (day.date | date:'E, d MMM') }}
+        {{ formatDayLabel(day.date, day.rawDateStr, i) }}
       </div>
 
       <div class="flex items-center gap-3 flex-1 px-2 overflow-hidden">
@@ -24,7 +24,7 @@
           [iconCode]="day.iconCode"
           size="sm"
         ></app-weather-icon>
-        <span class="text-white font-medium text-sm capitalize truncate">{{ day.description || 'N/A' }}</span>
+        <span class="text-white font-medium text-sm capitalize truncate">{{ translateCondition(day.weatherCode, day.description) || 'N/A' }}</span>
       </div>
 
 

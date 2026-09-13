@@ -11,6 +11,7 @@ import { SettingsComponent } from './components/settings/settings';
 import { WeatherService, WeatherResponseDto, ForecastResponseDto } from './services/weather.service';
 import { SettingsService } from './services/settings.service';
 import { PwaService } from './services/pwa.service';
+import { TranslatePipe } from './pipes/translate.pipe';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ import { PwaService } from './services/pwa.service';
     SevenDayForecast,
     CitiesComponent,
     SettingsComponent,
+    TranslatePipe,
   ],
   templateUrl: './app.html',
 })
