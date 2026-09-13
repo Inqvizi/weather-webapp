@@ -1,4 +1,40 @@
 <div class="relative w-full">
-  <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-  <input type="text" placeholder="Search for cities" class="w-full bg-[#1b2533] text-white pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-700" (keyup)="onSearch($event)">
+  <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 z-10"></i>
+  @if (isLoading()) {
+    <i class="bi bi-arrow-repeat absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 animate-spin z-10"></i>
+  }
+  <input
+    type="text"
+    placeholder="Search for cities (e.g. Львів, Kyiv, London)"
+    [value]="inputValue()"
+    (input)="onInput($event)"
+    (keydown)="onKeyDown($event)"
+    class="w-full bg-[#1b2533] text-white pl-12 pr-12 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-700 shadow-sm transition-all"
+    autocomplete="off"
+  />
+
+  @if (suggestions().length > 0) {
+    <div class="absolute left-0 right-0 top-full mt-2 bg-[#1b2533] border border-gray-700 rounded-xl shadow-2xl overflow-hidden z-50 divide-y divide-gray-800">
+      @for (city of suggestions(); track city.latitude + '_' + city.longitude) {
+        <button
+          type="button"
+          (click)="selectCity(city.name)"
+          class="w-full text-left px-4 py-3 hover:bg-blue-600/20 flex items-center justify-between transition-colors group cursor-pointer"
+        >
+          <div class="flex items-center gap-2">
+            <i class="bi bi-geo-alt text-gray-400 group-hover:text-blue-400 transition-colors"></i>
+            <div>
+              <span class="font-medium text-white group-hover:text-blue-200">{{ city.name }}</span>
+              @if (city.adminRegion) {
+                <span class="text-xs text-gray-400 ml-1.5">({{ city.adminRegion }})</span>
+              }
+            </div>
+          </div>
+          <span class="text-xs font-semibold px-2 py-0.5 rounded bg-gray-800 text-gray-300 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+            {{ city.countryCode || city.country }}
+          </span>
+        </button>
+      }
+    </div>
+  }
 </div>
