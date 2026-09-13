@@ -15,13 +15,13 @@ A modern, fast, and fully responsive weather dashboard built with **Angular 19**
 
 - **Vector Meteocons SVG Icon System:**
   - Built with custom, scalable SVG weather graphics for all WMO weather codes (0–99).
-  - Dynamic **day and night** variations (`is_day: 0 | 1`) ensuring nighttime clear skies show a moon and daytime shows a radiant sun.
-  - Subtle floating and pulse animations for enhanced visual feedback.
+  - Dynamic **day and night** variations (`is_day: 0 | 1`) ensuring nighttime clear skies show a crisp moon and daytime shows a radiant sun.
+  - High-contrast, static vector presentation for optimal readability and zero visual clutter.
 
 - **Interactive 7-Day & 24-Hour Timeline:**
   - Clicking any day in the 7-day forecast automatically updates the 24-hour timeline to display that date's 24-hour hourly conditions.
   - Includes an active day highlight and a one-click **"↺ Back to Today"** reset button.
-  - Hourly cards dynamically display **precipitation probability pills (`💧 X%`)** whenever precipitation chance is greater than 0%.
+  - Hourly cards consistently display **precipitation probability pills (`💧 X%`)** across all 24 hours, ensuring perfect structural symmetry, baseline alignment, and clear distinction between dry and rainy hours.
 
 - **One-Click Geolocation & Search History:**
   - Crosshair location button in the search bar uses the browser's `navigator.geolocation` API to detect current coordinates and display local weather instantly.
