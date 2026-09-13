@@ -61,12 +61,16 @@
         size="md"
         customClass="my-0.5"
       ></app-weather-icon>
-      <div class="h-4 flex items-center justify-center -mt-1">
-        @if ((item.precipitationProbability ?? 0) >= 5) {
-          <span class="text-[10px] font-semibold text-sky-400 bg-sky-500/15 px-1.5 py-0.5 rounded-full">
-            💧 {{ item.precipitationProbability }}%
-          </span>
-        }
+      <div class="flex items-center justify-center -mt-1">
+        <span
+          class="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+          [class.text-sky-400]="(item.precipitationProbability ?? 0) > 0"
+          [class.bg-sky-500\/15]="(item.precipitationProbability ?? 0) > 0"
+          [class.text-gray-400]="(item.precipitationProbability ?? 0) === 0"
+          [class.bg-white\/5]="(item.precipitationProbability ?? 0) === 0"
+        >
+          💧 {{ item.precipitationProbability ?? 0 }}%
+        </span>
       </div>
       <span class="text-white font-bold text-lg sm:text-xl">
         {{ formatTemp(item.temperature) }}&deg;
