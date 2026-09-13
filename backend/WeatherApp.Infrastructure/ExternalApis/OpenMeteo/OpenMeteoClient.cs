@@ -89,8 +89,8 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
         var description = WmoWeatherCodeMapper.GetDescription(current.WeatherCode, options.Language);
         var iconCode = WmoWeatherCodeMapper.GetIconCode(current.WeatherCode, isDay);
 
-        var measuredAt = DateTime.TryParse(current.Time, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var parsedDate)
-            ? DateTime.SpecifyKind(parsedDate, DateTimeKind.Utc)
+        var measuredAt = DateTime.TryParse(current.Time, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate)
+            ? DateTime.SpecifyKind(parsedDate, DateTimeKind.Unspecified)
             : DateTime.UtcNow;
 
         return WeatherForecast.Create(
@@ -132,8 +132,8 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
             var description = WmoWeatherCodeMapper.GetDescription(weatherCode, options.Language);
             var iconCode = WmoWeatherCodeMapper.GetIconCode(weatherCode, isDay);
 
-            var date = DateTime.TryParse(timeStr, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var parsed)
-                ? DateTime.SpecifyKind(parsed, DateTimeKind.Utc)
+            var date = DateTime.TryParse(timeStr, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsed)
+                ? DateTime.SpecifyKind(parsed, DateTimeKind.Unspecified)
                 : DateTime.UtcNow;
 
             forecasts.Add(WeatherForecast.Create(
