@@ -29,7 +29,7 @@ export class WeatherIcon {
   @Input() size: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'hero' = 'md';
   @Input() customClass: string = '';
 
-  iconType = computed<WeatherIconType>(() => {
+  get iconType(): WeatherIconType {
     const code = this.weatherCode ?? this.mapIconCodeToWmo(this.iconCode);
     const day = this.isDay !== undefined ? this.isDay : !this.iconCode?.includes('n');
 
@@ -84,7 +84,7 @@ export class WeatherIcon {
     }
 
     return day ? 'clear-day' : 'clear-night';
-  });
+  }
 
   private static instanceCounter = 0;
   readonly uid = `wi_${++WeatherIcon.instanceCounter}`;

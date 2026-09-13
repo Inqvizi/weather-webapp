@@ -218,7 +218,9 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
             var dailyCount = forecastResponse.Daily.Time.Count;
             for (var i = 0; i < dailyCount; i++)
             {
-                var code = i < forecastResponse.Daily.WeatherCode.Count ? forecastResponse.Daily.WeatherCode[i] : 0;
+                var dateStr = forecastResponse.Daily.Time[i];
+                var rawCode = i < forecastResponse.Daily.WeatherCode.Count ? forecastResponse.Daily.WeatherCode[i] : 0;
+                var code = ResolveDailyWeatherCode(dateStr, rawCode, forecastResponse.Hourly);
                 var minTemp = i < forecastResponse.Daily.Temperature2mMin.Count ? forecastResponse.Daily.Temperature2mMin[i] : 0.0;
                 var maxTemp = i < forecastResponse.Daily.Temperature2mMax.Count ? forecastResponse.Daily.Temperature2mMax[i] : 0.0;
                 var sunrise = i < forecastResponse.Daily.Sunrise.Count ? forecastResponse.Daily.Sunrise[i] : string.Empty;
@@ -227,7 +229,7 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
 
                 dailyList.Add(new DailyForecastItemDto
                 {
-                    Date = forecastResponse.Daily.Time[i],
+                    Date = dateStr,
                     WeatherCode = code,
                     Description = WmoWeatherCodeMapper.GetDescription(code, options.Language),
                     IconCode = WmoWeatherCodeMapper.GetIconCode(code, true),
@@ -241,6 +243,111 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
         }
 
         return new ForecastData(city, forecasts, dailyList);
+    }
+
+    private static int ResolveDailyWeatherCode(
+        string dateStr,
+        int rawDailyCode,
+        HourlyWeatherBlock? hourly)
+    {
+        if (hourly is null || hourly.Time.Count == 0)
+        {
+            return rawDailyCode;
+        }
+
+        var dayIndices = new List<int>();
+        for (var i = 0; i < hourly.Time.Count; i++)
+        {
+            if (hourly.Time[i].StartsWith(dateStr, StringComparison.OrdinalIgnoreCase))
+            {
+                dayIndices.Add(i);
+            }
+        }
+
+        if (dayIndices.Count == 0)
+        {
+            return rawDailyCode;
+        }
+
+        // Identify daylight hours (is_day == 1)
+        var daylightIndices = dayIndices
+            .Where(idx => idx < hourly.IsDay.Count && hourly.IsDay[idx] == 1)
+            .ToList();
+
+        // Fallback to core daytime hours (08:00 to 19:00) if is_day flags are missing
+        if (daylightIndices.Count == 0)
+        {
+            daylightIndices = dayIndices.Where(idx =>
+            {
+                var time = hourly.Time[idx];
+                if (DateTime.TryParse(time, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
+                {
+                    return dt.Hour >= 8 && dt.Hour <= 19;
+                }
+                return true;
+            }).ToList();
+        }
+
+        var sampleIndices = daylightIndices.Count > 0 ? daylightIndices : dayIndices;
+
+        // 1. Check for severe storms, snow or precipitation during daylight
+        var daylightCodes = sampleIndices
+            .Select(idx => idx < hourly.WeatherCode.Count ? hourly.WeatherCode[idx] : 0)
+            .ToList();
+
+        var precipitationCodes = daylightCodes
+            .Where(c => (c >= 51 && c <= 67) || (c >= 71 && c <= 86) || (c >= 95 && c <= 99))
+            .ToList();
+
+        // If severe storm or snow occurs during daytime, always prioritize it
+        var severeCode = precipitationCodes.FirstOrDefault(c => c >= 95 || (c >= 71 && c <= 77) || c == 65 || c == 82);
+        if (severeCode > 0)
+        {
+            return severeCode;
+        }
+
+        // If rain or drizzle occurs for at least 2 daylight hours, report it
+        if (precipitationCodes.Count >= 2)
+        {
+            return precipitationCodes
+                .GroupBy(c => c)
+                .OrderByDescending(g => g.Count())
+                .First().Key;
+        }
+
+        // 2. Evaluate cloudiness vs sunshine during daytime
+        var clearCount = daylightCodes.Count(c => c == 0);
+        var mainlyClearCount = daylightCodes.Count(c => c == 1);
+        var partlyCloudyCount = daylightCodes.Count(c => c == 2);
+        var overcastCount = daylightCodes.Count(c => c == 3);
+        var fogCount = daylightCodes.Count(c => c == 45 || c == 48);
+
+        var totalDaylight = daylightCodes.Count;
+        var sunHours = clearCount + mainlyClearCount + partlyCloudyCount;
+
+        // If the sun shines for a significant portion of daylight (> 40%), don't brand the whole day as Overcast!
+        if (sunHours >= overcastCount || overcastCount < totalDaylight * 0.6)
+        {
+            if (clearCount >= partlyCloudyCount && clearCount >= mainlyClearCount && clearCount >= totalDaylight * 0.35)
+            {
+                return 0; // Clear sky (Sunny)
+            }
+
+            if ((clearCount + mainlyClearCount) >= partlyCloudyCount && (clearCount + mainlyClearCount) >= totalDaylight * 0.35)
+            {
+                return 1; // Mainly clear
+            }
+
+            return 2; // Partly cloudy (Sun with clouds)
+        }
+
+        if (fogCount >= totalDaylight * 0.5)
+        {
+            return 45; // Fog
+        }
+
+        // True overcast day (overcast for >= 60% of daylight)
+        return 3;
     }
 
     private async Task<City> ResolveCityAsync(string cityName, CancellationToken cancellationToken)
