@@ -4,7 +4,7 @@ import { SettingsService } from '../../services/settings.service';
 import { PwaService } from '../../services/pwa.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 
-export type AppTab = 'weather' | 'cities' | 'settings';
+export type AppTab = 'weather' | 'cities' | 'map' | 'settings';
 
 @Component({
   selector: 'app-sidebar',

@@ -29,6 +29,21 @@
     <span class="text-[10px] lg:text-xs font-semibold">{{ 'nav.cities' | translate }}</span>
   </button>
 
+  <!-- Map / Radar Tab -->
+  <button
+    type="button"
+    (click)="selectTab('map')"
+    class="flex flex-col items-center cursor-pointer transition-all rounded-2xl p-2 sm:p-2.5 w-16 sm:w-20 lg:w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+    [class.text-blue-400]="activeTab === 'map'"
+    [class.bg-blue-500\/10]="activeTab === 'map'"
+    [class.text-gray-400]="activeTab !== 'map'"
+    [class.hover:text-white]="activeTab !== 'map'"
+    [title]="'nav.map' | translate"
+  >
+    <i class="bi bi-radar text-xl sm:text-2xl lg:mb-1"></i>
+    <span class="text-[10px] lg:text-xs font-semibold">{{ 'nav.map' | translate }}</span>
+  </button>
+
   <!-- Settings Tab -->
   <button
     type="button"

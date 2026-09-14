@@ -9,6 +9,7 @@ import { AirQualityComponent } from './components/air-quality/air-quality';
 import { SevenDayForecast } from './components/seven-day-forecast/seven-day-forecast';
 import { CitiesComponent } from './components/cities/cities';
 import { SettingsComponent } from './components/settings/settings';
+import { WeatherMapComponent } from './components/weather-map/weather-map';
 import { WeatherService, WeatherResponseDto, ForecastResponseDto } from './services/weather.service';
 import { SettingsService } from './services/settings.service';
 import { PwaService } from './services/pwa.service';
@@ -28,6 +29,7 @@ import { TranslatePipe } from './pipes/translate.pipe';
     SevenDayForecast,
     CitiesComponent,
     SettingsComponent,
+    WeatherMapComponent,
     TranslatePipe,
   ],
   templateUrl: './app.html',

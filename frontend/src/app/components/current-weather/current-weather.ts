@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WeatherService, WeatherResponseDto } from '../../services/weather.service';
 import { SettingsService } from '../../services/settings.service';
@@ -15,8 +15,8 @@ import { WeatherIcon } from '../weather-icon/weather-icon';
   styleUrl: './current-weather.css',
 })
 export class CurrentWeather {
-
   @Input({ required: true }) weather!: WeatherResponseDto;
+  @Output() openRadar = new EventEmitter<void>();
 
   settingsService = inject(SettingsService);
   favoritesService = inject(FavoritesService);
