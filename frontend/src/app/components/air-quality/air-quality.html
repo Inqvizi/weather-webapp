@@ -15,60 +15,31 @@
   </div>
 
   @if (airQuality) {
-    <!-- Main AQI Hero + Health Advice -->
-    <div class="flex flex-col md:flex-row items-stretch gap-4 sm:gap-6 p-4 sm:p-5 rounded-2xl bg-white/[0.02] border border-gray-700/40">
-      <!-- Left: Big AQI Value + Category Badge -->
-      <div class="flex items-center gap-4 sm:gap-5 md:w-56 shrink-0">
-        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex flex-col items-center justify-center border shrink-0 {{ aqiInfo.badgeClass }}">
+    <!-- Main AQI Summary -->
+    <div class="flex items-center justify-between p-4 sm:p-5 rounded-2xl bg-white/[0.02] border border-gray-700/40">
+      <div class="flex items-center gap-4 sm:gap-5">
+        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex flex-col items-center justify-center border shrink-0 {{ aqiInfo.badgeClass }}">
           <span class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-none">
             {{ airQuality.usAqi }}
           </span>
-          <span class="text-[10px] font-semibold uppercase tracking-wider mt-1 opacity-80">
+          <span class="text-[9px] font-semibold uppercase tracking-wider mt-1 opacity-80">
             AQI
           </span>
         </div>
 
         <div class="flex flex-col min-w-0">
-          <span class="text-xs text-gray-400 font-medium mb-1">
+          <span class="text-xs text-gray-400 font-medium mb-0.5">
             {{ 'airQuality.index' | translate }}
           </span>
           <span class="text-base sm:text-lg font-bold truncate {{ aqiInfo.textClass }}">
             {{ aqiInfo.statusKey | translate }}
           </span>
-          <span class="text-[11px] text-gray-400 mt-0.5">
-            EU AQI: <strong class="text-gray-200">{{ airQuality.europeanAqi }}</strong>
-          </span>
         </div>
       </div>
 
-      <!-- Right: Health Recommendation + Visual Gradient Meter -->
-      <div class="flex-1 flex flex-col justify-between gap-3 min-w-0 pt-2 md:pt-0 border-t md:border-t-0 md:border-l border-gray-700/40 md:pl-6">
-        <div class="flex items-start gap-2.5">
-          <div class="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0 mt-0.5">
-            <i class="bi bi-info-circle text-sm"></i>
-          </div>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
-            {{ aqiInfo.adviceKey | translate }}
-          </p>
-        </div>
-
-        <!-- Progress Gradient Scale -->
-        <div class="flex flex-col gap-1.5 mt-1">
-          <div class="relative w-full h-2.5 rounded-full bg-gradient-to-r from-emerald-500 via-amber-400 via-orange-500 via-rose-500 to-purple-600 shadow-inner">
-            <!-- Dynamic Position Indicator Marker -->
-            <div
-              class="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white shadow-md border-2 border-gray-900 transition-all duration-500"
-              [style.left]="'calc(' + aqiInfo.markerPositionPercent + '% - 8px)'"
-              [title]="'AQI: ' + airQuality.usAqi"
-            ></div>
-          </div>
-          <div class="flex justify-between items-center text-[10px] text-gray-400 font-medium px-0.5">
-            <span>0 ({{ 'airQuality.good' | translate }})</span>
-            <span>100</span>
-            <span>200</span>
-            <span>300+</span>
-          </div>
-        </div>
+      <div class="text-right">
+        <span class="text-xs text-gray-400 font-medium block mb-0.5">EU AQI</span>
+        <span class="text-base sm:text-lg font-bold text-gray-200">{{ airQuality.europeanAqi }}</span>
       </div>
     </div>
 
