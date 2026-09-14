@@ -21,6 +21,7 @@ public sealed class WeatherForecast
     public string Description { get; }
     public string IconCode { get; }
     public DateTime ForecastDate { get; }
+    public AirQuality? AirQuality { get; }
 
     private WeatherForecast(
         Guid id,
@@ -39,7 +40,8 @@ public sealed class WeatherForecast
         int weatherCode,
         string description,
         string iconCode,
-        DateTime forecastDate)
+        DateTime forecastDate,
+        AirQuality? airQuality = null)
     {
         Id = id;
         City = city;
@@ -58,6 +60,7 @@ public sealed class WeatherForecast
         Description = description;
         IconCode = iconCode;
         ForecastDate = forecastDate;
+        AirQuality = airQuality;
     }
 
     public static WeatherForecast Create(
@@ -76,7 +79,8 @@ public sealed class WeatherForecast
         string sunrise = "",
         string sunset = "",
         bool isDay = true,
-        int weatherCode = 0)
+        int weatherCode = 0,
+        AirQuality? airQuality = null)
     {
         ArgumentNullException.ThrowIfNull(city);
         ArgumentNullException.ThrowIfNull(temperature);
@@ -119,7 +123,8 @@ public sealed class WeatherForecast
             weatherCode,
             description.Trim(),
             iconCode?.Trim() ?? string.Empty,
-            forecastDate);
+            forecastDate,
+            airQuality);
     }
 }
 

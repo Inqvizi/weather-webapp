@@ -1,5 +1,6 @@
 using WeatherApp.Application.Models;
 using WeatherApp.Domain.Entities;
+using WeatherApp.Domain.ValueObjects;
 
 namespace WeatherApp.Application.Interfaces;
 
@@ -10,4 +11,5 @@ public interface IWeatherApiClient
     Task<ForecastData> GetForecastAsync(string cityName, CancellationToken cancellationToken = default);
     Task<ForecastData> GetForecastByCoordinatesAsync(double latitude, double longitude, string? cityName = null, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<City>> SearchCitiesAsync(string query, string? language = null, CancellationToken cancellationToken = default);
+    Task<AirQuality?> GetAirQualityByCoordinatesAsync(double latitude, double longitude, CancellationToken cancellationToken = default);
 }

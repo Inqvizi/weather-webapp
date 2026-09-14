@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using WeatherApp.Application.Interfaces;
 using WeatherApp.Application.Models;
 using WeatherApp.Domain.Entities;
+using WeatherApp.Domain.ValueObjects;
 
 namespace WeatherApp.Infrastructure.ExternalApis.Caching;
 
@@ -102,6 +103,29 @@ internal sealed class CachedWeatherApiClient : IWeatherApiClient
 
         var result = await inner.SearchCitiesAsync(query, language, cancellationToken);
         cache.Set(cacheKey, result, CitiesSearchCacheDuration);
+        return result;
+    }
+
+    public async Task<AirQuality?> GetAirQualityByCoordinatesAsync(
+        double latitude,
+        double longitude,
+        CancellationToken cancellationToken = default)
+    {
+        var latStr = latitude.ToString("F3", CultureInfo.InvariantCulture);
+        var lonStr = longitude.ToString("F3", CultureInfo.InvariantCulture);
+        var cacheKey = $"airquality:coord:{latStr}:{lonStr}";
+
+        if (cache.TryGetValue(cacheKey, out AirQuality? cached) && cached is not null)
+        {
+            return cached;
+        }
+
+        var result = await inner.GetAirQualityByCoordinatesAsync(latitude, longitude, cancellationToken);
+        if (result is not null)
+        {
+            cache.Set(cacheKey, result, ForecastCacheDuration);
+        }
+
         return result;
     }
 }

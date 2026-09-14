@@ -13,4 +13,6 @@ public interface IWeatherService
     Task<ForecastResponseDto> GetForecastByCoordinatesAsync(double latitude, double longitude, string? cityName = null, CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<CitySearchResultDto>> SearchCitiesAsync(string query, string? language = null, CancellationToken cancellationToken = default);
+    Task<AirQualityDto?> GetAirQualityAsync(string cityName, CancellationToken cancellationToken = default);
+    Task<AirQualityDto?> GetAirQualityByCoordinatesAsync(double latitude, double longitude, CancellationToken cancellationToken = default);
 }

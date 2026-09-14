@@ -60,7 +60,8 @@ public class WeatherService : IWeatherService
             Latitude = forecastData.City.Coordinates.Latitude,
             Longitude = forecastData.City.Coordinates.Longitude,
             Items = mapper.Map<IReadOnlyList<ForecastItemDto>>(forecastData.Hourly),
-            Daily = forecastData.Daily
+            Daily = forecastData.Daily,
+            AirQuality = mapper.Map<AirQualityDto>(forecastData.AirQuality)
         };
     }
 
@@ -81,7 +82,8 @@ public class WeatherService : IWeatherService
             Latitude = forecastData.City.Coordinates.Latitude,
             Longitude = forecastData.City.Coordinates.Longitude,
             Items = mapper.Map<IReadOnlyList<ForecastItemDto>>(forecastData.Hourly),
-            Daily = forecastData.Daily
+            Daily = forecastData.Daily,
+            AirQuality = mapper.Map<AirQualityDto>(forecastData.AirQuality)
         };
     }
 
@@ -95,6 +97,32 @@ public class WeatherService : IWeatherService
 
         var cities = await weatherApiClient.SearchCitiesAsync(query, language, cancellationToken);
         return mapper.Map<IReadOnlyList<CitySearchResultDto>>(cities);
+    }
+
+    public async Task<AirQualityDto?> GetAirQualityAsync(string cityName, CancellationToken cancellationToken = default)
+    {
+        var validationResult = await validator.ValidateAsync(cityName, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors.First().ErrorMessage);
+        }
+
+        var cities = await weatherApiClient.SearchCitiesAsync(cityName, null, cancellationToken);
+        if (cities.Count == 0)
+        {
+            return null;
+        }
+
+        var firstCity = cities[0];
+        return await GetAirQualityByCoordinatesAsync(firstCity.Coordinates.Latitude, firstCity.Coordinates.Longitude, cancellationToken);
+    }
+
+    public async Task<AirQualityDto?> GetAirQualityByCoordinatesAsync(double latitude, double longitude, CancellationToken cancellationToken = default)
+    {
+        ValidateCoordinates(latitude, longitude);
+
+        var airQuality = await weatherApiClient.GetAirQualityByCoordinatesAsync(latitude, longitude, cancellationToken);
+        return mapper.Map<AirQualityDto>(airQuality);
     }
 
     private static void ValidateCoordinates(double latitude, double longitude)

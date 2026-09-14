@@ -20,4 +20,5 @@ public sealed class WeatherResponseDto
     public DateTime MeasuredAt { get; init; }
     public double Latitude { get; init; }
     public double Longitude { get; init; }
+    public AirQualityDto? AirQuality { get; init; }
 }

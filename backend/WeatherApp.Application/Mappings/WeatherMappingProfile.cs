@@ -26,7 +26,11 @@ public sealed class WeatherMappingProfile : Profile
             .ForMember(dest => dest.WeatherCode,              opt => opt.MapFrom(src => src.WeatherCode))
             .ForMember(dest => dest.Description,              opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.MeasuredAt,               opt => opt.MapFrom(src => src.ForecastDate))
-            .ForMember(dest => dest.IconCode,                 opt => opt.MapFrom(src => src.IconCode));
+            .ForMember(dest => dest.IconCode,                 opt => opt.MapFrom(src => src.IconCode))
+            .ForMember(dest => dest.AirQuality,               opt => opt.MapFrom(src => src.AirQuality));
+
+        CreateMap<WeatherApp.Domain.ValueObjects.AirQuality, AirQualityDto>()
+            .ForMember(dest => dest.Category, opt => opt.MapFrom(src => GetAirQualityCategory(src.UsAqi)));
 
         CreateMap<WeatherForecast, ForecastItemDto>()
             .ForMember(dest => dest.DateTime,                 opt => opt.MapFrom(src => src.ForecastDate))
@@ -50,4 +54,14 @@ public sealed class WeatherMappingProfile : Profile
             .ForMember(dest => dest.Latitude,                 opt => opt.MapFrom(src => src.Coordinates.Latitude))
             .ForMember(dest => dest.Longitude,                opt => opt.MapFrom(src => src.Coordinates.Longitude));
     }
+
+    private static string GetAirQualityCategory(int aqi) => aqi switch
+    {
+        <= 50 => "Good",
+        <= 100 => "Moderate",
+        <= 150 => "UnhealthyForSensitiveGroups",
+        <= 200 => "Unhealthy",
+        <= 300 => "VeryUnhealthy",
+        _ => "Hazardous"
+    };
 }

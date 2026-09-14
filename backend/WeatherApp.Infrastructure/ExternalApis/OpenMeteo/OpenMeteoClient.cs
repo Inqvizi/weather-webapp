@@ -120,7 +120,13 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
         City city,
         CancellationToken cancellationToken)
     {
-        var forecastResponse = await FetchForecastAsync(city.Coordinates.Latitude, city.Coordinates.Longitude, cancellationToken);
+        var forecastTask = FetchForecastAsync(city.Coordinates.Latitude, city.Coordinates.Longitude, cancellationToken);
+        var airQualityTask = FetchAirQualityAsync(city.Coordinates.Latitude, city.Coordinates.Longitude, cancellationToken);
+
+        await Task.WhenAll(forecastTask, airQualityTask);
+
+        var forecastResponse = await forecastTask;
+        var airQuality = await airQualityTask;
         var current = forecastResponse.Current
                       ?? throw new WeatherApiException("Received empty current weather block from Open-Meteo", (int)HttpStatusCode.BadGateway);
 
@@ -159,14 +165,21 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
             sunrise: sunrise,
             sunset: sunset,
             isDay: isDay,
-            weatherCode: current.WeatherCode);
+            weatherCode: current.WeatherCode,
+            airQuality: airQuality);
     }
 
     private async Task<ForecastData> GetForecastForCityAsync(
         City city,
         CancellationToken cancellationToken)
     {
-        var forecastResponse = await FetchForecastAsync(city.Coordinates.Latitude, city.Coordinates.Longitude, cancellationToken);
+        var forecastTask = FetchForecastAsync(city.Coordinates.Latitude, city.Coordinates.Longitude, cancellationToken);
+        var airQualityTask = FetchAirQualityAsync(city.Coordinates.Latitude, city.Coordinates.Longitude, cancellationToken);
+
+        await Task.WhenAll(forecastTask, airQualityTask);
+
+        var forecastResponse = await forecastTask;
+        var airQuality = await airQualityTask;
         var hourly = forecastResponse.Hourly
                      ?? throw new WeatherApiException("Received empty hourly forecast block from Open-Meteo", (int)HttpStatusCode.BadGateway);
 
@@ -242,7 +255,7 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
             }
         }
 
-        return new ForecastData(city, forecasts, dailyList);
+        return new ForecastData(city, forecasts, dailyList, airQuality);
     }
 
     private static int ResolveDailyWeatherCode(
@@ -400,6 +413,56 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
         {
             throw new WeatherApiException($"Open-Meteo forecast API error: {ex.Message}",
                 (int)(ex.StatusCode ?? HttpStatusCode.BadGateway));
+        }
+    }
+
+    public async Task<AirQuality?> GetAirQualityByCoordinatesAsync(
+        double latitude,
+        double longitude,
+        CancellationToken cancellationToken = default)
+    {
+        return await FetchAirQualityAsync(latitude, longitude, cancellationToken);
+    }
+
+    private async Task<AirQuality?> FetchAirQualityAsync(
+        double latitude,
+        double longitude,
+        CancellationToken cancellationToken)
+    {
+        var lat = latitude.ToString("F5", CultureInfo.InvariantCulture);
+        var lon = longitude.ToString("F5", CultureInfo.InvariantCulture);
+
+        var url = $"{options.AirQualityBaseUrl.TrimEnd('/')}/air-quality?latitude={lat}&longitude={lon}" +
+                  "&current=european_aqi,us_aqi,pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone";
+
+        try
+        {
+            var response = await httpClient.GetAsync(url, cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var aqResponse = await response.Content.ReadFromJsonAsync<OpenMeteoAirQualityResponse>(cancellationToken);
+            if (aqResponse?.Current is null)
+            {
+                return null;
+            }
+
+            var current = aqResponse.Current;
+            return AirQuality.Create(
+                current.EuropeanAqi ?? 0,
+                current.UsAqi ?? 0,
+                current.Pm10 ?? 0,
+                current.Pm25 ?? 0,
+                current.CarbonMonoxide ?? 0,
+                current.NitrogenDioxide ?? 0,
+                current.SulphurDioxide ?? 0,
+                current.Ozone ?? 0);
+        }
+        catch (Exception)
+        {
+            return null;
         }
     }
 }

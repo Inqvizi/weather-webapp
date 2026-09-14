@@ -8,4 +8,5 @@ public sealed class ForecastResponseDto
     public double Longitude { get; init; }
     public IReadOnlyList<ForecastItemDto> Items { get; init; } = [];
     public IReadOnlyList<DailyForecastItemDto> Daily { get; init; } = [];
+    public AirQualityDto? AirQuality { get; init; }
 }

@@ -77,4 +77,33 @@ public sealed class WeatherController : ControllerBase
         var result = await weatherService.GetForecastAsync(cityName, cancellationToken);
         return Ok(result);
     }
+
+    [HttpGet("by-coordinates/air-quality")]
+    [ProducesResponseType(typeof(AirQualityDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<AirQualityDto>> GetAirQualityByCoordinates(
+        [FromQuery] double latitude,
+        [FromQuery] double longitude,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await weatherService.GetAirQualityByCoordinatesAsync(latitude, longitude, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpGet("{cityName}/air-quality")]
+    [ProducesResponseType(typeof(AirQualityDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<AirQualityDto>> GetAirQuality(
+        string cityName,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await weatherService.GetAirQualityAsync(cityName, cancellationToken);
+        if (result is null)
+        {
+            return NotFound(new { message = $"City '{cityName}' not found" });
+        }
+
+        return Ok(result);
+    }
 }
