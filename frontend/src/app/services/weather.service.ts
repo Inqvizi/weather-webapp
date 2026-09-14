@@ -22,6 +22,7 @@ export interface WeatherResponseDto {
   measuredAt: string;
   latitude?: number;
   longitude?: number;
+  airQuality?: AirQualityDto;
 }
 
 export interface ForecastItemDto {
@@ -51,6 +52,18 @@ export interface DailyForecastItemDto {
   uvIndexMax: number;
 }
 
+export interface AirQualityDto {
+  europeanAqi: number;
+  usAqi: number;
+  category: string;
+  pm10: number;
+  pm25: number;
+  carbonMonoxide: number;
+  nitrogenDioxide: number;
+  sulphurDioxide: number;
+  ozone: number;
+}
+
 export interface ForecastResponseDto {
   cityName: string;
   countryCode: string;
@@ -58,6 +71,7 @@ export interface ForecastResponseDto {
   longitude?: number;
   items: ForecastItemDto[];
   daily?: DailyForecastItemDto[];
+  airQuality?: AirQualityDto;
 }
 
 export interface CitySearchResultDto {
@@ -121,6 +135,17 @@ export class WeatherService {
   reverseGeocode(latitude: number, longitude: number): Observable<any> {
     const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`;
     return this.http.get<any>(url);
+  }
+
+  getAirQuality(city: string): Observable<AirQualityDto> {
+    return this.http.get<AirQualityDto>(`${this.apiUrl}/${encodeURIComponent(city.trim())}/air-quality`);
+  }
+
+  getAirQualityByCoordinates(latitude: number, longitude: number): Observable<AirQualityDto> {
+    const params = new HttpParams()
+      .set('latitude', latitude.toString())
+      .set('longitude', longitude.toString());
+    return this.http.get<AirQualityDto>(`${this.apiUrl}/by-coordinates/air-quality`, { params });
   }
 }
 

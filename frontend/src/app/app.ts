@@ -5,6 +5,7 @@ import { SearchBar } from './components/search-bar/search-bar';
 import { CurrentWeather } from './components/current-weather/current-weather';
 import { HourlyForecast } from './components/hourly-forecast/hourly-forecast';
 import { AirConditions } from './components/air-conditions/air-conditions';
+import { AirQualityComponent } from './components/air-quality/air-quality';
 import { SevenDayForecast } from './components/seven-day-forecast/seven-day-forecast';
 import { CitiesComponent } from './components/cities/cities';
 import { SettingsComponent } from './components/settings/settings';
@@ -23,6 +24,7 @@ import { TranslatePipe } from './pipes/translate.pipe';
     CurrentWeather,
     HourlyForecast,
     AirConditions,
+    AirQualityComponent,
     SevenDayForecast,
     CitiesComponent,
     SettingsComponent,

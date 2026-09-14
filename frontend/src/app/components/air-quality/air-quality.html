@@ -1,0 +1,119 @@
+<div class="flex flex-col gap-4 sm:gap-6">
+  <!-- Card Header -->
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-6 h-6 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+        <i class="bi bi-lungs-fill text-sm"></i>
+      </div>
+      <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">
+        {{ 'airQuality.title' | translate }}
+      </h3>
+    </div>
+    <span class="text-[11px] font-semibold text-gray-400 bg-gray-800/80 px-2.5 py-1 rounded-full border border-gray-700/50">
+      {{ 'airQuality.standard' | translate }}
+    </span>
+  </div>
+
+  @if (airQuality) {
+    <!-- Main AQI Hero + Health Advice -->
+    <div class="flex flex-col md:flex-row items-stretch gap-4 sm:gap-6 p-4 sm:p-5 rounded-2xl bg-white/[0.02] border border-gray-700/40">
+      <!-- Left: Big AQI Value + Category Badge -->
+      <div class="flex items-center gap-4 sm:gap-5 md:w-56 shrink-0">
+        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex flex-col items-center justify-center border shrink-0 {{ aqiInfo.badgeClass }}">
+          <span class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-none">
+            {{ airQuality.usAqi }}
+          </span>
+          <span class="text-[10px] font-semibold uppercase tracking-wider mt-1 opacity-80">
+            AQI
+          </span>
+        </div>
+
+        <div class="flex flex-col min-w-0">
+          <span class="text-xs text-gray-400 font-medium mb-1">
+            {{ 'airQuality.index' | translate }}
+          </span>
+          <span class="text-base sm:text-lg font-bold truncate {{ aqiInfo.textClass }}">
+            {{ aqiInfo.statusKey | translate }}
+          </span>
+          <span class="text-[11px] text-gray-400 mt-0.5">
+            EU AQI: <strong class="text-gray-200">{{ airQuality.europeanAqi }}</strong>
+          </span>
+        </div>
+      </div>
+
+      <!-- Right: Health Recommendation + Visual Gradient Meter -->
+      <div class="flex-1 flex flex-col justify-between gap-3 min-w-0 pt-2 md:pt-0 border-t md:border-t-0 md:border-l border-gray-700/40 md:pl-6">
+        <div class="flex items-start gap-2.5">
+          <div class="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0 mt-0.5">
+            <i class="bi bi-info-circle text-sm"></i>
+          </div>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+            {{ aqiInfo.adviceKey | translate }}
+          </p>
+        </div>
+
+        <!-- Progress Gradient Scale -->
+        <div class="flex flex-col gap-1.5 mt-1">
+          <div class="relative w-full h-2.5 rounded-full bg-gradient-to-r from-emerald-500 via-amber-400 via-orange-500 via-rose-500 to-purple-600 shadow-inner">
+            <!-- Dynamic Position Indicator Marker -->
+            <div
+              class="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white shadow-md border-2 border-gray-900 transition-all duration-500"
+              [style.left]="'calc(' + aqiInfo.markerPositionPercent + '% - 8px)'"
+              [title]="'AQI: ' + airQuality.usAqi"
+            ></div>
+          </div>
+          <div class="flex justify-between items-center text-[10px] text-gray-400 font-medium px-0.5">
+            <span>0 ({{ 'airQuality.good' | translate }})</span>
+            <span>100</span>
+            <span>200</span>
+            <span>300+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pollutants Breakdown Grid -->
+    <div>
+      <div class="flex items-center justify-between mb-3">
+        <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+          {{ 'airQuality.pollutants' | translate }}
+        </h4>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3.5">
+        @for (item of pollutants; track item.key) {
+          <div class="flex flex-col justify-between p-3 sm:p-3.5 rounded-2xl bg-white/[0.02] border border-gray-700/40 transition-all hover:border-gray-600/60 min-w-0">
+            <div class="flex items-start justify-between gap-1 mb-2">
+              <div class="flex flex-col min-w-0">
+                <span class="text-xs sm:text-sm font-bold text-white tracking-tight truncate">
+                  {{ item.nameKey | translate }}
+                </span>
+                <span class="text-[10px] text-gray-400 truncate">
+                  {{ item.descKey | translate }}
+                </span>
+              </div>
+              <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full border shrink-0 {{ item.badgeClass }}">
+                {{ item.badgeLabelKey | translate }}
+              </span>
+            </div>
+
+            <div class="flex items-baseline gap-1 mt-1">
+              <span class="text-lg sm:text-xl font-extrabold text-white tracking-tight">
+                {{ item.value }}
+              </span>
+              <span class="text-[11px] text-gray-400 font-medium">
+                {{ item.unit }}
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <!-- Empty / Loading state -->
+    <div class="p-6 rounded-2xl bg-white/[0.02] border border-gray-700/40 text-center text-gray-400 text-sm">
+      <i class="bi bi-hourglass-split text-2xl mb-2 text-gray-500 inline-block animate-pulse"></i>
+      <p>{{ 'airQuality.title' | translate }}...</p>
+    </div>
+  }
+</div>

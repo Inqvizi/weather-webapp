@@ -47,6 +47,13 @@
             <div class="bg-[#202b3b] rounded-3xl p-4 sm:p-6 shadow-inner border border-gray-700">
               <app-air-conditions [weather]="currentWeather()!"></app-air-conditions>
             </div>
+
+            <!-- Air Quality Card -->
+            @if (currentWeather()?.airQuality || forecast()?.airQuality) {
+              <div class="bg-[#202b3b] rounded-3xl p-4 sm:p-6 shadow-inner border border-gray-700">
+                <app-air-quality [airQuality]="currentWeather()?.airQuality || forecast()?.airQuality"></app-air-quality>
+              </div>
+            }
           </div>
         } @else {
           <!-- Skeleton Loading State -->
