@@ -32,34 +32,51 @@
   z-index: 99999 !important;
 }
 
-/* Custom Leaflet City Marker */
-.city-marker-container {
+.city-weather-leaflet-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Custom Leaflet City Marker — Precision Anchored */
+.city-marker-anchor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+.city-marker-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translate(-50%, -100%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  transform: translate(-50%, -100%);
+  pointer-events: auto;
   cursor: pointer;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
-  transition: transform 0.2s ease;
-}
-
-.city-marker-container:hover {
-  transform: translate(-50%, -105%) scale(1.05);
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
 }
 
 .city-marker-badge {
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  background: rgba(32, 43, 59, 0.95);
-  border: 1px solid rgba(59, 130, 246, 0.5);
-  padding: 0.25rem 0.6rem;
+  background: rgba(27, 37, 51, 0.96);
+  border: 1px solid rgba(59, 130, 246, 0.6);
+  padding: 0.25rem 0.65rem;
   border-radius: 9999px;
   color: white;
   font-weight: 700;
   font-size: 0.75rem;
   white-space: nowrap;
   backdrop-filter: blur(8px);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.city-marker-body:hover .city-marker-badge {
+  transform: scale(1.06);
+  border-color: #3b82f6;
 }
 
 .city-marker-pin {

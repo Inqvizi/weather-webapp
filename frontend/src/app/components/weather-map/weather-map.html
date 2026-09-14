@@ -16,16 +16,16 @@
     </div>
 
     <div class="flex items-center gap-2 flex-wrap ml-auto">
-      <!-- Layer Toggle (Precipitation vs Satellite Clouds) -->
+      <!-- Radar Palette Toggle (Universal Blue vs NEXRAD) -->
       <div class="flex items-center bg-[#1b2533] p-1 rounded-2xl border border-gray-700">
         <button
           type="button"
-          (click)="switchLayerType('radar')"
+          (click)="switchColorScheme(2)"
           class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer"
-          [class.bg-blue-600]="activeLayerType === 'radar'"
-          [class.text-white]="activeLayerType === 'radar'"
-          [class.text-gray-400]="activeLayerType !== 'radar'"
-          [class.hover:text-white]="activeLayerType !== 'radar'"
+          [class.bg-blue-600]="activeColorScheme === 2"
+          [class.text-white]="activeColorScheme === 2"
+          [class.text-gray-400]="activeColorScheme !== 2"
+          [class.hover:text-white]="activeColorScheme !== 2"
         >
           <i class="bi bi-cloud-rain-fill text-sm"></i>
           <span>{{ 'map.layerRadar' | translate }}</span>
@@ -33,15 +33,15 @@
 
         <button
           type="button"
-          (click)="switchLayerType('satellite')"
+          (click)="switchColorScheme(6)"
           class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer"
-          [class.bg-blue-600]="activeLayerType === 'satellite'"
-          [class.text-white]="activeLayerType === 'satellite'"
-          [class.text-gray-400]="activeLayerType !== 'satellite'"
-          [class.hover:text-white]="activeLayerType !== 'satellite'"
+          [class.bg-blue-600]="activeColorScheme === 6"
+          [class.text-white]="activeColorScheme === 6"
+          [class.text-gray-400]="activeColorScheme !== 6"
+          [class.hover:text-white]="activeColorScheme !== 6"
         >
-          <i class="bi bi-cloud-sun-fill text-sm"></i>
-          <span>{{ 'map.layerSatellite' | translate }}</span>
+          <i class="bi bi-water text-sm"></i>
+          <span>{{ 'map.layerNexrad' | translate }}</span>
         </button>
       </div>
 
@@ -114,7 +114,7 @@
     }
 
     <!-- Precipitation Intensity Legend (Universal Palette) -->
-    @if (activeLayerType === 'radar') {
+    @if (frames.length > 0) {
       <div class="absolute top-3 left-3 z-[900] bg-[#1b2533]/90 backdrop-blur-md border border-gray-700/60 rounded-2xl p-2.5 shadow-xl max-w-[220px] pointer-events-none hidden sm:block">
         <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
           <span>{{ 'map.legendTitle' | translate }}</span>

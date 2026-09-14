@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -15,7 +16,6 @@ import {
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import * as L from 'leaflet';
 import {
-  RadarLayerType,
   RainViewerFrame,
   RainViewerService,
 } from '../../services/rainviewer.service';
@@ -40,12 +40,12 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
   private rainViewerService = inject(RainViewerService);
   private translationService = inject(TranslationService);
   private platformId = inject(PLATFORM_ID);
+  private cdr = inject(ChangeDetectorRef);
 
-  activeLayerType: RadarLayerType = 'radar';
+  activeColorScheme: 2 | 6 = 2; // 2: Universal Blue, 6: NEXRAD
   host = 'https://tilecache.rainviewer.com';
 
   radarFrames: RainViewerFrame[] = [];
-  satelliteFrames: RainViewerFrame[] = [];
   currentFrameIndex = 0;
 
   isPlaying = false;
@@ -60,11 +60,11 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
   private cityMarker?: L.Marker;
   private playTimer: any = null;
 
-  // Track pre-cached tile layers by frame path
+  // Track pre-cached tile layers by frame path and color scheme
   private tileLayerCache = new Map<string, L.TileLayer>();
 
   get frames(): RainViewerFrame[] {
-    return this.activeLayerType === 'radar' ? this.radarFrames : this.satelliteFrames;
+    return this.radarFrames;
   }
 
   get currentFrame(): RainViewerFrame | undefined {
@@ -76,7 +76,6 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   get isCurrentFrameLatestPast(): boolean {
-    if (this.activeLayerType !== 'radar') return false;
     const pastFrames = this.radarFrames.filter((f) => !f.isNowcast);
     if (pastFrames.length === 0) return false;
     const latestPastIndex = pastFrames.length - 1;
@@ -105,10 +104,8 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => {
-        this.initLeafletMap();
-        this.loadRadarFrames();
-      }, 50);
+      this.initLeafletMap();
+      this.loadRadarFrames();
     }
   }
 
@@ -166,6 +163,7 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
     ).addTo(this.map);
 
     this.updateCityMarker();
+    setTimeout(() => this.map?.invalidateSize(), 150);
   }
 
   private updateCityMarker(): void {
@@ -181,20 +179,22 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
       this.cityMarker.setLatLng([lat, lon]);
     } else {
       const markerHtml = `
-        <div class="city-marker-container">
-          <div class="city-marker-badge">
-            <i class="bi bi-geo-alt-fill text-blue-400"></i>
-            <span>${cityName} ${temp}</span>
+        <div class="city-marker-anchor">
+          <div class="city-marker-body">
+            <div class="city-marker-badge">
+              <i class="bi bi-geo-alt-fill text-blue-400"></i>
+              <span>${cityName} ${temp}</span>
+            </div>
+            <div class="city-marker-pin"></div>
           </div>
-          <div class="city-marker-pin"></div>
         </div>
       `;
 
       const customIcon = L.divIcon({
-        className: 'city-weather-div-icon',
+        className: 'city-weather-leaflet-icon',
         html: markerHtml,
-        iconSize: [120, 42],
-        iconAnchor: [60, 42],
+        iconSize: [0, 0],
+        iconAnchor: [0, 0],
       });
 
       this.cityMarker = L.marker([lat, lon], { icon: customIcon }).addTo(this.map);
@@ -216,25 +216,28 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
   loadRadarFrames(forceRefresh = false): void {
     this.isLoading = true;
     this.errorMessage = null;
+    this.cdr.markForCheck();
 
     this.rainViewerService.getRadarData(forceRefresh).subscribe({
       next: (data) => {
         this.isLoading = false;
         if (!data || data.frames.length === 0) {
           this.errorMessage = 'Дані радара недоступні';
+          this.cdr.markForCheck();
           return;
         }
 
         this.host = data.host;
         this.radarFrames = data.frames;
-        this.satelliteFrames = data.satelliteFrames;
         this.currentFrameIndex = data.currentIndex;
 
         this.displayCurrentFrame();
+        this.cdr.markForCheck();
       },
       error: (err) => {
         this.isLoading = false;
         this.errorMessage = 'Не вдалося завантажити радарні дані';
+        this.cdr.markForCheck();
         console.error('Radar load error:', err);
       },
     });
@@ -246,19 +249,26 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
     const frame = this.currentFrame;
     if (!frame) return;
 
-    const tileUrl =
-      this.activeLayerType === 'radar'
-        ? this.rainViewerService.getRadarTileUrl(this.host, frame.path, 2, true, true, 256)
-        : this.rainViewerService.getSatelliteTileUrl(this.host, frame.path, 256);
+    const cacheKey = `${frame.path}_scheme${this.activeColorScheme}`;
+    const tileUrl = this.rainViewerService.getRadarTileUrl(
+      this.host,
+      frame.path,
+      this.activeColorScheme,
+      true,
+      true,
+      256
+    );
 
-    let nextLayer = this.tileLayerCache.get(frame.path);
+    let nextLayer = this.tileLayerCache.get(cacheKey);
     if (!nextLayer) {
       nextLayer = L.tileLayer(tileUrl, {
         tileSize: 256,
         opacity: this.opacity,
-        zIndex: 100,
+        zIndex: 200,
+        maxNativeZoom: 7,
+        maxZoom: 18,
       });
-      this.tileLayerCache.set(frame.path, nextLayer);
+      this.tileLayerCache.set(cacheKey, nextLayer);
     }
 
     if (this.currentTileLayer && this.currentTileLayer !== nextLayer) {
@@ -272,12 +282,15 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
     this.currentTileLayer = nextLayer;
   }
 
-  switchLayerType(type: RadarLayerType): void {
-    if (this.activeLayerType === type) return;
-    this.stopPlay();
-    this.activeLayerType = type;
-    this.currentFrameIndex = Math.max(0, this.frames.length - 1);
+  switchColorScheme(scheme: 2 | 6): void {
+    if (this.activeColorScheme === scheme) return;
+    this.activeColorScheme = scheme;
+    if (this.currentTileLayer && this.map) {
+      this.map.removeLayer(this.currentTileLayer);
+      this.currentTileLayer = undefined;
+    }
     this.displayCurrentFrame();
+    this.cdr.markForCheck();
   }
 
   togglePlay(): void {

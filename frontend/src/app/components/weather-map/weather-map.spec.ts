@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import '@angular/compiler';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { Injector, runInInjectionContext, PLATFORM_ID } from '@angular/core';
+import { Injector, runInInjectionContext, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { of } from 'rxjs';
 import { WeatherMapComponent } from './weather-map';
 import { RainViewerService, RainViewerData } from '../../services/rainviewer.service';
@@ -18,9 +18,7 @@ describe('WeatherMapComponent Class Logic', () => {
       { time: 1726303600, path: '/v2/radar/2', isNowcast: false },
       { time: 1726307200, path: '/v2/radar/3', isNowcast: true },
     ],
-    satelliteFrames: [
-      { time: 1726303600, path: '/v2/satellite/1', isNowcast: false },
-    ],
+    satelliteFrames: [],
     currentIndex: 1,
   };
 
@@ -28,7 +26,6 @@ describe('WeatherMapComponent Class Logic', () => {
     mockRainViewerService = {
       getRadarData: vi.fn().mockReturnValue(of(sampleData)),
       getRadarTileUrl: vi.fn().mockReturnValue('https://example.com/tile.png'),
-      getSatelliteTileUrl: vi.fn().mockReturnValue('https://example.com/sat.png'),
     };
   });
 
@@ -36,6 +33,7 @@ describe('WeatherMapComponent Class Logic', () => {
     const injector = Injector.create({
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
+        { provide: ChangeDetectorRef, useValue: { markForCheck: vi.fn(), detectChanges: vi.fn() } },
         { provide: RainViewerService, useValue: mockRainViewerService },
         { provide: SettingsService, useClass: SettingsService },
         { provide: TranslationService, useClass: TranslationService },
@@ -92,16 +90,15 @@ describe('WeatherMapComponent Class Logic', () => {
     expect(comp.currentFrameIndex).toBe(2);
   });
 
-  it('should switch layer type between radar and satellite', () => {
+  it('should switch color scheme between Universal Blue and NEXRAD', () => {
     const comp = createComponent();
     comp.loadRadarFrames();
 
-    expect(comp.activeLayerType).toBe('radar');
-    expect(comp.frames.length).toBe(3);
-
-    comp.switchLayerType('satellite');
-    expect(comp.activeLayerType).toBe('satellite');
-    expect(comp.frames.length).toBe(1);
+    expect(comp.activeColorScheme).toBe(2);
+    comp.switchColorScheme(6);
+    expect(comp.activeColorScheme).toBe(6);
+    comp.switchColorScheme(2);
+    expect(comp.activeColorScheme).toBe(2);
   });
 
   it('should toggle play and stop animation properly', () => {
