@@ -21,6 +21,7 @@ import {
 } from '../../services/rainviewer.service';
 import { WeatherResponseDto } from '../../services/weather.service';
 import { TranslationService } from '../../services/translation.service';
+import { SettingsService, ThemeMode } from '../../services/settings.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
@@ -39,6 +40,7 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
 
   private rainViewerService = inject(RainViewerService);
   private translationService = inject(TranslationService);
+  private settingsService = inject(SettingsService);
   private platformId = inject(PLATFORM_ID);
   private cdr = inject(ChangeDetectorRef);
 
@@ -56,9 +58,12 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
   isFullscreen = false;
 
   private map?: L.Map;
+  private baseTileLayer?: L.TileLayer;
+  private referenceTileLayer?: L.TileLayer;
   private currentTileLayer?: L.TileLayer;
   private cityMarker?: L.Marker;
   private playTimer: any = null;
+  private themeObserver?: MutationObserver;
 
   // Track pre-cached tile layers by frame path and color scheme
   private tileLayerCache = new Map<string, L.TileLayer>();
@@ -120,6 +125,10 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopPlay();
+    if (this.themeObserver) {
+      this.themeObserver.disconnect();
+      this.themeObserver = undefined;
+    }
     this.cleanupMap();
   }
 
@@ -142,28 +151,60 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
     // Custom Zoom control at top-right
     L.control.zoom({ position: 'topright' }).addTo(this.map);
 
-    // Premium Dark Base map (ArcGIS World Dark Gray Base - free, no watermark)
-    L.tileLayer(
-      'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+    // Apply base map according to current theme (Dark vs Light)
+    const isLightInitial =
+      (typeof document !== 'undefined' && document.documentElement.classList.contains('light')) ||
+      this.settingsService.settings().theme === 'light';
+    this.updateBaseMapTheme(isLightInitial ? 'light' : 'dark');
+
+    // Dynamically observe theme class changes on <html>
+    if (typeof MutationObserver !== 'undefined' && typeof document !== 'undefined') {
+      this.themeObserver = new MutationObserver(() => {
+        const isLight = document.documentElement.classList.contains('light');
+        this.updateBaseMapTheme(isLight ? 'light' : 'dark');
+      });
+      this.themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class'],
+      });
+    }
+
+    this.updateCityMarker();
+    setTimeout(() => this.map?.invalidateSize(), 150);
+  }
+
+  private updateBaseMapTheme(theme: ThemeMode): void {
+    if (!this.map) return;
+
+    if (this.baseTileLayer && this.map.hasLayer(this.baseTileLayer)) {
+      this.map.removeLayer(this.baseTileLayer);
+    }
+    if (this.referenceTileLayer && this.map.hasLayer(this.referenceTileLayer)) {
+      this.map.removeLayer(this.referenceTileLayer);
+    }
+
+    const isLight = theme === 'light';
+    const baseService = isLight ? 'World_Light_Gray_Base' : 'World_Dark_Gray_Base';
+    const refService = isLight ? 'World_Light_Gray_Reference' : 'World_Dark_Gray_Reference';
+
+    this.baseTileLayer = L.tileLayer(
+      `https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/${baseService}/MapServer/tile/{z}/{y}/{x}`,
       {
         maxZoom: 16,
+        zIndex: 1,
         attribution:
           '&copy; Esri, HERE, Garmin &copy; <a href="https://www.rainviewer.com/">RainViewer</a>',
       }
     ).addTo(this.map);
 
-    // Dark Reference labels & borders on top of base
-    L.tileLayer(
-      'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+    this.referenceTileLayer = L.tileLayer(
+      `https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/${refService}/MapServer/tile/{z}/{y}/{x}`,
       {
         maxZoom: 16,
         zIndex: 500,
-        opacity: 0.85,
+        opacity: isLight ? 0.9 : 0.85,
       }
     ).addTo(this.map);
-
-    this.updateCityMarker();
-    setTimeout(() => this.map?.invalidateSize(), 150);
   }
 
   private updateCityMarker(): void {
@@ -175,37 +216,44 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
     const temp = this.currentWeather?.temperature != null ? `${Math.round(this.currentWeather.temperature)}°` : '';
     const desc = this.currentWeather?.description ?? '';
 
+    const markerHtml = `
+      <div class="city-marker-container">
+        <div class="city-beacon-ring"></div>
+        <div class="city-beacon-dot"></div>
+        <div class="city-pin-tooltip">
+          <div class="city-pin-content">
+            <i class="bi bi-geo-alt-fill city-pin-icon"></i>
+            <span class="city-pin-name">${cityName}</span>
+            ${temp ? `<span class="city-pin-temp">${temp}</span>` : ''}
+          </div>
+          <div class="city-pin-arrow"></div>
+        </div>
+      </div>
+    `;
+
+    const customIcon = L.divIcon({
+      className: 'city-weather-leaflet-icon',
+      html: markerHtml,
+      iconSize: [0, 0],
+      iconAnchor: [0, 0],
+    });
+
     if (this.cityMarker) {
       this.cityMarker.setLatLng([lat, lon]);
+      this.cityMarker.setIcon(customIcon);
     } else {
-      const markerHtml = `
-        <div class="city-marker-anchor">
-          <div class="city-marker-body">
-            <div class="city-marker-badge">
-              <i class="bi bi-geo-alt-fill text-blue-400"></i>
-              <span>${cityName} ${temp}</span>
-            </div>
-            <div class="city-marker-pin"></div>
-          </div>
-        </div>
-      `;
-
-      const customIcon = L.divIcon({
-        className: 'city-weather-leaflet-icon',
-        html: markerHtml,
-        iconSize: [0, 0],
-        iconAnchor: [0, 0],
-      });
-
-      this.cityMarker = L.marker([lat, lon], { icon: customIcon }).addTo(this.map);
+      this.cityMarker = L.marker([lat, lon], {
+        icon: customIcon,
+        zIndexOffset: 1000,
+      }).addTo(this.map);
     }
 
     // Popup content
     const popupContent = `
       <div class="p-3 text-left">
-        <div class="font-bold text-sm text-white">${cityName}</div>
-        <div class="text-xs text-blue-400 font-semibold mb-1">${temp} • ${desc}</div>
-        <div class="text-[11px] text-gray-400">
+        <div class="font-bold text-sm text-white popup-city-name">${cityName}</div>
+        <div class="text-xs text-blue-400 font-semibold mb-1 popup-city-sub">${temp} • ${desc}</div>
+        <div class="text-[11px] text-gray-400 popup-city-info">
           Вітер: ${this.currentWeather?.windSpeed ?? 0} км/год • Вологість: ${this.currentWeather?.humidity ?? 0}%
         </div>
       </div>
@@ -392,6 +440,12 @@ export class WeatherMapComponent implements OnInit, OnChanges, OnDestroy {
 
   private cleanupMap(): void {
     if (this.map) {
+      if (this.baseTileLayer && this.map.hasLayer(this.baseTileLayer)) {
+        this.map.removeLayer(this.baseTileLayer);
+      }
+      if (this.referenceTileLayer && this.map.hasLayer(this.referenceTileLayer)) {
+        this.map.removeLayer(this.referenceTileLayer);
+      }
       this.tileLayerCache.forEach((layer) => {
         if (this.map?.hasLayer(layer)) {
           this.map.removeLayer(layer);

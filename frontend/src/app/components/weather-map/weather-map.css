@@ -13,6 +13,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 1.5rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 @media (max-width: 640px) {
@@ -32,77 +33,134 @@
   z-index: 99999 !important;
 }
 
-.city-weather-leaflet-icon {
+/* ============================================================
+   CUSTOM LEAFLET CITY MARKER — PRECISION ANCHORED
+   ============================================================ */
+
+:host ::ng-deep .city-weather-leaflet-icon {
   background: transparent !important;
   border: none !important;
+  overflow: visible !important;
 }
 
-/* Custom Leaflet City Marker — Precision Anchored */
-.city-marker-anchor {
-  position: absolute;
-  left: 0;
-  top: 0;
-  pointer-events: none;
+:host ::ng-deep .city-marker-container {
+  position: relative !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
 }
 
-.city-marker-body {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  transform: translate(-50%, -100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  pointer-events: auto;
-  cursor: pointer;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+/* Ground coordinate beacon on exact coordinate (0, 0) */
+:host ::ng-deep .city-beacon-dot {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 8px !important;
+  height: 8px !important;
+  background: #3b82f6 !important;
+  border: 2px solid #ffffff !important;
+  border-radius: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.9) !important;
+  z-index: 2 !important;
 }
 
-.city-marker-badge {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  background: rgba(27, 37, 51, 0.96);
-  border: 1px solid rgba(59, 130, 246, 0.6);
-  padding: 0.25rem 0.65rem;
-  border-radius: 9999px;
-  color: white;
-  font-weight: 700;
-  font-size: 0.75rem;
-  white-space: nowrap;
-  backdrop-filter: blur(8px);
-  transition: transform 0.15s ease, border-color 0.15s ease;
+:host ::ng-deep .city-beacon-ring {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 26px !important;
+  height: 26px !important;
+  background: rgba(59, 130, 246, 0.2) !important;
+  border: 1.5px solid rgba(59, 130, 246, 0.6) !important;
+  border-radius: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  animation: city-beacon-ripple 2.2s cubic-bezier(0, 0.2, 0.8, 1) infinite !important;
+  z-index: 1 !important;
 }
 
-.city-marker-body:hover .city-marker-badge {
-  transform: scale(1.06);
-  border-color: #3b82f6;
-}
-
-.city-marker-pin {
-  width: 10px;
-  height: 10px;
-  background: #3b82f6;
-  border: 2px solid white;
-  border-radius: 50%;
-  margin-top: -3px;
-  box-shadow: 0 0 10px #3b82f6;
-  animation: pulse-pin 2s infinite;
-}
-
-@keyframes pulse-pin {
+@keyframes city-beacon-ripple {
   0% {
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    transform: translate(-50%, -50%) scale(0.35);
+    opacity: 1;
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
   }
 }
 
-/* Leaflet Popup Styling */
+/* Floating callout pin pointing down to coordinate */
+:host ::ng-deep .city-pin-tooltip {
+  position: absolute !important;
+  bottom: 8px !important;
+  left: 0 !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45)) !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  z-index: 1000 !important;
+}
+
+:host ::ng-deep .city-pin-tooltip:hover {
+  transform: translateX(-50%) translateY(-3px) scale(1.06) !important;
+}
+
+:host ::ng-deep .city-pin-content {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-direction: row !important;
+  gap: 6px !important;
+  background: #1e293b !important;
+  border: 1.5px solid #3b82f6 !important;
+  border-radius: 9999px !important;
+  padding: 4px 10px !important;
+  white-space: nowrap !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+:host ::ng-deep .city-pin-icon {
+  font-size: 13px !important;
+  color: #60a5fa !important;
+  display: inline-block !important;
+  line-height: 1 !important;
+}
+
+:host ::ng-deep .city-pin-name {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  line-height: 1 !important;
+}
+
+:host ::ng-deep .city-pin-temp {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #93c5fd !important;
+  background: rgba(59, 130, 246, 0.25) !important;
+  padding: 1px 6px !important;
+  border-radius: 9999px !important;
+  line-height: 1.2 !important;
+}
+
+:host ::ng-deep .city-pin-arrow {
+  width: 0 !important;
+  height: 0 !important;
+  border-left: 6px solid transparent !important;
+  border-right: 6px solid transparent !important;
+  border-top: 7px solid #1e293b !important;
+  margin-top: -1px !important;
+}
+
+/* ============================================================
+   LEAFLET POPUP STYLING (DARK MODE)
+   ============================================================ */
+
 :host ::ng-deep .leaflet-popup-content-wrapper {
   background: rgba(27, 37, 51, 0.96) !important;
   color: #f8fafc !important;
@@ -132,7 +190,10 @@
   color: #ffffff !important;
 }
 
-/* Custom Zoom Controls */
+/* ============================================================
+   CUSTOM ZOOM & ATTRIBUTION CONTROLS (DARK MODE)
+   ============================================================ */
+
 :host ::ng-deep .leaflet-control-zoom {
   border: 1px solid rgba(75, 85, 99, 0.5) !important;
   border-radius: 0.75rem !important;
@@ -165,7 +226,207 @@
   color: #94a3b8 !important;
 }
 
-/* Custom Slider Styling */
+/* Range input accent */
 input[type='range'] {
   accent-color: #3b82f6;
+}
+
+/* ============================================================
+   LIGHT THEME ADAPTATION (Activates when <html class="light">)
+   ============================================================ */
+
+:host-context(html.light) .map-container {
+  background-color: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+:host-context(html.light) .map-header-bar {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+:host-context(html.light) .map-action-btn {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+:host-context(html.light) .map-action-btn:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Legend in Light Mode */
+:host-context(html.light) .map-legend {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08) !important;
+}
+
+:host-context(html.light) .map-legend-title {
+  color: #64748b !important;
+}
+
+:host-context(html.light) .map-legend-labels {
+  color: #475569 !important;
+}
+
+/* Timeline HUD in Light Mode */
+:host-context(html.light) .map-timeline-hud {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.12) !important;
+}
+
+:host-context(html.light) .hud-time-label {
+  color: #0f172a !important;
+}
+
+:host-context(html.light) .hud-relative-label {
+  color: #64748b !important;
+}
+
+:host-context(html.light) .hud-opacity-label {
+  color: #64748b !important;
+}
+
+:host-context(html.light) .hud-opacity-val {
+  color: #334155 !important;
+}
+
+:host-context(html.light) .hud-step-btn {
+  background-color: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+:host-context(html.light) .hud-step-btn:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+:host-context(html.light) .hud-speed-group {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+
+:host-context(html.light) .hud-speed-btn:not(.bg-blue-600) {
+  color: #64748b !important;
+}
+
+:host-context(html.light) .hud-speed-btn:not(.bg-blue-600):hover {
+  color: #0f172a !important;
+}
+
+:host-context(html.light) .map-range-slider {
+  background-color: #e2e8f0 !important;
+}
+
+:host-context(html.light) .hud-badge-past {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+:host-context(html.light) .hud-badge-live {
+  background-color: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #047857 !important;
+}
+
+:host-context(html.light) .hud-badge-nowcast {
+  background-color: #fffbeb !important;
+  border-color: #fde68a !important;
+  color: #b45309 !important;
+}
+
+/* City Pin Marker in Light Mode */
+:host-context(html.light) ::ng-deep .city-pin-content {
+  background: #ffffff !important;
+  border-color: #2563eb !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 0 10px rgba(37, 99, 235, 0.2) !important;
+}
+
+:host-context(html.light) ::ng-deep .city-pin-name {
+  color: #0f172a !important;
+}
+
+:host-context(html.light) ::ng-deep .city-pin-temp {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe !important;
+}
+
+:host-context(html.light) ::ng-deep .city-pin-icon {
+  color: #2563eb !important;
+}
+
+:host-context(html.light) ::ng-deep .city-pin-arrow {
+  border-top-color: #ffffff !important;
+}
+
+:host-context(html.light) ::ng-deep .city-beacon-dot {
+  background: #2563eb !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.9) !important;
+}
+
+/* Leaflet Popups in Light Mode */
+:host-context(html.light) ::ng-deep .leaflet-popup-content-wrapper {
+  background: rgba(255, 255, 255, 0.98) !important;
+  color: #0f172a !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+}
+
+:host-context(html.light) ::ng-deep .leaflet-popup-tip {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+:host-context(html.light) ::ng-deep .popup-city-name {
+  color: #0f172a !important;
+}
+
+:host-context(html.light) ::ng-deep .popup-city-sub {
+  color: #2563eb !important;
+}
+
+:host-context(html.light) ::ng-deep .popup-city-info {
+  color: #64748b !important;
+}
+
+:host-context(html.light) ::ng-deep .leaflet-popup-close-button {
+  color: #64748b !important;
+}
+
+:host-context(html.light) ::ng-deep .leaflet-popup-close-button:hover {
+  color: #0f172a !important;
+}
+
+/* Leaflet Zoom Controls in Light Mode */
+:host-context(html.light) ::ng-deep .leaflet-control-zoom {
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+:host-context(html.light) ::ng-deep .leaflet-control-zoom a {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #334155 !important;
+  border-color: #e2e8f0 !important;
+}
+
+:host-context(html.light) ::ng-deep .leaflet-control-zoom a:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+:host-context(html.light) ::ng-deep .leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #64748b !important;
+}
+
+:host-context(html.light) ::ng-deep .leaflet-control-attribution a {
+  color: #2563eb !important;
 }

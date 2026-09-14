@@ -334,3 +334,316 @@ html.light app-weather-icon path[fill="#38bdf8"] {
 html.light app-weather-icon g[stroke="#bae6fd"] {
   stroke: #0284c7 !important;
 }
+
+/* ============================================================
+   LEAFLET MAP & RADAR IN LIGHT MODE
+   ============================================================ */
+
+html.light .map-container {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .map-header-bar {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light .map-action-btn {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+html.light .map-action-btn:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html.light .map-legend {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light .map-legend-title {
+  color: #64748b !important;
+}
+
+html.light .map-legend-labels {
+  color: #475569 !important;
+}
+
+html.light .map-timeline-hud {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light .hud-time-label {
+  color: #0f172a !important;
+}
+
+html.light .hud-relative-label {
+  color: #64748b !important;
+}
+
+html.light .hud-opacity-label {
+  color: #64748b !important;
+}
+
+html.light .hud-opacity-val {
+  color: #334155 !important;
+}
+
+html.light .hud-step-btn {
+  background-color: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+html.light .hud-step-btn:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html.light .hud-speed-group {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .hud-speed-btn:not(.bg-blue-600) {
+  color: #64748b !important;
+}
+
+html.light .hud-speed-btn:not(.bg-blue-600):hover {
+  color: #0f172a !important;
+}
+
+html.light .map-range-slider {
+  background-color: #e2e8f0 !important;
+}
+
+html.light .hud-badge-past {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+html.light .hud-badge-live {
+  background-color: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #047857 !important;
+}
+
+html.light .hud-badge-nowcast {
+  background-color: #fffbeb !important;
+  border-color: #fde68a !important;
+  color: #b45309 !important;
+}
+
+/* ============================================================
+   LEAFLET CITY MARKER PIN — PRECISION ANCHORED
+   ============================================================ */
+
+.city-weather-leaflet-icon {
+  background: transparent !important;
+  border: none !important;
+  overflow: visible !important;
+}
+
+.city-marker-container {
+  position: relative !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+.city-beacon-dot {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 8px !important;
+  height: 8px !important;
+  background: #3b82f6 !important;
+  border: 2px solid #ffffff !important;
+  border-radius: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.9) !important;
+  z-index: 2 !important;
+}
+
+.city-beacon-ring {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 26px !important;
+  height: 26px !important;
+  background: rgba(59, 130, 246, 0.2) !important;
+  border: 1.5px solid rgba(59, 130, 246, 0.6) !important;
+  border-radius: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  animation: city-beacon-ripple 2.2s cubic-bezier(0, 0.2, 0.8, 1) infinite !important;
+  z-index: 1 !important;
+}
+
+@keyframes city-beacon-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.35);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+.city-pin-tooltip {
+  position: absolute !important;
+  bottom: 8px !important;
+  left: 0 !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45)) !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  z-index: 1000 !important;
+}
+
+.city-pin-tooltip:hover {
+  transform: translateX(-50%) translateY(-3px) scale(1.06) !important;
+}
+
+.city-pin-content {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-direction: row !important;
+  gap: 6px !important;
+  background: #1e293b !important;
+  border: 1.5px solid #3b82f6 !important;
+  border-radius: 9999px !important;
+  padding: 4px 10px !important;
+  white-space: nowrap !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+.city-pin-icon {
+  font-size: 13px !important;
+  color: #60a5fa !important;
+  display: inline-block !important;
+  line-height: 1 !important;
+}
+
+.city-pin-name {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  line-height: 1 !important;
+}
+
+.city-pin-temp {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #93c5fd !important;
+  background: rgba(59, 130, 246, 0.25) !important;
+  padding: 1px 6px !important;
+  border-radius: 9999px !important;
+  line-height: 1.2 !important;
+}
+
+.city-pin-arrow {
+  width: 0 !important;
+  height: 0 !important;
+  border-left: 6px solid transparent !important;
+  border-right: 6px solid transparent !important;
+  border-top: 7px solid #1e293b !important;
+  margin-top: -1px !important;
+}
+
+/* Leaflet City Marker Pin in Light Mode */
+html.light .city-pin-content {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-color: #2563eb !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light .city-pin-name {
+  color: #0f172a !important;
+}
+
+html.light .city-pin-temp {
+  color: #2563eb !important;
+}
+
+html.light .city-pin-icon {
+  color: #2563eb !important;
+}
+
+html.light .city-pin-arrow {
+  border-top-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+/* Leaflet Popups in Light Mode */
+html.light .leaflet-popup-content-wrapper {
+  background: rgba(255, 255, 255, 0.98) !important;
+  color: #0f172a !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light .leaflet-popup-tip {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .leaflet-popup-close-button {
+  color: #64748b !important;
+}
+
+html.light .leaflet-popup-close-button:hover {
+  color: #0f172a !important;
+}
+
+html.light .popup-city-name {
+  color: #0f172a !important;
+}
+
+html.light .popup-city-sub {
+  color: #2563eb !important;
+}
+
+html.light .popup-city-info {
+  color: #64748b !important;
+}
+
+/* Leaflet Controls in Light Mode */
+html.light .leaflet-control-zoom {
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light .leaflet-control-zoom a {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #334155 !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .leaflet-control-zoom a:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html.light .leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #64748b !important;
+}
+
+html.light .leaflet-control-attribution a {
+  color: #2563eb !important;
+}
+
