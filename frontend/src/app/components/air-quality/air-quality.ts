@@ -10,6 +10,7 @@ export interface AqiStatusInfo {
   badgeClass: string;
   textClass: string;
   glowClass: string;
+  barColorClass: string;
   markerPositionPercent: number;
 }
 
@@ -37,7 +38,7 @@ export class AirQualityComponent {
 
   get aqiInfo(): AqiStatusInfo {
     const aqi = this.airQuality?.usAqi ?? 0;
-    const clampedPercent = Math.min(Math.max((aqi / 300) * 100, 4), 98);
+    const clampedPercent = Math.min(Math.max((aqi / 300) * 100, 4), 100);
 
     if (aqi <= 50) {
       return {
@@ -46,6 +47,7 @@ export class AirQualityComponent {
         badgeClass: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
         textClass: 'text-emerald-400',
         glowClass: 'shadow-emerald-500/10 border-emerald-500/20',
+        barColorClass: 'bg-emerald-400',
         markerPositionPercent: clampedPercent,
       };
     }
@@ -57,6 +59,7 @@ export class AirQualityComponent {
         badgeClass: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
         textClass: 'text-amber-400',
         glowClass: 'shadow-amber-500/10 border-amber-500/20',
+        barColorClass: 'bg-amber-400',
         markerPositionPercent: clampedPercent,
       };
     }
@@ -68,6 +71,7 @@ export class AirQualityComponent {
         badgeClass: 'bg-orange-500/15 text-orange-400 border-orange-500/30',
         textClass: 'text-orange-400',
         glowClass: 'shadow-orange-500/10 border-orange-500/20',
+        barColorClass: 'bg-orange-400',
         markerPositionPercent: clampedPercent,
       };
     }
@@ -79,6 +83,7 @@ export class AirQualityComponent {
         badgeClass: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
         textClass: 'text-rose-400',
         glowClass: 'shadow-rose-500/10 border-rose-500/20',
+        barColorClass: 'bg-rose-500',
         markerPositionPercent: clampedPercent,
       };
     }
@@ -90,6 +95,7 @@ export class AirQualityComponent {
         badgeClass: 'bg-purple-500/15 text-purple-400 border-purple-500/30',
         textClass: 'text-purple-400',
         glowClass: 'shadow-purple-500/10 border-purple-500/20',
+        barColorClass: 'bg-purple-500',
         markerPositionPercent: clampedPercent,
       };
     }
@@ -100,6 +106,7 @@ export class AirQualityComponent {
       badgeClass: 'bg-red-950/40 text-red-300 border-red-800/50',
       textClass: 'text-red-400',
       glowClass: 'shadow-red-500/10 border-red-800/30',
+      barColorClass: 'bg-red-700',
       markerPositionPercent: clampedPercent,
     };
   }
