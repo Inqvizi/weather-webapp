@@ -21,5 +21,21 @@ module.exports = {
       }
     },
   },
+  safelist: [
+    'bg-emerald-400',
+    'bg-amber-400',
+    'bg-orange-400',
+    'bg-rose-500',
+    'bg-purple-500',
+    'bg-red-600',
+    'bg-red-700',
+    'bg-red-800',
+    'text-emerald-400',
+    'text-amber-400',
+    'text-orange-400',
+    'text-rose-400',
+    'text-purple-400',
+    'text-red-400',
+  ],
   plugins: [],
 }

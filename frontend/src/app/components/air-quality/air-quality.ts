@@ -11,6 +11,7 @@ export interface AqiStatusInfo {
   textClass: string;
   glowClass: string;
   barColorClass: string;
+  barColor: string;
   markerPositionPercent: number;
 }
 
@@ -38,7 +39,7 @@ export class AirQualityComponent {
 
   get aqiInfo(): AqiStatusInfo {
     const aqi = this.airQuality?.usAqi ?? 0;
-    const clampedPercent = Math.min(Math.max((aqi / 300) * 100, 4), 100);
+    const markerPercent = this.calculateAqiPercent(aqi);
 
     if (aqi <= 50) {
       return {
@@ -48,7 +49,8 @@ export class AirQualityComponent {
         textClass: 'text-emerald-400',
         glowClass: 'shadow-emerald-500/10 border-emerald-500/20',
         barColorClass: 'bg-emerald-400',
-        markerPositionPercent: clampedPercent,
+        barColor: '#34d399',
+        markerPositionPercent: markerPercent,
       };
     }
 
@@ -60,7 +62,8 @@ export class AirQualityComponent {
         textClass: 'text-amber-400',
         glowClass: 'shadow-amber-500/10 border-amber-500/20',
         barColorClass: 'bg-amber-400',
-        markerPositionPercent: clampedPercent,
+        barColor: '#fbbf24',
+        markerPositionPercent: markerPercent,
       };
     }
 
@@ -72,7 +75,8 @@ export class AirQualityComponent {
         textClass: 'text-orange-400',
         glowClass: 'shadow-orange-500/10 border-orange-500/20',
         barColorClass: 'bg-orange-400',
-        markerPositionPercent: clampedPercent,
+        barColor: '#fb923c',
+        markerPositionPercent: markerPercent,
       };
     }
 
@@ -84,7 +88,8 @@ export class AirQualityComponent {
         textClass: 'text-rose-400',
         glowClass: 'shadow-rose-500/10 border-rose-500/20',
         barColorClass: 'bg-rose-500',
-        markerPositionPercent: clampedPercent,
+        barColor: '#f43f5e',
+        markerPositionPercent: markerPercent,
       };
     }
 
@@ -96,7 +101,8 @@ export class AirQualityComponent {
         textClass: 'text-purple-400',
         glowClass: 'shadow-purple-500/10 border-purple-500/20',
         barColorClass: 'bg-purple-500',
-        markerPositionPercent: clampedPercent,
+        barColor: '#a855f7',
+        markerPositionPercent: markerPercent,
       };
     }
 
@@ -106,9 +112,19 @@ export class AirQualityComponent {
       badgeClass: 'bg-red-950/40 text-red-300 border-red-800/50',
       textClass: 'text-red-400',
       glowClass: 'shadow-red-500/10 border-red-800/30',
-      barColorClass: 'bg-red-700',
-      markerPositionPercent: clampedPercent,
+      barColorClass: 'bg-red-600',
+      barColor: '#dc2626',
+      markerPositionPercent: markerPercent,
     };
+  }
+
+  private calculateAqiPercent(aqi: number): number {
+    if (aqi <= 0) return 4;
+    if (aqi <= 50) return Math.max(4, (aqi / 50) * 25);
+    if (aqi <= 100) return 25 + ((aqi - 50) / 50) * 25;
+    if (aqi <= 200) return 50 + ((aqi - 100) / 100) * 25;
+    if (aqi <= 300) return 75 + ((aqi - 200) / 100) * 25;
+    return 100;
   }
 
   get pollutants(): PollutantCard[] {
