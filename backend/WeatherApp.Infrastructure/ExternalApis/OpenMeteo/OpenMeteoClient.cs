@@ -55,7 +55,13 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
                 return [];
             }
 
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync(cancellationToken);
+                throw new WeatherApiException(
+                    $"Geocoding service returned {(int)response.StatusCode} {response.ReasonPhrase}: {errorBody}",
+                    (int)response.StatusCode);
+            }
 
             var geoResponse = await response.Content.ReadFromJsonAsync<GeocodingResponse>(cancellationToken);
             if (geoResponse?.Results is null || geoResponse.Results.Count == 0)
@@ -404,7 +410,13 @@ internal sealed class OpenMeteoClient : IWeatherApiClient
                 throw new WeatherApiException("Weather forecast not found for coordinates", (int)HttpStatusCode.NotFound);
             }
 
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync(cancellationToken);
+                throw new WeatherApiException(
+                    $"Open-Meteo forecast API returned {(int)response.StatusCode} {response.ReasonPhrase}: {errorBody}",
+                    (int)response.StatusCode);
+            }
 
             return await response.Content.ReadFromJsonAsync<OpenMeteoForecastResponse>(cancellationToken)
                    ?? throw new WeatherApiException("Received empty response body from Open-Meteo", (int)HttpStatusCode.BadGateway);

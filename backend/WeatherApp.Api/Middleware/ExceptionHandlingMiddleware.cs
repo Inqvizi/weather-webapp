@@ -34,13 +34,15 @@ public sealed class ExceptionHandlingMiddleware
         {
             logger.LogError("Weather API error: {Message}", ex.Message);
             await WriteErrorResponse(context, StatusCodes.Status502BadGateway,
-                "Failed to retrieve data from the weather service");
+                ex.Message,
+                new[] { ex.Message });
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Unexpected error occurred");
+            logger.LogError(ex, "Unexpected error occurred: {Message}", ex.Message);
             await WriteErrorResponse(context, StatusCodes.Status500InternalServerError,
-                "An unexpected error occurred. Please try again later.");
+                "An unexpected error occurred. Please try again later.",
+                new[] { ex.Message });
         }
     }
 
